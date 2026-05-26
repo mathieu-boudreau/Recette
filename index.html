@@ -839,29 +839,36 @@ body.loader-plan-active #loaderPlanView { display:block; }
   body.loader-plan-active #loaderPlanName,
   body.loader-plan-active #loaderPlanShift,
   body.loader-plan-active #loaderPlanTarget { font-size:9px !important; min-height:12px !important; }
-  .sheet-inner {
-    transform:scale(.82) !important;
+  /* Print the hauling sheet on a single physical page as much as possible. */
+  body:not(.loader-plan-active) .sheet-inner {
+    transform:scale(.72) !important;
     transform-origin:top left !important;
-    width:calc(100% / .82) !important;
+    width:calc(100% / .72) !important;
+  }
+  /* Keep the loader plan a touch larger because it is already simpler. */
+  body.loader-plan-active .sheet-inner {
+    transform:scale(.84) !important;
+    transform-origin:top left !important;
+    width:calc(100% / .84) !important;
   }
   .top, table, .foot, .note, .page-print-label { min-width:0; }
   .top {
     grid-template-columns: 1.7fr 1.1fr 1.1fr;
-    gap:3px;
-    margin-bottom:2px;
+    gap:2px;
+    margin-bottom:1px;
     break-inside: avoid;
     page-break-inside: avoid;
     align-items:start;
   }
-  .brand-left { grid-template-columns:26px minmax(0,1fr); gap:3px; }
-  .left-logo { width:24px; height:24px; }
-  .right-logo { height:22px; max-width:118px; }
-  .sheet-name { font-size:6px; line-height:1; }
-  .title-box { font-size:10px; min-width:150px; padding:1px 8px; }
+  .brand-left { grid-template-columns:24px minmax(0,1fr); gap:2px; }
+  .left-logo { width:22px; height:22px; }
+  .right-logo { height:19px; max-width:106px; }
+  .sheet-name { font-size:5.5px; line-height:1; }
+  .title-box { font-size:9px; min-width:138px; padding:1px 6px; }
   .fields {
-    font-size:6px;
-    gap:1px;
-    grid-template-columns: 46px minmax(92px,1fr);
+    font-size:5.5px;
+    gap:0;
+    grid-template-columns: 42px minmax(82px,1fr);
   }
   .line-input, .foot input {
     color:#000 !important;
@@ -869,18 +876,18 @@ body.loader-plan-active #loaderPlanView { display:block; }
     opacity:1 !important;
     background:transparent !important;
     border-bottom:1px solid #555 !important;
-    font-size:7px !important;
+    font-size:6.5px !important;
     font-weight:800 !important;
-    min-height:11px !important;
+    min-height:10px !important;
     padding:0 1px !important;
     line-height:1 !important;
   }
-  #metaDate, #metaTruckNo { min-width:132px !important; font-size:7.5px !important; }
-  #metaName { min-width:92px !important; }
-  .truck { margin-top:1px; gap:5px; font-size:6px; }
-  .truck-choice { font-size:9px; min-width:20px; padding:0 2px; }
+  #metaDate, #metaTruckNo { min-width:118px !important; font-size:7px !important; }
+  #metaName { min-width:84px !important; }
+  .truck { margin-top:0; gap:4px; font-size:5.5px; }
+  .truck-choice { font-size:8px; min-width:18px; padding:0 2px; }
   table {
-    font-size:5px;
+    font-size:4.5px;
     table-layout:fixed;
     width:100%;
     page-break-inside:auto;
@@ -888,17 +895,17 @@ body.loader-plan-active #loaderPlanView { display:block; }
   }
   thead { display:table-header-group; }
   tr { page-break-inside:avoid; break-inside:avoid; }
-  th,td { height:10px; padding:0; line-height:1; }
+  th,td { height:9px; padding:0; line-height:1; }
   td.ore-cell {
-    font-size:7px;
+    font-size:6.5px;
     font-weight:900;
     letter-spacing:0;
     font-family: Arial, Helvetica, sans-serif;
     text-shadow:none;
   }
-  .bucket-marks { gap:2px; min-width:12px; }
-  .bucket-mark { width:2px; height:8px; border-radius:0; }
-  .bucket-x { font-size:8px; font-weight:900; }
+  .bucket-marks { gap:2px; min-width:11px; }
+  .bucket-mark { width:2px; height:7px; border-radius:0; }
+  .bucket-x { font-size:7px; font-weight:900; }
   tr.selected td,
   tr.next-line td {
     background:#fffdf8 !important;
@@ -908,15 +915,24 @@ body.loader-plan-active #loaderPlanView { display:block; }
   tr.next-line td.ore-cell:not(:empty) {
     background:#fff !important;
   }
-  td.time-cell,td.loader-cell,td.dest-cell { font-size:6px; }
-  tfoot td { height:11px; font-size:6px !important; }
-  .total-number { font-size:6px !important; }
-  .total-label { font-size:6px !important; }
-  .small-h { font-size:4px; }
-  .foot,.note,.page-print-label { font-size:6px; margin-top:1px; }
-  .foot { gap:34px; }
-  .foot input { min-width:88px !important; }
-  .note { line-height:1; }
+  td.time-cell,td.loader-cell,td.dest-cell { font-size:5.5px; }
+  tfoot td { height:9px; font-size:5.5px !important; }
+  .total-number { font-size:5.5px !important; }
+  .total-label { font-size:5.5px !important; }
+  .small-h { font-size:3.5px; }
+  .foot,.note,.page-print-label { font-size:5px; margin-top:0; }
+  .foot { gap:24px; }
+  .foot input { min-width:78px !important; }
+  .note { line-height:1; margin-top:0 !important; }
+  #weightNote { white-space:nowrap; }
+  #haulingSheetWrapper .sheet {
+    break-inside: avoid-page;
+    page-break-inside: avoid;
+  }
+  #haulingSheetWrapper .sheet-inner {
+    margin:0 !important;
+    padding:0 !important;
+  }
   
   body.dark-mode,
   body.dark-mode .sheet,
@@ -972,7 +988,7 @@ body.loader-plan-active #loaderPlanView { display:block; }
     color:#111 !important;
   }
 
-  @page { size: landscape; margin:2.5mm; }
+  @page { size: landscape; margin:2mm; }
 }
 </style>
 </head>
