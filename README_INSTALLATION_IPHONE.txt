@@ -195,3 +195,9 @@ CORRECTIFS v3.4
 - Le header devient plus compact en Vue complète.
 - La feuille commence plus bas pour ne plus être cachée sous le header.
 - Meilleur ajustement vertical de la feuille à l’écran.
+
+
+CORRECTIFS v3.6
+- Impression/PDF ajustée pour que la grille remplisse beaucoup plus la page.
+- Suppression de l’échelle trop petite qui donnait une grille à environ 3/4 de page.
+- La feuille reste optimisée pour une seule page imprimée en mode paysage.

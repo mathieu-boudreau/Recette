@@ -826,7 +826,7 @@ body.loader-plan-active #loaderPlanView { display:block; }
   body.loader-plan-active #haulingSheetWrapper { display:none !important; }
   body:not(.loader-plan-active) #loaderPlanView { display:none !important; }
   .app { max-width:none; padding:0; margin:0; }
-  .sheet { box-shadow:none; border:0; padding:0; overflow:visible; }
+  .sheet { box-shadow:none; border:0; padding:0; overflow:visible; width:100%; max-width:100%; }
   body.loader-plan-active .sheet-inner { transform:none !important; width:auto !important; }
   body.loader-plan-active .loader-plan-table { font-size:8px; }
   body.loader-plan-active .loader-plan-table th,
@@ -839,36 +839,31 @@ body.loader-plan-active #loaderPlanView { display:block; }
   body.loader-plan-active #loaderPlanName,
   body.loader-plan-active #loaderPlanShift,
   body.loader-plan-active #loaderPlanTarget { font-size:9px !important; min-height:12px !important; }
-  /* Print the hauling sheet on a single physical page as much as possible. */
-  body:not(.loader-plan-active) .sheet-inner {
-    transform:scale(.72) !important;
-    transform-origin:top left !important;
-    width:calc(100% / .72) !important;
-  }
-  /* Keep the loader plan a touch larger because it is already simpler. */
+  /* Print at real page width. The grid itself is sized to fill the page. */
+  body:not(.loader-plan-active) .sheet-inner,
   body.loader-plan-active .sheet-inner {
-    transform:scale(.84) !important;
-    transform-origin:top left !important;
-    width:calc(100% / .84) !important;
+    transform:none !important;
+    width:100% !important;
+    max-width:100% !important;
   }
-  .top, table, .foot, .note, .page-print-label { min-width:0; }
+  .top, table, .foot, .note, .page-print-label { min-width:0; max-width:100%; }
   .top {
     grid-template-columns: 1.7fr 1.1fr 1.1fr;
     gap:2px;
-    margin-bottom:1px;
+    margin-bottom:2px;
     break-inside: avoid;
     page-break-inside: avoid;
     align-items:start;
   }
-  .brand-left { grid-template-columns:24px minmax(0,1fr); gap:2px; }
-  .left-logo { width:22px; height:22px; }
-  .right-logo { height:19px; max-width:106px; }
-  .sheet-name { font-size:5.5px; line-height:1; }
-  .title-box { font-size:9px; min-width:138px; padding:1px 6px; }
+  .brand-left { grid-template-columns:26px minmax(0,1fr); gap:3px; }
+  .left-logo { width:24px; height:24px; }
+  .right-logo { height:22px; max-width:120px; }
+  .sheet-name { font-size:6px; line-height:1; }
+  .title-box { font-size:10px; min-width:150px; padding:1px 8px; }
   .fields {
-    font-size:5.5px;
-    gap:0;
-    grid-template-columns: 42px minmax(82px,1fr);
+    font-size:6px;
+    gap:1px;
+    grid-template-columns: 48px minmax(96px,1fr);
   }
   .line-input, .foot input {
     color:#000 !important;
@@ -876,18 +871,18 @@ body.loader-plan-active #loaderPlanView { display:block; }
     opacity:1 !important;
     background:transparent !important;
     border-bottom:1px solid #555 !important;
-    font-size:6.5px !important;
+    font-size:7px !important;
     font-weight:800 !important;
-    min-height:10px !important;
+    min-height:11px !important;
     padding:0 1px !important;
     line-height:1 !important;
   }
-  #metaDate, #metaTruckNo { min-width:118px !important; font-size:7px !important; }
-  #metaName { min-width:84px !important; }
-  .truck { margin-top:0; gap:4px; font-size:5.5px; }
-  .truck-choice { font-size:8px; min-width:18px; padding:0 2px; }
+  #metaDate, #metaTruckNo { min-width:135px !important; font-size:7.5px !important; }
+  #metaName { min-width:96px !important; }
+  .truck { margin-top:1px; gap:5px; font-size:6px; }
+  .truck-choice { font-size:9px; min-width:20px; padding:0 2px; }
   table {
-    font-size:4.5px;
+    font-size:5px;
     table-layout:fixed;
     width:100%;
     page-break-inside:auto;
@@ -895,17 +890,17 @@ body.loader-plan-active #loaderPlanView { display:block; }
   }
   thead { display:table-header-group; }
   tr { page-break-inside:avoid; break-inside:avoid; }
-  th,td { height:9px; padding:0; line-height:1; }
+  th,td { height:10.8px; padding:0; line-height:1; }
   td.ore-cell {
-    font-size:6.5px;
+    font-size:7px;
     font-weight:900;
     letter-spacing:0;
     font-family: Arial, Helvetica, sans-serif;
     text-shadow:none;
   }
-  .bucket-marks { gap:2px; min-width:11px; }
-  .bucket-mark { width:2px; height:7px; border-radius:0; }
-  .bucket-x { font-size:7px; font-weight:900; }
+  .bucket-marks { gap:2px; min-width:12px; }
+  .bucket-mark { width:2px; height:8px; border-radius:0; }
+  .bucket-x { font-size:8px; font-weight:900; }
   tr.selected td,
   tr.next-line td {
     background:#fffdf8 !important;
@@ -915,15 +910,15 @@ body.loader-plan-active #loaderPlanView { display:block; }
   tr.next-line td.ore-cell:not(:empty) {
     background:#fff !important;
   }
-  td.time-cell,td.loader-cell,td.dest-cell { font-size:5.5px; }
-  tfoot td { height:9px; font-size:5.5px !important; }
-  .total-number { font-size:5.5px !important; }
-  .total-label { font-size:5.5px !important; }
-  .small-h { font-size:3.5px; }
-  .foot,.note,.page-print-label { font-size:5px; margin-top:0; }
-  .foot { gap:24px; }
-  .foot input { min-width:78px !important; }
-  .note { line-height:1; margin-top:0 !important; }
+  td.time-cell,td.loader-cell,td.dest-cell { font-size:6px; }
+  tfoot td { height:10.8px; font-size:6px !important; }
+  .total-number { font-size:6px !important; }
+  .total-label { font-size:6px !important; }
+  .small-h { font-size:4px; }
+  .foot,.note,.page-print-label { font-size:6px; margin-top:1px; }
+  .foot { gap:34px; }
+  .foot input { min-width:88px !important; }
+  .note { line-height:1; margin-top:1px !important; }
   #weightNote { white-space:nowrap; }
   #haulingSheetWrapper .sheet {
     break-inside: avoid-page;
@@ -988,6 +983,17 @@ body.loader-plan-active #loaderPlanView { display:block; }
     color:#111 !important;
   }
 
+
+  body:not(.loader-plan-active) #haulingSheetWrapper .sheet {
+    height:auto !important;
+  }
+  body:not(.loader-plan-active) #sheetTable {
+    width:100% !important;
+  }
+  body:not(.loader-plan-active) #sheetTable tbody tr td {
+    height:10.8px !important;
+  }
+
   @page { size: landscape; margin:2mm; }
 }
 </style>
@@ -1035,7 +1041,7 @@ body.loader-plan-active #loaderPlanView { display:block; }
 
       <section class="menu-section menu-status full-span">
         <h3 class="menu-title" id="menuSectionStatus">Statut</h3>
-        <div class="status" id="status">App prête. Les données restent sur ce téléphone. Version 3.4.</div>
+        <div class="status" id="status">App prête. Les données restent sur ce téléphone. Version 3.6.</div>
         <div class="menu-note" id="menuNote">Astuce: ouvre le menu pour les actions et ferme-le pour voir plus de feuille.</div>
       </section>
 
@@ -1290,7 +1296,7 @@ body.loader-plan-active #loaderPlanView { display:block; }
       menuSectionStatus:"Statut",
       menuSectionDanger:"Réinitialisation",
       menuNote:"Astuce: ouvre le menu pour les actions et ferme-le pour voir plus de feuille.",
-      statusReady:"App prête. Les données restent sur ce téléphone. Version 3.4.",
+      statusReady:"App prête. Les données restent sur ce téléphone. Version 3.6.",
       sheetName:"Feuille de transport / Hauling Sheet",
       sheetTitle:"Recette",
       voyageHeader:"Voyage",
@@ -1403,7 +1409,7 @@ body.loader-plan-active #loaderPlanView { display:block; }
       menuSectionStatus:"Status",
       menuSectionDanger:"Reset",
       menuNote:"Tip: open the menu for actions, then close it to see more of the sheet.",
-      statusReady:"App ready. Data stays on this phone. Version 3.4.",
+      statusReady:"App ready. Data stays on this phone. Version 3.6.",
       sheetName:"Hauling Sheet",
       sheetTitle:"Receipt",
       voyageHeader:"Trip",

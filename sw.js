@@ -1,4 +1,4 @@
-const CACHE_NAME = "recette-touch-v3.4.0-fullview-header-fix";
+const CACHE_NAME = "recette-touch-v3.6.0-print-full-grid";
 const ASSETS = [
   "./",
   "./index.html",
