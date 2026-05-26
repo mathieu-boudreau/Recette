@@ -1,0 +1,2739 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover">
+<meta name="theme-color" content="#111111">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Recette Touch">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<title>Feuille Recette Touch - Hors ligne</title>
+<style>
+:root {
+  --bg:#f4f0e7;
+  --view-scale:1;
+  --paper:#fffdf8;
+  --ink:#111;
+  --grid:#545454;
+  --thin:#a9a9a9;
+  --blue:#cfe7f6;
+  --yellow:#d8cc45;
+  --green:#d8ead0;
+  --pink:#ead5dc;
+  --gray:#e7e7e7;
+  --selected:#fff4b8;
+}
+
+body.dark-mode {
+  --bg:#090909;
+  --paper:#141414;
+  --ink:#f4f1e8;
+  --thin:#555;
+  --grid:#777;
+  --selected:#3a3212;
+}
+body.dark-mode {
+  background:#090909;
+  color:#f4f1e8;
+}
+body.dark-mode .sheet {
+  background:#141414;
+  border-color:#444;
+  box-shadow:0 3px 18px rgba(0,0,0,.65);
+}
+body.dark-mode .sheet input,
+body.dark-mode .sheet textarea {
+  color:#f4f1e8;
+  -webkit-text-fill-color:#f4f1e8;
+}
+body.dark-mode th,
+body.dark-mode td {
+  background:#171717;
+  color:#f4f1e8;
+  border-color:#555;
+}
+body.dark-mode .row-no,
+body.dark-mode th {
+  background:#222;
+}
+body.dark-mode .source-main {
+  background:#2d2d2d !important;
+}
+body.dark-mode .group-anuri {
+  background:#5f5010 !important;
+}
+body.dark-mode .group-qaki {
+  background:#253d22 !important;
+}
+body.dark-mode .group-pad {
+  background:#183247 !important;
+}
+body.dark-mode .group-kiki {
+  background:#3e2530 !important;
+}
+body.dark-mode td.ore-cell:not(:empty),
+body.dark-mode tr.selected td.ore-cell:not(:empty) {
+  background:#111 !important;
+}
+body.dark-mode .bucket-mark {
+  background:#fff5c2;
+}
+body.dark-mode .bucket-x {
+  color:#fff5c2;
+}
+body.dark-mode tr.selected td {
+  background:#3a3212 !important;
+}
+body.dark-mode tr.next-line td {
+  box-shadow: inset 0 0 0 2px rgba(255,204,36,.35);
+}
+body.dark-mode tfoot td,
+body.dark-mode .total-cell {
+  background:#1f2a30 !important;
+  color:#f4f1e8;
+  border-color:#777;
+}
+body.dark-mode .toolbar {
+  background:rgba(18,18,18,.985);
+  border-color:#3a3a3a;
+}
+body.dark-mode .menu-section {
+  background:#151515;
+  border-color:#3a3a3a;
+}
+body.dark-mode .menu-title {
+  color:#ffcc24;
+}
+body.dark-mode button {
+  background:#1f1f1f;
+  color:#f4f1e8;
+  border-color:#555;
+}
+body.dark-mode button.primary {
+  background:#ffcc24;
+  color:#111;
+  border-color:#ffcc24;
+}
+body.dark-mode button.on,
+body.dark-mode button.active,
+body.dark-mode button.loader-switch-active {
+  background:#ffcc24 !important;
+  color:#111 !important;
+  border-color:#ffcc24 !important;
+}
+body.dark-mode button.danger {
+  background:#2a1110;
+  color:#ffb3aa;
+  border-color:#7d2c24;
+}
+body.dark-mode .status,
+body.dark-mode .offline,
+body.dark-mode .installbox,
+body.dark-mode .menu-note {
+  background:#151515;
+  color:#f4f1e8;
+  border-color:#3a3a3a;
+}
+body.dark-mode .line-input,
+body.dark-mode .foot input,
+body.dark-mode .loader-plan-input,
+body.dark-mode .loader-done-tap,
+body.dark-mode .loader-notes-wrap textarea {
+  background:#111;
+  color:#f4f1e8;
+  -webkit-text-fill-color:#f4f1e8;
+  border-color:#666;
+}
+body.dark-mode .loader-tonnes,
+body.dark-mode .loader-buckets,
+body.dark-mode .loader-status {
+  background:#171717;
+}
+body.dark-mode .right-logo,
+body.dark-mode .left-logo {
+  filter:brightness(.9);
+}
+
+* { box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+html,body {
+  margin:0;
+  padding:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family: Arial, Helvetica, sans-serif;
+  -webkit-user-select:none;
+  user-select:none;
+  touch-action:manipulation;
+}
+.app {
+  max-width:1440px;
+  margin:0 auto;
+  padding:calc(84px + env(safe-area-inset-top)) 8px calc(90px + env(safe-area-inset-bottom));
+}
+.toolbar {
+  position:fixed;
+  top:calc(78px + env(safe-area-inset-top));
+  left:8px;
+  right:8px;
+  z-index:85;
+  display:none;
+  max-height:min(72vh, 760px);
+  overflow:auto;
+  padding:14px;
+  background:rgba(255,253,244,.985);
+  border:2px solid rgba(17,17,17,.18);
+  border-radius:20px;
+  box-shadow:0 16px 40px rgba(0,0,0,.22);
+  backdrop-filter: blur(10px);
+}
+body.menu-open .toolbar {
+  display:block;
+}
+.toolbar-layout {
+  display:grid;
+  gap:14px;
+}
+.menu-section {
+  background:#fffdf4;
+  border:1px solid #ddd4bf;
+  border-radius:16px;
+  padding:12px;
+}
+.menu-title {
+  margin:0 0 10px;
+  font-size:12px;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  color:#6a5b1a;
+}
+.menu-grid {
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0, 1fr));
+  gap:10px;
+}
+.menu-grid.columns-3 {
+  grid-template-columns:repeat(3, minmax(0, 1fr));
+}
+.menu-grid.single {
+  grid-template-columns:1fr;
+}
+button {
+  min-height:48px;
+  border:1.5px solid #9c9c9c;
+  border-radius:14px;
+  background:#fff;
+  padding:10px 12px;
+  font-size:15px;
+  font-weight:800;
+  color:#111;
+  box-shadow:0 1px 0 rgba(0,0,0,.04);
+}
+button.primary {
+  background:#111;
+  color:#ffcc24;
+  border-color:#111;
+}
+button.danger {
+  background:#fff3f1;
+  color:#9b2115;
+  border-color:#e5b0a9;
+}
+button.on,
+button.active,
+button.loader-switch-active {
+  background:#ffcc24 !important;
+  color:#111 !important;
+  border-color:#c79d00 !important;
+}
+#btnPageLabel {
+  pointer-events:none;
+  background:#f2eee2;
+  border-color:#cfc6ae;
+  color:#111;
+}
+.fixed-app-header {
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  z-index:90;
+  height:calc(74px + env(safe-area-inset-top));
+  padding:calc(6px + env(safe-area-inset-top)) 10px 6px;
+  display:grid;
+  grid-template-columns:48px 1fr 48px;
+  align-items:center;
+  gap:8px;
+  background:#ffcb1f;
+  border-bottom:1px solid rgba(0,0,0,.25);
+  box-shadow:0 2px 12px rgba(0,0,0,.18);
+}
+.menu-toggle {
+  width:44px;
+  height:44px;
+  min-height:44px;
+  padding:0;
+  border-radius:12px;
+  background:#111;
+  color:#fff;
+  border:1px solid #111;
+  display:grid;
+  place-items:center;
+  font-size:24px;
+  line-height:1;
+}
+.kiewit-header-img {
+  width:100%;
+  height:56px;
+  object-fit:contain;
+  justify-self:center;
+}
+body.menu-open .menu-toggle {
+  background:#fff;
+  color:#111;
+}
+tfoot td, .total-cell {
+  background:#eef7ff !important;
+  font-weight:900;
+  color:#000;
+  border:1.5px solid #555;
+}
+.total-label {
+  text-align:right !important;
+  padding-right:8px !important;
+  font-size:12px;
+}
+.total-number {
+  font-size:15px;
+}
+
+.status {
+  font-size:13px;
+  line-height:1.35;
+  color:#222;
+  background:#fff9df;
+  border:1px solid #eadc9b;
+  border-radius:12px;
+  padding:10px 12px;
+}
+.menu-note {
+  font-size:12px;
+  line-height:1.35;
+  color:#4e4a39;
+  margin-top:8px;
+}
+.offline {
+  margin:8px 0;
+  padding:8px 10px;
+  border:1px solid #d6d0c6;
+  border-radius:12px;
+  background:#fff;
+  font-size:13px;
+  line-height:1.35;
+}
+.installbox {
+  display:none;
+  margin:8px 0;
+  padding:10px;
+  border:1px solid #bbb;
+  border-radius:12px;
+  background:#fff9d8;
+  font-size:13px;
+  line-height:1.35;
+}
+.installbox.show { display:block; }
+body.fit-mode .offline,
+body.fit-mode .installbox {
+  display:none !important;
+}
+body.fit-mode .app {
+  padding-top:calc(62px + env(safe-area-inset-top));
+}
+body.fit-mode .fixed-app-header {
+  height:calc(52px + env(safe-area-inset-top));
+  padding:calc(4px + env(safe-area-inset-top)) 8px 4px;
+  grid-template-columns:40px 1fr 24px;
+  gap:6px;
+}
+body.fit-mode .kiewit-header-img {
+  height:34px;
+}
+body.fit-mode .menu-toggle {
+  width:38px;
+  height:38px;
+  min-height:38px;
+  border-radius:10px;
+  font-size:22px;
+}
+body.fit-mode .toolbar {
+  top:calc(56px + env(safe-area-inset-top));
+  padding:10px;
+}
+body.fit-mode .menu-section {
+  padding:9px;
+}
+body.fit-mode button {
+  min-height:38px;
+  padding:7px 9px;
+  font-size:13px;
+}
+body.fit-mode .status {
+  font-size:11px;
+}
+body.fit-mode .sheet {
+  padding:4px;
+}
+.sheet {
+  background:var(--paper);
+  border:1px solid #aaa;
+  box-shadow:0 3px 14px rgba(0,0,0,.13);
+  padding:12px;
+  overflow:auto;
+}
+.sheet-inner {
+  transform:scale(var(--view-scale));
+  transform-origin:top left;
+  width:calc(100% / var(--view-scale));
+  touch-action:manipulation;
+}
+.top {
+  display:grid;
+  grid-template-columns: 1fr 1.35fr 1fr;
+  gap:12px;
+  align-items:start;
+  margin-bottom:6px;
+  min-width:1280px;
+}
+.brand-left {
+  display:grid;
+  grid-template-columns:70px 1fr;
+  gap:8px;
+  align-items:center;
+}
+.left-logo {
+  width:58px;
+  height:58px;
+  object-fit:contain;
+}
+.logo-placeholder {
+  width:58px;
+  height:58px;
+  border:2px solid #444;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  font-weight:800;
+}
+.right-logo {
+  justify-self:end;
+  max-width:270px;
+  height:64px;
+  object-fit:contain;
+}
+.wordmark-placeholder {
+  justify-self:end;
+  text-align:right;
+  font-size:27px;
+  letter-spacing:2px;
+  font-weight:700;
+}
+.wordmark-placeholder small {
+  display:block;
+  font-size:10px;
+  letter-spacing:.8px;
+  font-weight:500;
+}
+.sheet-name {
+  font-size:12px;
+  font-weight:700;
+  text-decoration:underline;
+}
+.title { text-align:center; }
+.title-box {
+  display:inline-block;
+  min-width:390px;
+  padding:4px 40px;
+  border:1px solid #777;
+  background:var(--blue);
+  font-size:22px;
+  font-weight:700;
+}
+.fields {
+  display:grid;
+  grid-template-columns:94px 1fr;
+  gap:6px;
+  align-items:center;
+  margin-top:4px;
+  font-size:12px;
+  font-weight:700;
+}
+.line-input {
+  width:100%;
+  min-height:28px;
+  border:0;
+  border-bottom:2px solid #777;
+  border-radius:0;
+  background:transparent;
+  padding:3px 6px;
+  font-size:15px;
+  font-weight:600;
+}
+.truck {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:18px;
+  margin-top:8px;
+  font-size:13px;
+  font-weight:700;
+}
+.truck-choice {
+  min-width:54px;
+  padding:4px 8px;
+  border:1px solid transparent;
+  border-radius:8px;
+  font-size:23px;
+  font-weight:900;
+  cursor:pointer;
+}
+.truck-choice.active {
+  background:#e9f4ff;
+  border-color:#111;
+}
+table {
+  width:100%;
+  min-width:1280px;
+  border-collapse:collapse;
+  table-layout:fixed;
+  font-size:12px;
+}
+th,td {
+  border:1px solid var(--thin);
+  text-align:center;
+  height:30px;
+  padding:2px;
+  background:#fffdf8;
+}
+th {
+  font-weight:900;
+  background:#f2f2f2;
+}
+.source-main { background:#dedede; font-size:14px; }
+.group-anuri { background:var(--yellow); }
+.group-qaki { background:var(--green); }
+.group-pad { background:var(--blue); }
+.group-kiki { background:var(--pink); }
+.small-h { font-size:9px; line-height:1.04; }
+.voy { width:42px; }
+.time { width:92px; }
+.ore { width:62px; }
+.ore-wide { width:82px; }
+.loader { width:86px; }
+.dest { width:62px; }
+.row-no {
+  background:#fafafa;
+  font-size:12px;
+  font-weight:700;
+  color:#333;
+}
+td.time-cell, td.ore-cell, td.loader-cell, td.dest-cell {
+  cursor:pointer;
+}
+td.time-cell {
+  font-size:15px;
+  font-weight:800;
+}
+td.ore-cell {
+  font-size:19px;
+  font-weight:900;
+  letter-spacing:0;
+  line-height:1;
+  font-family: Arial, Helvetica, sans-serif;
+  text-shadow:none;
+}
+.bucket-marks {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  min-width:22px;
+}
+.bucket-mark {
+  display:inline-block;
+  width:3px;
+  height:18px;
+  background:#111;
+  border-radius:1px;
+}
+.bucket-x {
+  display:inline-block;
+  font-size:18px;
+  font-weight:900;
+  line-height:1;
+}
+td.ore-cell:not(:empty) {
+  background:#fff;
+}
+td.loader-cell {
+  font-size:15px;
+  font-weight:800;
+}
+td.dest-cell {
+  font-size:17px;
+  font-weight:900;
+}
+tr.selected td {
+  background:var(--selected);
+}
+tr.selected td.ore-cell:not(:empty) {
+  background:#fff;
+}
+td.flash { animation: flash .5s ease; }
+tr.next-line td {
+  box-shadow: inset 0 0 0 2px rgba(0,120,255,.22);
+}
+tr.blocked-line td {
+  animation: blockedLine .65s ease;
+}
+@keyframes blockedLine {
+  0% { background:#ffd6d6; }
+  100% { background:inherit; }
+}
+@keyframes flash {
+  0% { background:#ffd0d0; }
+  100% { background:inherit; }
+}
+.foot {
+  min-width:1280px;
+  display:flex;
+  justify-content:center;
+  gap:70px;
+  align-items:center;
+  margin-top:10px;
+  font-size:13px;
+  font-weight:700;
+}
+.foot input {
+  border:0;
+  border-bottom:2px solid #777;
+  background:transparent;
+  min-width:130px;
+  padding:3px 6px;
+  font-size:14px;
+  font-weight:700;
+}
+.foot input[readonly] {
+  color:#000;
+  -webkit-text-fill-color:#000;
+  opacity:1;
+}
+.page-print-label {
+  min-width:1280px;
+  text-align:right;
+  font-size:12px;
+  margin-top:6px;
+  font-weight:800;
+}
+.note {
+  min-width:1280px;
+  text-align:center;
+  font-size:12px;
+  margin-top:3px;
+  font-weight:700;
+}
+.modal {
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:100;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  background:rgba(0,0,0,.42);
+}
+.modal.open { display:flex; }
+.panel {
+  width:min(430px,100%);
+  background:#fff;
+  border-radius:18px;
+  padding:18px;
+  box-shadow:0 10px 30px rgba(0,0,0,.25);
+}
+.panel h2 {
+  margin:0 0 12px;
+  font-size:20px;
+}
+.panel input {
+  width:100%;
+  min-height:48px;
+  border:1px solid #aaa;
+  border-radius:10px;
+  padding:8px 10px;
+  font-size:22px;
+}
+.panel-row {
+  display:flex;
+  gap:8px;
+  justify-content:flex-end;
+  margin-top:12px;
+}
+
+.loader-switch-active {
+  background:#111 !important;
+  color:#fff !important;
+  border-color:#111 !important;
+}
+#loaderPlanView { display:none; }
+body.loader-plan-active #haulingSheetWrapper { display:none; }
+body.loader-plan-active #loaderPlanView { display:block; }
+.loader-plan-table {
+  min-width:0;
+  width:100%;
+  border-collapse:collapse;
+  table-layout:fixed;
+}
+.loader-plan-table th,
+.loader-plan-table td {
+  border:1px solid var(--grid);
+  min-height:34px;
+  height:auto;
+  padding:6px 8px;
+  text-align:center;
+}
+.loader-plan-table th:first-child,
+.loader-plan-table td:first-child {
+  text-align:left;
+  font-weight:700;
+}
+.loader-plan-table tfoot td {
+  background:#f8f8f8;
+  font-weight:800;
+}
+.loader-plan-input {
+  width:100%;
+  border:0;
+  border-bottom:1px solid #666;
+  background:transparent;
+  text-align:center;
+  font-size:16px;
+  font-weight:800;
+  padding:2px 0;
+}
+.loader-plan-input:focus,
+.loader-notes-wrap textarea:focus {
+  outline:2px solid rgba(0,120,255,.18);
+}
+.loader-plan-extra {
+  display:grid;
+  grid-template-columns: repeat(2, minmax(180px, 1fr));
+  gap:14px 24px;
+  margin-top:10px;
+}
+.loader-plan-extra label {
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-weight:700;
+}
+.loader-plan-extra .line-input {
+  min-width:0;
+  flex:1 1 auto;
+}
+.loader-notes-wrap {
+  margin-top:12px;
+}
+.loader-notes-wrap label {
+  display:block;
+  font-weight:800;
+  margin-bottom:6px;
+}
+.loader-notes-wrap textarea {
+  width:100%;
+  min-height:90px;
+  border:1px solid #aaa;
+  border-radius:10px;
+  padding:10px;
+  font-size:15px;
+  resize:vertical;
+}
+#loaderPlanBlend { min-width:340px; }
+.loader-tonnes,
+.loader-buckets,
+.loader-status {
+  font-weight:800;
+  background:#fffdf8;
+}
+.loader-done-tap {
+  width:100%;
+  border:1px solid #666;
+  background:#fff;
+  text-align:center;
+  font-size:18px;
+  font-weight:800;
+  padding:8px 0;
+  border-radius:8px;
+  cursor:pointer;
+  touch-action:manipulation;
+}
+.loader-done-tap.complete {
+  background:#eef7ee;
+  border-color:#157347;
+  color:#157347;
+}
+.loader-status.complete {
+  color:#157347;
+}
+.loader-status.remaining {
+  color:#b42318;
+}
+.loader-status.partial {
+  color:#664d03;
+}
+.loader-plan-table th:nth-child(1) { width:24%; }
+.loader-plan-table th:nth-child(2) { width:12%; }
+.loader-plan-table th:nth-child(3) { width:16%; }
+.loader-plan-table th:nth-child(4) { width:16%; }
+.loader-plan-table th:nth-child(5) { width:14%; }
+.loader-plan-table th:nth-child(6) { width:18%; }
+#loaderPercentTotal.ok { color:#157347; }
+#loaderPercentTotal.warn { color:#b42318; }
+
+@media (max-width:700px) {
+  .app { padding:calc(82px + env(safe-area-inset-top)) 6px calc(88px + env(safe-area-inset-bottom)); }
+  .toolbar button { width:100%; }
+@media (min-width: 820px) {
+  .toolbar-layout {
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+    align-items:start;
+  }
+  .menu-section.full-span,
+  .menu-section.menu-status {
+    grid-column:1 / -1;
+  }
+}
+  .status { flex-basis:100%; }
+  .sheet { padding:8px; }
+  .loader-plan-extra { grid-template-columns:1fr; gap:10px; }
+  #loaderPlanBlend { min-width:0; width:100%; }
+  th,td { height:32px; }
+}
+@media print {
+  :root { --app-zoom:1 !important; }
+  html, body { background:#fff; width:100%; margin:0; padding:0; overflow:visible; }
+  .toolbar,.offline,.installbox,.modal,.menu-toggle,.fixed-app-header { display:none !important; }
+  body.loader-plan-active #haulingSheetWrapper { display:none !important; }
+  body:not(.loader-plan-active) #loaderPlanView { display:none !important; }
+  .app { max-width:none; padding:0; margin:0; }
+  .sheet { box-shadow:none; border:0; padding:0; overflow:visible; }
+  body.loader-plan-active .sheet-inner { transform:none !important; width:auto !important; }
+  body.loader-plan-active .loader-plan-table { font-size:8px; }
+  body.loader-plan-active .loader-plan-table th,
+  body.loader-plan-active .loader-plan-table td { height:auto; padding:2px 4px; }
+  body.loader-plan-active .loader-plan-input,
+  body.loader-plan-active .loader-done-tap,
+  body.loader-plan-active #loaderPlanNotes,
+  body.loader-plan-active #loaderPlanBlend,
+  body.loader-plan-active #loaderPlanDate,
+  body.loader-plan-active #loaderPlanName,
+  body.loader-plan-active #loaderPlanShift,
+  body.loader-plan-active #loaderPlanTarget { font-size:9px !important; min-height:12px !important; }
+  .sheet-inner {
+    transform:scale(.82) !important;
+    transform-origin:top left !important;
+    width:calc(100% / .82) !important;
+  }
+  .top, table, .foot, .note, .page-print-label { min-width:0; }
+  .top {
+    grid-template-columns: 1.7fr 1.1fr 1.1fr;
+    gap:3px;
+    margin-bottom:2px;
+    break-inside: avoid;
+    page-break-inside: avoid;
+    align-items:start;
+  }
+  .brand-left { grid-template-columns:26px minmax(0,1fr); gap:3px; }
+  .left-logo { width:24px; height:24px; }
+  .right-logo { height:22px; max-width:118px; }
+  .sheet-name { font-size:6px; line-height:1; }
+  .title-box { font-size:10px; min-width:150px; padding:1px 8px; }
+  .fields {
+    font-size:6px;
+    gap:1px;
+    grid-template-columns: 46px minmax(92px,1fr);
+  }
+  .line-input, .foot input {
+    color:#000 !important;
+    -webkit-text-fill-color:#000 !important;
+    opacity:1 !important;
+    background:transparent !important;
+    border-bottom:1px solid #555 !important;
+    font-size:7px !important;
+    font-weight:800 !important;
+    min-height:11px !important;
+    padding:0 1px !important;
+    line-height:1 !important;
+  }
+  #metaDate, #metaTruckNo { min-width:132px !important; font-size:7.5px !important; }
+  #metaName { min-width:92px !important; }
+  .truck { margin-top:1px; gap:5px; font-size:6px; }
+  .truck-choice { font-size:9px; min-width:20px; padding:0 2px; }
+  table {
+    font-size:5px;
+    table-layout:fixed;
+    width:100%;
+    page-break-inside:auto;
+    border-collapse:collapse;
+  }
+  thead { display:table-header-group; }
+  tr { page-break-inside:avoid; break-inside:avoid; }
+  th,td { height:10px; padding:0; line-height:1; }
+  td.ore-cell {
+    font-size:7px;
+    font-weight:900;
+    letter-spacing:0;
+    font-family: Arial, Helvetica, sans-serif;
+    text-shadow:none;
+  }
+  .bucket-marks { gap:2px; min-width:12px; }
+  .bucket-mark { width:2px; height:8px; border-radius:0; }
+  .bucket-x { font-size:8px; font-weight:900; }
+  tr.selected td,
+  tr.next-line td {
+    background:#fffdf8 !important;
+    box-shadow:none !important;
+  }
+  tr.selected td.ore-cell:not(:empty),
+  tr.next-line td.ore-cell:not(:empty) {
+    background:#fff !important;
+  }
+  td.time-cell,td.loader-cell,td.dest-cell { font-size:6px; }
+  tfoot td { height:11px; font-size:6px !important; }
+  .total-number { font-size:6px !important; }
+  .total-label { font-size:6px !important; }
+  .small-h { font-size:4px; }
+  .foot,.note,.page-print-label { font-size:6px; margin-top:1px; }
+  .foot { gap:34px; }
+  .foot input { min-width:88px !important; }
+  .note { line-height:1; }
+  
+  body.dark-mode,
+  body.dark-mode .sheet,
+  body.dark-mode th,
+  body.dark-mode td,
+  body.dark-mode .row-no,
+  body.dark-mode .source-main,
+  body.dark-mode .group-anuri,
+  body.dark-mode .group-qaki,
+  body.dark-mode .group-pad,
+  body.dark-mode .group-kiki,
+  body.dark-mode tfoot td,
+  body.dark-mode .total-cell {
+    color:#000 !important;
+    -webkit-text-fill-color:#000 !important;
+  }
+  body.dark-mode {
+    background:#fff !important;
+  }
+  body.dark-mode .sheet {
+    background:#fffdf8 !important;
+  }
+  body.dark-mode th,
+  body.dark-mode td {
+    background:#fffdf8 !important;
+    border-color:#aaa !important;
+  }
+  body.dark-mode th {
+    background:#f2f2f2 !important;
+  }
+  body.dark-mode .source-main {
+    background:#dedede !important;
+  }
+  body.dark-mode .group-anuri {
+    background:var(--yellow) !important;
+  }
+  body.dark-mode .group-qaki {
+    background:var(--green) !important;
+  }
+  body.dark-mode .group-pad {
+    background:var(--blue) !important;
+  }
+  body.dark-mode .group-kiki {
+    background:var(--pink) !important;
+  }
+  body.dark-mode td.ore-cell:not(:empty) {
+    background:#fff !important;
+  }
+  body.dark-mode .bucket-mark {
+    background:#111 !important;
+  }
+  body.dark-mode .bucket-x {
+    color:#111 !important;
+  }
+
+  @page { size: landscape; margin:2.5mm; }
+}
+</style>
+</head>
+<body>
+<header class="fixed-app-header">
+  <button id="menuToggle" class="menu-toggle" aria-label="Menu">☰</button>
+  <img class="kiewit-header-img" src="./kiewit-header.png" alt="Kiewit">
+</header>
+<div class="app">
+  <div class="toolbar">
+    <div class="toolbar-layout">
+      <section class="menu-section">
+        <h3 class="menu-title" id="menuSectionQuick">Actions rapides</h3>
+        <div class="menu-grid">
+          <button class="primary" id="btnTime">Heure maintenant</button>
+          <button id="btnErase">Effacer case</button>
+          <button id="btnMax3" class="on">Max 3 buckets/voyage: ON</button>
+          <button id="btnLang">English</button>
+          <button id="btnDarkMode">Mode nuit: Auto</button>
+        </div>
+      </section>
+
+      <section class="menu-section">
+        <h3 class="menu-title" id="menuSectionViews">Vues et feuilles</h3>
+        <div class="menu-grid">
+          <button id="btnLoaderPlan">Feuille loader</button>
+          <button id="btnFitPage">Vue complète</button>
+          <button id="btnInputView">Vue saisie</button>
+          <button id="btnPrint">Imprimer/PDF</button>
+        </div>
+      </section>
+
+      <section class="menu-section full-span">
+        <h3 class="menu-title" id="menuSectionPages">Pages</h3>
+        <div class="menu-grid columns-3">
+          <button id="btnPrevPage">Page -</button>
+          <button id="btnPageLabel">Page 1/1</button>
+          <button id="btnNextPage">Page +</button>
+          <button id="btnAddPage">+ Nouvelle page</button>
+          <button id="btnDeletePage" class="danger">Supprimer page</button>
+          <button id="btnExport">Exporter CSV</button>
+        </div>
+      </section>
+
+      <section class="menu-section menu-status full-span">
+        <h3 class="menu-title" id="menuSectionStatus">Statut</h3>
+        <div class="status" id="status">App prête. Les données restent sur ce téléphone. Version 3.4.</div>
+        <div class="menu-note" id="menuNote">Astuce: ouvre le menu pour les actions et ferme-le pour voir plus de feuille.</div>
+      </section>
+
+      <section class="menu-section full-span">
+        <h3 class="menu-title" id="menuSectionDanger">Réinitialisation</h3>
+        <div class="menu-grid single">
+          <button id="btnReset" class="danger">Reset feuille</button>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="installbox" id="installBox">
+    <span id="installText"><b>Installation iPhone :</b> ouvrir cette page dans Safari, bouton Partager, puis <b>Ajouter à l’écran d’accueil</b>. Après cette étape, l’application fonctionne hors ligne.</span>
+  </div>
+
+  <div class="offline">
+    <span id="helpText"><b>Feuille Recette Touch.</b> Toucher une case heure inscrit l’heure actuelle. Toucher A1, B2, etc. ajoute 1 trait vertical par bucket. Destination: toucher Silo ou Cr-Pad. Loader: toucher une fois pour entrer le numéro, double toucher pour répéter le dernier loader. + Nouvelle page crée une page 2, 3, etc. Utilise Vue complète pour voir toute la feuille, Vue saisie pour écrire plus gros, et pince avec deux doigts pour ajuster. Le bas du tableau affiche les totaux par colonne. Poids et # de voyage se calculent automatiquement. Les traits des buckets sont plus propres et moins collés. 1 tap = une petite ligne, 2 taps = deux petites lignes, 3 taps = X. Les lignes doivent être remplies en ordre: impossible de passer plus bas avant d’avoir l’heure de chargement et 3 buckets sur la ligne actuelle. L’impression est optimisée pour sortir 1 page complète par feuille. Cacher menu masque les boutons du haut. Appui long sur une case minerai: efface cette case.</span>
+  </div>
+
+  <div id="haulingSheetWrapper">
+  <div class="sheet">
+    <div class="sheet-inner">
+    <div class="top">
+      <div class="brand-left">
+        <img class="left-logo" src="./logo.png" alt="Logo">
+        <div>
+          <div class="sheet-name" id="sheetName">Feuille de transport / Hauling Sheet</div>
+          <div class="fields">
+            <label id="labelDate">Date:</label><input class="line-input" id="metaDate" autocomplete="off">
+            <label id="labelTruckNo">No de Camion :</label><input class="line-input" id="metaTruckNo" autocomplete="off">
+          </div>
+        </div>
+      </div>
+
+      <div class="title">
+        <div class="title-box" id="sheetTitle">Recette</div>
+        <div class="fields" style="grid-template-columns:55px 1fr; max-width:430px; margin:10px auto 0;">
+          <label id="labelName">Nom:</label><input class="line-input" id="metaName" autocomplete="off">
+        </div>
+        <div class="truck">
+          <span id="labelTruckType">Truck type :</span>
+          <span class="truck-choice" data-truck="40T">40T</span>
+          <span class="truck-choice" data-truck="50T">50T</span>
+        </div>
+      </div>
+
+      <div style="display:grid; align-items:start;">
+        <img class="right-logo" src="./wordmark.png" alt="MINE RAGLAN">
+      </div>
+    </div>
+
+    <table id="sheetTable" aria-label="Feuille Recette Touch">
+      <thead>
+        <tr>
+          <th rowspan="3" class="voy" id="thVoyage">Voyage</th>
+          <th rowspan="3" class="time small-h" id="thLoadingTime">HEURE DU<br>CHARGEMENT</th>
+          <th colspan="16" class="source-main" id="thSource">SOURCE</th>
+          <th rowspan="3" class="loader" id="thLoader">Numéro<br>Loader</th>
+          <th colspan="2" id="thDestination">DESTINATION</th>
+        </tr>
+        <tr>
+          <th colspan="6" class="group-anuri">Anuri</th>
+          <th colspan="3" class="group-qaki">Qaki</th>
+          <th colspan="3" class="group-pad">Pad crusher Mine 8</th>
+          <th colspan="4" class="group-kiki">Kikialik</th>
+          <th rowspan="2" class="dest small-h">Silo</th>
+          <th rowspan="2" class="dest small-h">Cr-Pad</th>
+        </tr>
+        <tr>
+          <th class="ore">A1</th>
+          <th class="ore">A2</th>
+          <th class="ore">A3</th>
+          <th class="ore-wide">A4 pad ore</th>
+          <th class="ore-wide">A4 dump</th>
+          <th class="ore-wide small-h">Bldr Cassé A</th>
+          <th class="ore">B1</th>
+          <th class="ore">B2</th>
+          <th class="ore">B3</th>
+          <th class="ore">C1</th>
+          <th class="ore">C2</th>
+          <th class="ore-wide small-h">Bldr Cassé B</th>
+          <th class="ore">D1</th>
+          <th class="ore">D2</th>
+          <th class="ore">D3</th>
+          <th class="ore">D4</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+      <tfoot>
+        <tr id="totalsRow"></tr>
+      </tfoot>
+    </table>
+
+    <div class="page-print-label" id="pagePrintLabel">Page 1/1</div>
+    <div class="foot">
+      <label><span id="labelPoids">Poids :</span> <input id="metaPoids" autocomplete="off" readonly></label>
+      <label><span id="labelVoyage"># de voyage :</span> <input id="metaVoyage" autocomplete="off" readonly></label>
+    </div>
+    <div class="note" id="weightNote">(Le relevé du poids doit être fait 1 fois par shift)</div>
+    </div>
+  </div>
+  </div>
+
+  <div class="sheet" id="loaderPlanView">
+    <div class="sheet-inner">
+      <div class="top">
+        <div class="brand-left">
+          <img class="left-logo" src="./logo.png" alt="Logo">
+          <div>
+            <div class="sheet-name" id="loaderPlanSheetName">Feuille loader / Loader sheet</div>
+            <div class="fields">
+              <label id="labelLoaderPlanDate">Date:</label><input class="line-input" id="loaderPlanDate" autocomplete="off">
+              <label id="labelLoaderPlanName">No Loader:</label><input class="line-input" id="loaderPlanName" autocomplete="off">
+              <label id="labelLoaderPlanOperator">Opérateur:</label><input class="line-input" id="loaderPlanOperator" autocomplete="off">
+            </div>
+          </div>
+        </div>
+
+        <div class="title">
+          <div class="title-box" id="loaderSheetTitle">Feuille recette loader</div>
+          <div class="fields" style="grid-template-columns:98px 1fr; max-width:430px; margin:10px auto 0;">
+            <label id="labelLoaderPlanShift">Quart :</label><input class="line-input" id="loaderPlanShift" autocomplete="off">
+            <label id="labelLoaderPlanTarget">Tonnage cible :</label><input class="line-input" id="loaderPlanTarget" autocomplete="off" placeholder="Ex: 2800 t">
+          </div>
+        </div>
+
+        <div style="display:grid; align-items:start;">
+          <img class="right-logo" src="./wordmark.png" alt="MINE RAGLAN">
+        </div>
+      </div>
+
+      <table class="loader-plan-table" aria-label="Feuille recette loader">
+        <thead>
+          <tr>
+            <th id="thLoaderOre">Minerai</th>
+            <th id="thLoaderPercent">%</th>
+            <th id="thLoaderTonnes">Tonnes estimées</th>
+            <th id="thLoaderBuckets">Cible buckets</th>
+            <th id="thLoaderDone">Buckets faits</th>
+            <th id="thLoaderStatus">Suivi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>A1</td><td><input class="loader-plan-input" data-item="A1" inputmode="decimal" autocomplete="off"></td><td class="loader-tonnes" data-tonnes="A1"></td><td class="loader-buckets" data-buckets="A1"></td><td><button type="button" class="loader-done-tap" data-done="A1">0</button></td><td class="loader-status" data-status="A1"></td></tr>
+          <tr><td>A2</td><td><input class="loader-plan-input" data-item="A2" inputmode="decimal" autocomplete="off"></td><td class="loader-tonnes" data-tonnes="A2"></td><td class="loader-buckets" data-buckets="A2"></td><td><button type="button" class="loader-done-tap" data-done="A2">0</button></td><td class="loader-status" data-status="A2"></td></tr>
+          <tr><td>A3</td><td><input class="loader-plan-input" data-item="A3" inputmode="decimal" autocomplete="off"></td><td class="loader-tonnes" data-tonnes="A3"></td><td class="loader-buckets" data-buckets="A3"></td><td><button type="button" class="loader-done-tap" data-done="A3">0</button></td><td class="loader-status" data-status="A3"></td></tr>
+          <tr><td>A4 pad ore</td><td><input class="loader-plan-input" data-item="A4 pad ore" inputmode="decimal" autocomplete="off"></td><td class="loader-tonnes" data-tonnes="A4 pad ore"></td><td class="loader-buckets" data-buckets="A4 pad ore"></td><td><button type="button" class="loader-done-tap" data-done="A4 pad ore">0</button></td><td class="loader-status" data-status="A4 pad ore"></td></tr>
+          <tr><td>A4 dump</td><td><input class="loader-plan-input" data-item="A4 dump" inputmode="decimal" autocomplete="off"></td><td class="loader-tonnes" data-tonnes="A4 dump"></td><td class="loader-buckets" data-buckets="A4 dump"></td><td><button type="button" class="loader-done-tap" data-done="A4 dump">0</button></td><td class="loader-status" data-status="A4 dump"></td></tr>
+          <tr><td>Bldr Cassé A</td><td><input class="loader-plan-input" data-item="Bldr Cassé A" inputmode="decimal" autocomplete="off"></td><td class="loader-tonnes" data-tonnes="Bldr Cassé A"></td><td class="loader-buckets" data-buckets="Bldr Cassé A"></td><td><button type="button" class="loader-done-tap" data-done="Bldr Cassé A">0</button></td><td class="loader-status" data-status="Bldr Cassé A"></td></tr>
+          <tr><td>B1</td><td><input class="loader-plan-input" data-item="B1" inputmode="decimal" autocomplete="off"></td><td class="loader-tonnes" data-tonnes="B1"></td><td class="loader-buckets" data-buckets="B1"></td><td><button type="button" class="loader-done-tap" data-done="B1">0</button></td><td class="loader-status" data-status="B1"></td></tr>
+          <tr><td>B2</td><td><input class="loader-plan-input" data-item="B2" inputmode="decimal" autocomplete="off"></td><td class="loader-tonnes" data-tonnes="B2"></td><td class="loader-buckets" data-buckets="B2"></td><td><button type="button" class="loader-done-tap" data-done="B2">0</button></td><td class="loader-status" data-status="B2"></td></tr>
+          <tr><td>B3</td><td><input class="loader-plan-input" data-item="B3" inputmode="decimal" autocomplete="off"></td><td class="loader-tonnes" data-tonnes="B3"></td><td class="loader-buckets" data-buckets="B3"></td><td><button type="button" class="loader-done-tap" data-done="B3">0</button></td><td class="loader-status" data-status="B3"></td></tr>
+          <tr><td>C1</td><td><input class="loader-plan-input" data-item="C1" inputmode="decimal" autocomplete="off"></td><td class="loader-tonnes" data-tonnes="C1"></td><td class="loader-buckets" data-buckets="C1"></td><td><button type="button" class="loader-done-tap" data-done="C1">0</button></td><td class="loader-status" data-status="C1"></td></tr>
+          <tr><td>C2</td><td><input class="loader-plan-input" data-item="C2" inputmode="decimal" autocomplete="off"></td><td class="loader-tonnes" data-tonnes="C2"></td><td class="loader-buckets" data-buckets="C2"></td><td><button type="button" class="loader-done-tap" data-done="C2">0</button></td><td class="loader-status" data-status="C2"></td></tr>
+          <tr><td>Bldr Cassé B</td><td><input class="loader-plan-input" data-item="Bldr Cassé B" inputmode="decimal" autocomplete="off"></td><td class="loader-tonnes" data-tonnes="Bldr Cassé B"></td><td class="loader-buckets" data-buckets="Bldr Cassé B"></td><td><button type="button" class="loader-done-tap" data-done="Bldr Cassé B">0</button></td><td class="loader-status" data-status="Bldr Cassé B"></td></tr>
+          <tr><td>D1</td><td><input class="loader-plan-input" data-item="D1" inputmode="decimal" autocomplete="off"></td><td class="loader-tonnes" data-tonnes="D1"></td><td class="loader-buckets" data-buckets="D1"></td><td><button type="button" class="loader-done-tap" data-done="D1">0</button></td><td class="loader-status" data-status="D1"></td></tr>
+          <tr><td>D2</td><td><input class="loader-plan-input" data-item="D2" inputmode="decimal" autocomplete="off"></td><td class="loader-tonnes" data-tonnes="D2"></td><td class="loader-buckets" data-buckets="D2"></td><td><button type="button" class="loader-done-tap" data-done="D2">0</button></td><td class="loader-status" data-status="D2"></td></tr>
+          <tr><td>D3</td><td><input class="loader-plan-input" data-item="D3" inputmode="decimal" autocomplete="off"></td><td class="loader-tonnes" data-tonnes="D3"></td><td class="loader-buckets" data-buckets="D3"></td><td><button type="button" class="loader-done-tap" data-done="D3">0</button></td><td class="loader-status" data-status="D3"></td></tr>
+          <tr><td>D4</td><td><input class="loader-plan-input" data-item="D4" inputmode="decimal" autocomplete="off"></td><td class="loader-tonnes" data-tonnes="D4"></td><td class="loader-buckets" data-buckets="D4"></td><td><button type="button" class="loader-done-tap" data-done="D4">0</button></td><td class="loader-status" data-status="D4"></td></tr>
+          <tr><td>Boulder</td><td><input class="loader-plan-input" data-item="Boulder" inputmode="decimal" autocomplete="off"></td><td class="loader-tonnes" data-tonnes="Boulder"></td><td class="loader-buckets" data-buckets="Boulder"></td><td><button type="button" class="loader-done-tap" data-done="Boulder">0</button></td><td class="loader-status" data-status="Boulder"></td></tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td id="loaderPercentTotalLabel">Total %</td>
+            <td id="loaderPercentTotal">0%</td>
+            <td id="loaderTonnageTotal">0 t</td>
+            <td id="loaderBucketTotal">0</td>
+            <td id="loaderDoneTotal">0</td>
+            <td id="loaderOverallStatus"></td>
+          </tr>
+        </tfoot>
+      </table>
+
+      <div class="loader-plan-extra">
+        <label><span id="labelLoaderBlend">Recette totale :</span> <input class="line-input" id="loaderPlanBlend" autocomplete="off" readonly></label>
+      </div>
+      <div class="note" id="loaderPlanSummaryNote">Le total visé devrait être 100% pour la soirée.</div>
+      <div class="loader-notes-wrap">
+        <label id="labelLoaderNotes" for="loaderPlanNotes">Notes</label>
+        <textarea id="loaderPlanNotes" autocomplete="off"></textarea>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="loaderModal">
+  <div class="panel">
+    <h2 id="loaderTitle">Numéro Loader</h2>
+    <input id="loaderInput" inputmode="numeric" pattern="[0-9]*" autocomplete="off" placeholder="Ex: 4524">
+    <div class="panel-row">
+      <button id="loaderClear">Effacer</button>
+      <button id="loaderCancel">Annuler</button>
+      <button id="loaderSave" class="primary">Sauver</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  if ("serviceWorker" in navigator && location.protocol !== "file:") {
+    navigator.serviceWorker.register("./sw.js")
+      .then(() => setStatus(t("cacheOk")))
+      .catch(() => setStatus(t("cacheFail")));
+  }
+
+  if (!window.matchMedia("(display-mode: standalone)").matches && !navigator.standalone) {
+    document.getElementById("installBox").classList.add("show");
+  }
+
+  const ORES = ["A1","A2","A3","A4 pad ore","A4 dump","Bldr Cassé A","B1","B2","B3","C1","C2","Bldr Cassé B","D1","D2","D3","D4"];
+  const LOADER_PLAN_ITEMS = [...ORES, "Boulder"];
+  const ROWS = 60;
+  const KEY = "mine_raglan_recette_touch_offline_v4_pages";
+  const OLD_KEYS = [KEY, "mine_raglan_recette_touch_offline_v2", "mine_raglan_recette_touch_offline_v3_pages"];
+  let lang = localStorage.getItem("recette_touch_lang") || "fr";
+  const I18N = {
+    fr: {
+      langButton:"English",
+      darkAuto:"Mode nuit: Auto",
+      darkOn:"Mode nuit: ON",
+      darkOff:"Mode nuit: OFF",
+      darkAutoStatus:"Mode nuit automatique activé.",
+      darkOnStatus:"Mode nuit activé.",
+      darkOffStatus:"Mode nuit désactivé.",
+      loaderPlanBtn:"Feuille loader",
+      haulingPlanBtn:"Feuille transport",
+      loaderViewStatus:"Vue feuille loader.",
+      haulingViewStatus:"Vue feuille transport.",
+      menu:"☰",
+      menuClose:"×",
+      timeNow:"Heure maintenant",
+      hideMenu:"Cacher menu",
+      showMenu:"Afficher menu",
+      eraseCell:"Effacer case",
+      maxOn:"Max 3 buckets/voyage: ON",
+      maxOff:"Max 3 buckets/voyage: OFF",
+      pageMinus:"Page -",
+      pagePlus:"Page +",
+      fit:"Vue complète",
+      input:"Vue saisie",
+      addPage:"+ Nouvelle page",
+      deletePage:"Supprimer page",
+      exportCsv:"Exporter CSV",
+      printPdf:"Imprimer/PDF",
+      reset:"Reset feuille",
+      menuSectionQuick:"Actions rapides",
+      menuSectionViews:"Vues et feuilles",
+      menuSectionPages:"Pages",
+      menuSectionStatus:"Statut",
+      menuSectionDanger:"Réinitialisation",
+      menuNote:"Astuce: ouvre le menu pour les actions et ferme-le pour voir plus de feuille.",
+      statusReady:"App prête. Les données restent sur ce téléphone. Version 3.4.",
+      sheetName:"Feuille de transport / Hauling Sheet",
+      sheetTitle:"Recette",
+      voyageHeader:"Voyage",
+      loadingTimeHeader:"HEURE DU<br>CHARGEMENT",
+      source:"SOURCE",
+      destination:"DESTINATION",
+      loaderHeader:"Numéro<br>Loader",
+      install:'<b>Installation iPhone :</b> ouvrir cette page dans Safari, bouton Partager, puis <b>Ajouter à l’écran d’accueil</b>. Après cette étape, l’application fonctionne hors ligne.',
+      help:'<b>Feuille Recette Touch.</b> Toucher une case heure inscrit l’heure actuelle. Toucher A1, B2, etc. ajoute 1 trait vertical par bucket. Destination: toucher Silo ou Cr-Pad. Loader: toucher une fois pour entrer le numéro, double toucher pour répéter le dernier loader. + Nouvelle page crée une page 2, 3, etc. Utilise Vue complète pour voir toute la feuille, Vue saisie pour écrire plus gros, et pince avec deux doigts pour ajuster. Le bas du tableau affiche les totaux par colonne. Poids et # de voyage se calculent automatiquement. Le bouton Feuille loader ouvre une feuille de recette imprimable pour le loader avec buckets estimés selon le tonnage cible. Cacher menu masque les boutons du haut. Appui long sur une case minerai: efface cette case.',
+      loaderPlanSheetName:"Feuille loader / Loader sheet",
+      loaderSheetTitle:"Feuille recette loader",
+      loaderPlanDate:"Date:",
+      loaderPlanName:"No Loader:",
+      loaderPlanOperator:"Opérateur:",
+      loaderPlanShift:"Quart :",
+      loaderPlanTarget:"Tonnage cible :",
+      loaderOre:"Minerai",
+      loaderPercent:"Pourcentage",
+      loaderTonnes:"Tonnes estimées",
+      loaderBuckets:"Cible buckets",
+      loaderDone:"Buckets faits",
+      loaderStatus:"Suivi",
+      loaderComplete:"Complet",
+      loaderRemaining:"reste",
+      loaderOver:"surplus",
+      loaderOverallComplete:"Recette complète",
+      loaderOverallRemaining:"Buckets restants",
+      loaderTapHint:"1 tap = +1 bucket, appui long = -1 bucket",
+      loaderPercentTotal:"Total %",
+      loaderBlend:"Recette totale :",
+      loaderPlanSummaryNoteOk:"Le total visé est complet à 100%.",
+      loaderPlanSummaryNoteWarn:"Le total visé devrait être 100% pour la soirée.",
+      loaderNotes:"Notes",
+      date:"Date:",
+      truckNo:"No de Camion :",
+      name:"Nom:",
+      truckType:"Truck type :",
+      source:"SOURCE",
+      destination:"DESTINATION",
+      loader:"Numéro Loader",
+      loaderTitle:"Numéro Loader",
+      clear:"Effacer",
+      cancel:"Annuler",
+      save:"Sauver",
+      poids:"Poids :",
+      voyage:"# de voyage :",
+      note:"(Le relevé du poids doit être fait 1 fois par shift)",
+      pageWord:"Page",
+      total:"TOTAL",
+      tonnes:"tonnes",
+      saved:"Sauvegardé hors ligne sur ce téléphone.",
+      offlineFail:"Impossible de sauvegarder automatiquement. Espace du navigateur possiblement plein.",
+      cacheOk:"Mode hors ligne installé dans le navigateur.",
+      cacheFail:"App utilisable, mais le cache hors ligne n’a pas pu être installé.",
+      fitStatus:"Vue complète activée. Toute la feuille est visible, mais les cases sont plus petites.",
+      inputStatus:"Vue saisie activée. Utilise le défilement horizontal/vertical pour remplir la feuille.",
+      limit3:"Limite 3 buckets atteinte pour ce voyage. Désactive Max 3 pour dépasser.",
+      noPrevLoader:"Aucun loader précédent à répéter.",
+      loaderRepeated:"Loader {value} répété sur la ligne {line}.",
+      selectErase:"Sélectionne une case à effacer.",
+      cellErased:"Case effacée. Prochaine ligne à compléter: ligne {line} avec heure + 3 buckets.",
+      maxOnStatus:"Limite de 3 buckets par ligne activée.",
+      maxOffStatus:"Limite désactivée. Les taps ajoutent plus de traits.",
+      pageStatus:"Page {current}/{total}.",
+      newPage:"Nouvelle page créée : page {current}/{total}.",
+      cannotDelete:"Impossible de supprimer la seule page.",
+      confirmDelete:"Supprimer la page {page} ?",
+      deletedPage:"Page supprimée. Page actuelle : {current}/{total}.",
+      confirmReset:"Effacer toute la feuille sur ce téléphone ?",
+      resetDone:"Feuille remise à zéro.",
+      csvDone:"CSV exporté avec toutes les pages.",
+      dateAuto:"Date du jour inscrite automatiquement.",
+      lineFirst:"Ligne {line} d’abord: ajoute {missing} avant d’utiliser la ligne {target}.",
+      priorityTime:"Priorité ligne {line}: inscris l’heure de chargement avant de cocher le minerai, loader ou destination.",
+      missingHour:"l’heure",
+      missingBuckets:"{count} bucket(s)"
+    },
+    en: {
+      langButton:"Français",
+      darkAuto:"Night mode: Auto",
+      darkOn:"Night mode: ON",
+      darkOff:"Night mode: OFF",
+      darkAutoStatus:"Automatic night mode enabled.",
+      darkOnStatus:"Night mode enabled.",
+      darkOffStatus:"Night mode disabled.",
+      loaderPlanBtn:"Loader sheet",
+      haulingPlanBtn:"Hauling sheet",
+      loaderViewStatus:"Loader sheet view.",
+      haulingViewStatus:"Hauling sheet view.",
+      menu:"☰",
+      menuClose:"×",
+      timeNow:"Current time",
+      hideMenu:"Hide menu",
+      showMenu:"Show menu",
+      eraseCell:"Erase cell",
+      maxOn:"Max 3 buckets/trip: ON",
+      maxOff:"Max 3 buckets/trip: OFF",
+      pageMinus:"Page -",
+      pagePlus:"Page +",
+      fit:"Full view",
+      input:"Entry view",
+      addPage:"+ New page",
+      deletePage:"Delete page",
+      exportCsv:"Export CSV",
+      printPdf:"Print/PDF",
+      reset:"Reset sheet",
+      menuSectionQuick:"Quick actions",
+      menuSectionViews:"Views and sheets",
+      menuSectionPages:"Pages",
+      menuSectionStatus:"Status",
+      menuSectionDanger:"Reset",
+      menuNote:"Tip: open the menu for actions, then close it to see more of the sheet.",
+      statusReady:"App ready. Data stays on this phone. Version 3.4.",
+      sheetName:"Hauling Sheet",
+      sheetTitle:"Receipt",
+      voyageHeader:"Trip",
+      loadingTimeHeader:"LOADING<br>TIME",
+      source:"SOURCE",
+      destination:"DESTINATION",
+      loaderHeader:"Loader<br>Number",
+      install:'<b>iPhone installation:</b> open this page in Safari, tap Share, then <b>Add to Home Screen</b>. After that, the app works offline.',
+      help:'<b>Recipe Touch Sheet.</b> Tap a time cell to enter the current time. Tap A1, B2, etc. to add 1 vertical mark per bucket. Destination: tap Silo or Cr-Pad. Loader: tap once to enter the number, double tap to repeat the last loader. + New page creates page 2, 3, etc. Use Full view to see the whole sheet, Entry view to write larger, and pinch with two fingers to adjust. The bottom of the table shows column totals. Weight and # of trips are calculated automatically. The Loader sheet button opens a printable recipe sheet for the loader with estimated buckets based on target tonnage. Hide menu hides the top buttons. Long press an ore cell to erase it.',
+      loaderPlanSheetName:"Loader sheet / Feuille loader",
+      loaderSheetTitle:"Loader recipe sheet",
+      loaderPlanDate:"Date:",
+      loaderPlanName:"Loader No:",
+      loaderPlanOperator:"Operator:",
+      loaderPlanShift:"Shift:",
+      loaderPlanTarget:"Target tonnage:",
+      loaderOre:"Ore",
+      loaderPercent:"Percentage",
+      loaderTonnes:"Estimated tonnes",
+      loaderBuckets:"Target buckets",
+      loaderDone:"Buckets done",
+      loaderStatus:"Progress",
+      loaderComplete:"Complete",
+      loaderRemaining:"left",
+      loaderOver:"over",
+      loaderOverallComplete:"Recipe complete",
+      loaderOverallRemaining:"Buckets left",
+      loaderTapHint:"Tap = +1 bucket, long press = -1 bucket",
+      loaderPercentTotal:"Total %",
+      loaderBlend:"Full recipe:",
+      loaderPlanSummaryNoteOk:"The planned total is complete at 100%.",
+      loaderPlanSummaryNoteWarn:"The planned total should reach 100% for the shift.",
+      loaderNotes:"Notes",
+      date:"Date:",
+      truckNo:"Truck No:",
+      name:"Name:",
+      truckType:"Truck type:",
+      source:"SOURCE",
+      destination:"DESTINATION",
+      loader:"Loader Number",
+      loaderTitle:"Loader Number",
+      clear:"Erase",
+      cancel:"Cancel",
+      save:"Save",
+      poids:"Weight:",
+      voyage:"# of trips:",
+      note:"(Weight reading must be done once per shift)",
+      pageWord:"Page",
+      total:"TOTAL",
+      tonnes:"tonnes",
+      saved:"Saved offline on this phone.",
+      offlineFail:"Unable to auto-save. Browser storage may be full.",
+      cacheOk:"Offline mode installed in the browser.",
+      cacheFail:"App usable, but offline cache could not be installed.",
+      fitStatus:"Full view enabled. The whole sheet is visible, but cells are smaller.",
+      inputStatus:"Entry view enabled. Use horizontal/vertical scrolling to fill the sheet.",
+      limit3:"3-bucket limit reached for this trip. Disable Max 3 to exceed it.",
+      noPrevLoader:"No previous loader to repeat.",
+      loaderRepeated:"Loader {value} repeated on line {line}.",
+      selectErase:"Select a cell to erase.",
+      cellErased:"Cell erased. Next line to complete: line {line} with time + 3 buckets.",
+      maxOnStatus:"3-bucket per line limit enabled.",
+      maxOffStatus:"Limit disabled. Taps can add more marks.",
+      pageStatus:"Page {current}/{total}.",
+      newPage:"New page created: page {current}/{total}.",
+      cannotDelete:"Cannot delete the only page.",
+      confirmDelete:"Delete page {page}?",
+      deletedPage:"Page deleted. Current page: {current}/{total}.",
+      confirmReset:"Erase the whole sheet on this phone?",
+      resetDone:"Sheet reset.",
+      csvDone:"CSV exported with all pages.",
+      dateAuto:"Today’s date entered automatically.",
+      lineFirst:"Line {line} first: add {missing} before using line {target}.",
+      priorityTime:"Priority line {line}: enter loading time before checking ore, loader, or destination.",
+      missingHour:"time",
+      missingBuckets:"{count} bucket(s)"
+    }
+  };
+
+  let state = loadState();
+  let selected = { row:null, type:null, key:null };
+  let max3 = true;
+  let loaderRow = null;
+  let loaderTapTimer = null;
+  let loaderLastTap = { row:null, time:0 };
+  let currentPage = Number(localStorage.getItem("recette_touch_current_page") || "0");
+  if (!Number.isFinite(currentPage) || currentPage < 0) currentPage = 0;
+  let viewMode = localStorage.getItem("recette_touch_view_mode") || "input";
+  let activeView = localStorage.getItem("recette_touch_active_view") || "hauling";
+  let darkModeSetting = localStorage.getItem("recette_touch_dark_mode") || "auto";
+
+  const tbody = document.getElementById("tbody");
+
+  function t(key, vars = {}){
+    let text = (I18N[lang] && I18N[lang][key]) || I18N.fr[key] || key;
+    Object.entries(vars).forEach(([k,v]) => {
+      text = text.replaceAll("{" + k + "}", String(v));
+    });
+    return text;
+  }
+
+  function setStatus(msg){ document.getElementById("status").textContent = msg; }
+
+  function setText(id, value){
+    const el = document.getElementById(id);
+    if (el) el.textContent = value;
+  }
+
+  function setHtml(id, value){
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = value;
+  }
+
+  function isNightTime(){
+    const hour = new Date().getHours();
+    return hour >= 19 || hour < 6;
+  }
+
+  function isDarkModeActive(){
+    if (darkModeSetting === "on") return true;
+    if (darkModeSetting === "off") return false;
+    return isNightTime();
+  }
+
+  function updateDarkButton(){
+    const btn = document.getElementById("btnDarkMode");
+    if (!btn) return;
+    if (darkModeSetting === "on") btn.textContent = t("darkOn");
+    else if (darkModeSetting === "off") btn.textContent = t("darkOff");
+    else btn.textContent = t("darkAuto");
+    btn.classList.toggle("active", isDarkModeActive());
+  }
+
+  function applyDarkMode(){
+    document.body.classList.toggle("dark-mode", isDarkModeActive());
+    updateDarkButton();
+  }
+
+  function cycleDarkMode(){
+    if (darkModeSetting === "auto") darkModeSetting = "on";
+    else if (darkModeSetting === "on") darkModeSetting = "off";
+    else darkModeSetting = "auto";
+    localStorage.setItem("recette_touch_dark_mode", darkModeSetting);
+    applyDarkMode();
+    if (darkModeSetting === "on") setStatus(t("darkOnStatus"));
+    else if (darkModeSetting === "off") setStatus(t("darkOffStatus"));
+    else setStatus(t("darkAutoStatus"));
+  }
+
+
+
+  function blankLoaderPlanItems(){
+    const items = {};
+    LOADER_PLAN_ITEMS.forEach(name => items[name] = "");
+    return items;
+  }
+
+  function blankLoaderPlanDone(){
+    const done = {};
+    LOADER_PLAN_ITEMS.forEach(name => done[name] = "");
+    return done;
+  }
+
+  function blankLoaderPlan(){
+    return { date:"", name:"", operator:"", shift:"", target:"", notes:"", items: blankLoaderPlanItems(), done: blankLoaderPlanDone() };
+  }
+
+  function normalizeLoaderPlan(plan){
+    const base = blankLoaderPlan();
+    if (!plan || typeof plan !== "object") return base;
+    base.date = plan.date || "";
+    base.name = plan.name || "";
+    base.operator = plan.operator || "";
+    base.shift = plan.shift || "";
+    base.target = plan.target || "";
+    base.notes = plan.notes || "";
+    base.items = Object.assign(blankLoaderPlanItems(), plan.items || {});
+    base.done = Object.assign(blankLoaderPlanDone(), plan.done || {});
+    return base;
+  }
+
+  function loaderPlanState(){
+    if (!state.loaderPlan) state.loaderPlan = blankLoaderPlan();
+    return state.loaderPlan;
+  }
+
+  function cleanPercentValue(value){
+    let v = String(value ?? "").replace(',', '.').replace(/[^0-9.]/g, '');
+    const firstDot = v.indexOf('.');
+    if (firstDot !== -1) v = v.slice(0, firstDot + 1) + v.slice(firstDot + 1).replaceAll('.', '');
+    return v;
+  }
+
+  function formatPercentValue(value){
+    const n = Number(value);
+    if (!Number.isFinite(n)) return "0";
+    return Number.isInteger(n) ? String(n) : String(Math.round(n * 10) / 10);
+  }
+
+  function buildLoaderPlanBlend(plan){
+    return LOADER_PLAN_ITEMS
+      .map(item => {
+        const raw = plan.items[item];
+        const n = Number(String(raw).replace(',', '.'));
+        if (!Number.isFinite(n) || n <= 0) return "";
+        return `${item} ${formatPercentValue(n)}%`;
+      })
+      .filter(Boolean)
+      .join(" | ");
+  }
+
+  function parseTonnage(value){
+    const cleaned = String(value ?? '').replace(',', '.').replace(/[^0-9.]/g, '');
+    const n = Number(cleaned);
+    return Number.isFinite(n) ? n : 0;
+  }
+
+  function formatEstimatedNumber(value, decimals = 1){
+    if (!Number.isFinite(value) || value <= 0) return "";
+    const rounded = Math.round(value * Math.pow(10, decimals)) / Math.pow(10, decimals);
+    return Number.isInteger(rounded) ? String(rounded) : String(rounded);
+  }
+
+  function updateLoaderPlanDerived(){
+    const plan = loaderPlanState();
+    const targetTonnage = parseTonnage(plan.target);
+    const bucketTonnage = 40 / 3;
+
+    let total = 0;
+    let totalEstimatedTonnes = 0;
+    let totalEstimatedBuckets = 0;
+    let totalRoundedTargetBuckets = 0;
+    let totalDoneBuckets = 0;
+    let totalRemainingBuckets = 0;
+
+    LOADER_PLAN_ITEMS.forEach(item => {
+      const pct = Number(String(plan.items[item] || '').replace(',', '.'));
+      const safePct = Number.isFinite(pct) ? pct : 0;
+      total += safePct;
+
+      const tonnes = targetTonnage > 0 ? (targetTonnage * safePct / 100) : 0;
+      const bucketsExact = tonnes > 0 ? (tonnes / bucketTonnage) : 0;
+      const bucketTarget = bucketsExact > 0 ? Math.max(1, Math.round(bucketsExact)) : 0;
+      const done = Number(String(plan.done[item] || '').replace(',', '.'));
+      const doneBuckets = Number.isFinite(done) ? done : 0;
+      const remaining = Math.max(0, bucketTarget - doneBuckets);
+      const over = doneBuckets > bucketTarget && bucketTarget > 0 ? doneBuckets - bucketTarget : 0;
+
+      totalEstimatedTonnes += tonnes;
+      totalEstimatedBuckets += bucketsExact;
+      totalRoundedTargetBuckets += bucketTarget;
+      totalDoneBuckets += doneBuckets;
+      totalRemainingBuckets += remaining;
+
+      const tonnesCell = document.querySelector('[data-tonnes="' + item + '"]');
+      const bucketsCell = document.querySelector('[data-buckets="' + item + '"]');
+      const statusCell = document.querySelector('[data-status="' + item + '"]');
+      const doneBtn = document.querySelector('.loader-done-tap[data-done="' + item + '"]');
+
+      if (tonnesCell) tonnesCell.textContent = tonnes > 0 ? formatEstimatedNumber(tonnes, 1) + ' t' : '';
+      if (bucketsCell) bucketsCell.textContent = bucketTarget > 0 ? String(bucketTarget) : '';
+      if (doneBtn) {
+        doneBtn.textContent = String(doneBuckets);
+        doneBtn.classList.toggle('complete', bucketTarget > 0 && doneBuckets >= bucketTarget);
+      }
+
+      if (statusCell) {
+        statusCell.classList.remove('complete', 'remaining', 'partial');
+        if (bucketTarget <= 0) {
+          statusCell.textContent = '';
+        } else if (remaining <= 0 && over <= 0) {
+          statusCell.textContent = doneBuckets + '/' + bucketTarget + ' ' + t('loaderComplete');
+          statusCell.classList.add('complete');
+        } else if (over > 0) {
+          statusCell.textContent = doneBuckets + '/' + bucketTarget + ' +' + formatEstimatedNumber(over, 1) + ' ' + t('loaderOver');
+          statusCell.classList.add('partial');
+        } else {
+          statusCell.textContent = doneBuckets + '/' + bucketTarget + ' - ' + formatEstimatedNumber(remaining, 1) + ' ' + t('loaderRemaining');
+          statusCell.classList.add('remaining');
+        }
+      }
+    });
+
+    const totalEl = document.getElementById('loaderPercentTotal');
+    if (totalEl) {
+      totalEl.textContent = formatPercentValue(total) + '%';
+      totalEl.classList.toggle('ok', Math.abs(total - 100) < 0.05);
+      totalEl.classList.toggle('warn', Math.abs(total - 100) >= 0.05);
+    }
+
+    const tonnageTotal = document.getElementById('loaderTonnageTotal');
+    if (tonnageTotal) tonnageTotal.textContent = totalEstimatedTonnes > 0 ? formatEstimatedNumber(totalEstimatedTonnes, 1) + ' t' : '0 t';
+
+    const bucketTotal = document.getElementById('loaderBucketTotal');
+    if (bucketTotal) bucketTotal.textContent = totalRoundedTargetBuckets > 0 ? String(totalRoundedTargetBuckets) : '0';
+
+    const doneTotal = document.getElementById('loaderDoneTotal');
+    if (doneTotal) doneTotal.textContent = totalDoneBuckets > 0 ? formatEstimatedNumber(totalDoneBuckets, 1) : '0';
+
+    const overall = document.getElementById('loaderOverallStatus');
+    if (overall) {
+      overall.classList.remove('complete', 'remaining', 'partial');
+      if (totalRoundedTargetBuckets <= 0) {
+        overall.textContent = '';
+      } else if (totalRemainingBuckets <= 0) {
+        overall.textContent = t('loaderOverallComplete');
+        overall.classList.add('complete');
+      } else {
+        overall.textContent = formatEstimatedNumber(totalRemainingBuckets, 1) + ' ' + t('loaderOverallRemaining');
+        overall.classList.add('remaining');
+      }
+    }
+
+    const blend = document.getElementById('loaderPlanBlend');
+    if (blend) blend.value = buildLoaderPlanBlend(plan);
+    const note = document.getElementById('loaderPlanSummaryNote');
+    if (note) note.textContent = Math.abs(total - 100) < 0.05 ? t('loaderPlanSummaryNoteOk') : t('loaderPlanSummaryNoteWarn');
+  }
+
+  function renderLoaderPlan(){
+    const plan = loaderPlanState();
+    if (!plan.date) plan.date = state?.meta?.date || todayDate();
+    const map = {
+      loaderPlanDate: plan.date || '',
+      loaderPlanName: plan.name || '',
+      loaderPlanOperator: plan.operator || '',
+      loaderPlanShift: plan.shift || '',
+      loaderPlanTarget: plan.target || '',
+      loaderPlanNotes: plan.notes || ''
+    };
+    Object.entries(map).forEach(([id, value]) => {
+      const el = document.getElementById(id);
+      if (el && document.activeElement !== el) el.value = value;
+    });
+    document.querySelectorAll('.loader-plan-input').forEach(input => {
+      const v = plan.items[input.dataset.item] || '';
+      if (document.activeElement !== input) input.value = v;
+    });
+    document.querySelectorAll('.loader-done-tap').forEach(btn => {
+      const raw = Number(String(plan.done[btn.dataset.done] || '').replace(',', '.'));
+      const value = Number.isFinite(raw) && raw > 0 ? raw : 0;
+      btn.textContent = String(value);
+    });
+    updateLoaderPlanDerived();
+  }
+
+  function saveLoaderPlanFromInputs(){
+    const plan = loaderPlanState();
+    plan.date = document.getElementById('loaderPlanDate')?.value || '';
+    plan.name = document.getElementById('loaderPlanName')?.value || '';
+    plan.operator = document.getElementById('loaderPlanOperator')?.value || '';
+    plan.shift = document.getElementById('loaderPlanShift')?.value || '';
+    plan.target = document.getElementById('loaderPlanTarget')?.value || '';
+    plan.notes = document.getElementById('loaderPlanNotes')?.value || '';
+    document.querySelectorAll('.loader-plan-input').forEach(input => {
+      plan.items[input.dataset.item] = cleanPercentValue(input.value);
+      if (input.value !== plan.items[input.dataset.item]) input.value = plan.items[input.dataset.item];
+    });
+
+    save();
+    updateLoaderPlanDerived();
+  }
+
+  function updateLoaderPlanButton(){
+    const btn = document.getElementById('btnLoaderPlan');
+    if (btn) {
+      btn.textContent = activeView === 'loader' ? t('haulingPlanBtn') : t('loaderPlanBtn');
+      btn.classList.toggle('loader-switch-active', activeView === 'loader');
+    }
+  }
+
+  function updateMenuButtonStates(){
+    const fitBtn = document.getElementById('btnFitPage');
+    const inputBtn = document.getElementById('btnInputView');
+    if (fitBtn) fitBtn.classList.toggle('active', activeView === 'hauling' && viewMode === 'fit');
+    if (inputBtn) inputBtn.classList.toggle('active', activeView === 'hauling' && viewMode === 'input');
+  }
+
+  function setActiveView(view, silent = false){
+    activeView = view === 'loader' ? 'loader' : 'hauling';
+    document.body.classList.toggle('loader-plan-active', activeView === 'loader');
+    if (activeView === 'loader') {
+      document.body.classList.remove('fit-mode');
+      applyViewScale(1);
+    }
+    try { localStorage.setItem('recette_touch_active_view', activeView); } catch(e) {}
+    updateLoaderPlanButton();
+    updateMenuButtonStates();
+    if (!silent) setStatus(activeView === 'loader' ? t('loaderViewStatus') : t('haulingViewStatus'));
+    if (activeView === 'hauling' && viewMode === 'fit') setTimeout(fitFullPage, 80);
+  }
+
+  function applyLanguage(){
+    const i = I18N[lang] || I18N.fr;
+    document.documentElement.lang = lang;
+
+    setText("btnLang", i.langButton);
+    updateDarkButton();
+    updateLoaderPlanButton();
+    setText("btnTime", i.timeNow);
+    setText("btnErase", i.eraseCell);
+    setText("btnMax3", max3 ? i.maxOn : i.maxOff);
+    setText("btnPrevPage", i.pageMinus);
+    setText("btnNextPage", i.pagePlus);
+    setText("btnFitPage", i.fit);
+    setText("btnInputView", i.input);
+    setText("btnAddPage", i.addPage);
+    setText("btnDeletePage", i.deletePage);
+    setText("btnExport", i.exportCsv);
+    setText("btnPrint", i.printPdf);
+    setText("btnReset", i.reset);
+    setText("menuSectionQuick", i.menuSectionQuick);
+    setText("menuSectionViews", i.menuSectionViews);
+    setText("menuSectionPages", i.menuSectionPages);
+    setText("menuSectionStatus", i.menuSectionStatus);
+    setText("menuSectionDanger", i.menuSectionDanger);
+    setText("menuNote", i.menuNote);
+    setText("menuToggle", document.body.classList.contains("menu-open") ? i.menuClose : i.menu);
+
+    setHtml("installText", i.install);
+    setHtml("helpText", i.help);
+    setText("sheetName", i.sheetName);
+    setText("sheetTitle", i.sheetTitle);
+    setText("thVoyage", i.voyageHeader);
+    setHtml("thLoadingTime", i.loadingTimeHeader);
+    setText("thSource", i.source);
+    setHtml("thLoader", i.loaderHeader);
+    setText("thDestination", i.destination);
+
+    setText("labelDate", i.date);
+    setText("labelTruckNo", i.truckNo);
+    setText("labelName", i.name);
+    setText("labelTruckType", i.truckType);
+    setText("labelPoids", i.poids);
+    setText("labelVoyage", i.voyage);
+    setText("weightNote", i.note);
+    setText("loaderPlanSheetName", i.loaderPlanSheetName);
+    setText("loaderSheetTitle", i.loaderSheetTitle);
+    setText("labelLoaderPlanDate", i.loaderPlanDate);
+    setText("labelLoaderPlanName", i.loaderPlanName);
+    setText("labelLoaderPlanOperator", i.loaderPlanOperator);
+    setText("labelLoaderPlanShift", i.loaderPlanShift);
+    setText("labelLoaderPlanTarget", i.loaderPlanTarget);
+    setText("thLoaderOre", i.loaderOre);
+    setText("thLoaderPercent", i.loaderPercent);
+    setText("thLoaderTonnes", i.loaderTonnes);
+    setText("thLoaderBuckets", i.loaderBuckets);
+    setText("thLoaderDone", i.loaderDone);
+    setText("thLoaderStatus", i.loaderStatus);
+    setText("loaderPercentTotalLabel", i.loaderPercentTotal);
+    setText("loaderTapHint", i.loaderTapHint);
+    setText("labelLoaderBlend", i.loaderBlend);
+    setText("labelLoaderNotes", i.loaderNotes);
+    setText("loaderTitle", i.loaderTitle);
+    setText("loaderClear", i.clear);
+    setText("loaderCancel", i.cancel);
+    setText("loaderSave", i.save);
+
+    updateMetaUI();
+    renderLoaderPlan();
+  }
+
+  function setMenuOpen(open){
+    document.body.classList.toggle("menu-open", open);
+    try { localStorage.setItem("recette_touch_menu_open", open ? "1" : "0"); } catch(e) {}
+    const toggle = document.getElementById("menuToggle");
+    if (toggle) toggle.textContent = open ? t("menuClose") : t("menu");
+    if (viewMode === "fit" && activeView === "hauling") setTimeout(fitFullPage, 90);
+  }
+
+  function restoreMenuState(){
+    const open = localStorage.getItem("recette_touch_menu_open") === "1";
+    setMenuOpen(open);
+  }
+
+  function applyViewScale(scale){
+    const fixed = Math.max(0.22, Math.min(1, Number(scale) || 1));
+    document.documentElement.style.setProperty("--view-scale", String(fixed));
+    const sheetInner = document.querySelector(".sheet-inner");
+    const sheet = document.querySelector(".sheet");
+    if (sheetInner && sheet) {
+      sheet.style.minHeight = Math.ceil(sheetInner.scrollHeight * fixed + 12) + "px";
+    }
+  }
+
+  function fitFullPage(){
+    document.body.classList.add("fit-mode");
+    const sheet = document.querySelector(".sheet");
+    const sheetInner = document.querySelector(".sheet-inner");
+    if (!sheet || !sheetInner) return;
+
+    applyViewScale(1);
+    const availableWidth = Math.max(320, sheet.clientWidth - 6);
+    const headerBottom = document.querySelector(".fixed-app-header")?.getBoundingClientRect().bottom || 0;
+    const toolbar = document.querySelector(".toolbar");
+    const toolbarBottom = document.body.classList.contains("menu-open") && toolbar ? toolbar.getBoundingClientRect().bottom : headerBottom;
+    const availableHeight = Math.max(360, window.innerHeight - toolbarBottom - 8);
+    const contentWidth = Math.max(1280, sheetInner.scrollWidth);
+    const contentHeight = Math.max(900, sheetInner.scrollHeight);
+
+    const scaleWidth = availableWidth / contentWidth;
+    const scaleHeight = availableHeight / contentHeight;
+    const scale = Math.min(scaleWidth, scaleHeight, 1);
+
+    applyViewScale(scale);
+    setStatus(t("fitStatus"));
+  }
+
+  function inputView(){
+    document.body.classList.remove("fit-mode");
+    applyViewScale(1);
+    setStatus(t("inputStatus"));
+  }
+
+  function applySavedViewMode(){
+    if (activeView === "loader") {
+      document.body.classList.remove("fit-mode");
+      applyViewScale(1);
+      return;
+    }
+    if (viewMode === "fit") {
+      setTimeout(fitFullPage, 80);
+    } else {
+      inputView();
+    }
+  }
+
+
+  function blankRow(){
+    const ores = {};
+    ORES.forEach(o => ores[o] = 0);
+    return { time:"", ores, loader:"", dest:"" };
+  }
+
+  function blankPage(){
+    return { rows: Array.from({length: ROWS}, blankRow), poids:"", voyage:"" };
+  }
+
+  function defaultState(){
+    return {
+      meta: { date:"", truckNo:"", name:"", truckType:"" },
+      pages: [blankPage()],
+      loaderPlan: blankLoaderPlan()
+    };
+  }
+
+  function normalizeRows(rows){
+    if (!Array.isArray(rows) || rows.length !== ROWS) return Array.from({length: ROWS}, blankRow);
+    for (const row of rows) {
+      row.ores = row.ores || {};
+      ORES.forEach(o => { if (typeof row.ores[o] !== "number") row.ores[o] = 0; });
+      row.time = row.time || "";
+      row.loader = row.loader || "";
+      row.dest = row.dest || "";
+    }
+    return rows;
+  }
+
+  function migrateState(parsed){
+    const base = defaultState();
+    if (!parsed || typeof parsed !== "object") return base;
+
+    if (Array.isArray(parsed.pages) && parsed.pages.length) {
+      return {
+        meta: Object.assign(base.meta, parsed.meta || {}),
+        pages: parsed.pages.map(p => ({
+          rows: normalizeRows(p.rows),
+          poids: p.poids || "",
+          voyage: p.voyage || ""
+        })),
+        loaderPlan: normalizeLoaderPlan(parsed.loaderPlan)
+      };
+    }
+
+    if (Array.isArray(parsed.rows)) {
+      return {
+        meta: {
+          date: parsed.meta?.date || "",
+          truckNo: parsed.meta?.truckNo || "",
+          name: parsed.meta?.name || "",
+          truckType: parsed.meta?.truckType || ""
+        },
+        pages: [{
+          rows: normalizeRows(parsed.rows),
+          poids: parsed.meta?.poids || "",
+          voyage: parsed.meta?.voyage || ""
+        }],
+        loaderPlan: normalizeLoaderPlan(parsed.loaderPlan)
+      };
+    }
+
+    return base;
+  }
+
+  function loadState(){
+    try {
+      for (const key of OLD_KEYS) {
+        const raw = localStorage.getItem(key);
+        if (raw) return migrateState(JSON.parse(raw));
+      }
+      return defaultState();
+    } catch(e) {
+      return defaultState();
+    }
+  }
+
+  function page(){
+    if (!state.pages || !state.pages.length) state.pages = [blankPage()];
+    if (currentPage < 0) currentPage = 0;
+    if (currentPage >= state.pages.length) currentPage = state.pages.length - 1;
+    return state.pages[currentPage];
+  }
+
+  function save(){
+    try {
+      localStorage.setItem(KEY, JSON.stringify(state));
+      localStorage.setItem("recette_touch_current_page", String(currentPage));
+      setStatus(t("saved"));
+    } catch(e) {
+      setStatus(t("offlineFail"));
+    }
+  }
+
+  function bars(n){
+    if (!n) return "";
+    const count = Math.max(0, Math.min(12, n));
+    if (count === 3) return '<span class="bucket-x">X</span>';
+    if (count > 3) {
+      return '<span class="bucket-marks"><span class="bucket-x">X</span>' + '<span class="bucket-mark"></span>'.repeat(count - 3) + '</span>';
+    }
+    return '<span class="bucket-marks">' + '<span class="bucket-mark"></span>'.repeat(count) + '</span>';
+  }
+
+  function rowTotal(r){
+    return ORES.reduce((sum, o) => sum + (page().rows[r].ores[o] || 0), 0);
+  }
+
+  function rowBucketTotalFromRow(row){
+    if (!row || !row.ores) return 0;
+    return ORES.reduce((sum, o) => sum + (row.ores[o] || 0), 0);
+  }
+
+  function rowStarted(row){
+    if (!row) return false;
+    return Boolean(row.time || row.loader || row.dest || rowBucketTotalFromRow(row) > 0);
+  }
+
+  function rowCompleteForNext(row){
+    if (!row) return false;
+    return Boolean(row.time && rowBucketTotalFromRow(row) >= 3);
+  }
+
+  function nextRealRowIndex(){
+    const rows = page().rows;
+    const idx = rows.findIndex(row => !rowCompleteForNext(row));
+    return idx === -1 ? rows.length - 1 : idx;
+  }
+
+  function markNextLine(){
+    const next = nextRealRowIndex();
+    document.querySelectorAll("tbody tr").forEach(tr => {
+      tr.classList.toggle("next-line", Number(tr.dataset.row) === next);
+    });
+  }
+
+  function flashBlockedLine(rowIndex){
+    const tr = document.querySelector('tbody tr[data-row="' + rowIndex + '"]');
+    if (!tr) return;
+    tr.classList.remove("blocked-line");
+    void tr.offsetWidth;
+    tr.classList.add("blocked-line");
+  }
+
+  function canUseRow(r){
+    const next = nextRealRowIndex();
+    return r <= next;
+  }
+
+  function requireSequentialRow(r){
+    const next = nextRealRowIndex();
+    if (r <= next) return true;
+
+    const row = page().rows[next];
+    const missing = [];
+    if (!row.time) missing.push(t("missingHour"));
+    const buckets = rowBucketTotalFromRow(row);
+    if (buckets < 3) missing.push(t("missingBuckets", { count: 3 - buckets }));
+
+    flashBlockedLine(r);
+    setSelected(next, "time", "time");
+    markNextLine();
+    setStatus(t("lineFirst", { line: next + 1, missing: missing.join(lang === "fr" ? " et " : " and "), target: r + 1 }));
+    return false;
+  }
+
+  function requireTimeBeforeEntry(r, type){
+    if (type === "time") return true;
+    const row = page().rows[r];
+    if (row && row.time) return true;
+
+    flashBlockedLine(r);
+    setSelected(r, "time", "time");
+    setStatus(t("priorityTime", { line: r + 1 }));
+    return false;
+  }
+
+  function calculateColumnTotals(){
+    const totals = {};
+    ORES.forEach(o => totals[o] = 0);
+    let silo = 0;
+    let crPad = 0;
+    let voyageCount = 0;
+
+    page().rows.forEach(row => {
+      let hasEntry = false;
+      ORES.forEach(o => {
+        const v = row.ores[o] || 0;
+        totals[o] += v;
+        if (v > 0) hasEntry = true;
+      });
+      if (row.time && rowBucketTotalFromRow(row) >= 3) voyageCount++;
+      if (row.dest === "Silo") silo++;
+      if (row.dest === "Cr-Pad") crPad++;
+    });
+
+    const totalBuckets = ORES.reduce((sum, o) => sum + totals[o], 0);
+    const estimatedTonnage = voyageCount * 40;
+    return { totals, silo, crPad, voyageCount, totalBuckets, estimatedTonnage };
+  }
+
+  function pageSummaryFor(p){
+    const totals = {};
+    ORES.forEach(o => totals[o] = 0);
+    let silo = 0;
+    let crPad = 0;
+    let voyageCount = 0;
+
+    p.rows.forEach(row => {
+      let hasEntry = false;
+      ORES.forEach(o => {
+        const v = row.ores[o] || 0;
+        totals[o] += v;
+        if (v > 0) hasEntry = true;
+      });
+      if (row.time && rowBucketTotalFromRow(row) >= 3) voyageCount++;
+      if (row.dest === "Silo") silo++;
+      if (row.dest === "Cr-Pad") crPad++;
+    });
+
+    const totalBuckets = ORES.reduce((sum, o) => sum + totals[o], 0);
+    const estimatedTonnage = voyageCount * 40;
+    return { totals, silo, crPad, voyageCount, totalBuckets, estimatedTonnage };
+  }
+
+  function renderTotals(){
+    const tr = document.getElementById("totalsRow");
+    if (!tr) return;
+    const data = calculateColumnTotals();
+    tr.innerHTML = "";
+
+    const label = document.createElement("td");
+    label.colSpan = 2;
+    label.className = "total-cell total-label";
+    label.textContent = t("total");
+    tr.appendChild(label);
+
+    ORES.forEach(ore => {
+      const td = document.createElement("td");
+      td.className = "total-cell total-number";
+      td.textContent = data.totals[ore] || "";
+      td.title = "Total " + ore;
+      tr.appendChild(td);
+    });
+
+    const loader = document.createElement("td");
+    loader.className = "total-cell total-number";
+    loader.textContent = "";
+    tr.appendChild(loader);
+
+    const silo = document.createElement("td");
+    silo.className = "total-cell total-number";
+    silo.textContent = data.silo || "";
+    silo.title = "Total Silo";
+    tr.appendChild(silo);
+
+    const crpad = document.createElement("td");
+    crpad.className = "total-cell total-number";
+    crpad.textContent = data.crPad || "";
+    crpad.title = "Total Cr-Pad";
+    tr.appendChild(crpad);
+  }
+
+  function setSelected(row, type, key){
+    selected = { row, type, key };
+    document.querySelectorAll("tbody tr").forEach(tr => tr.classList.toggle("selected", Number(tr.dataset.row) === row));
+  }
+
+  function nowHHMM(){
+    const d = new Date();
+    return d.toLocaleTimeString("fr-CA", { hour:"2-digit", minute:"2-digit", hour12:false });
+  }
+
+  function todayDate(){
+    const d = new Date();
+    return d.toLocaleDateString("fr-CA", { year:"numeric", month:"2-digit", day:"2-digit" });
+  }
+
+  function ensureDateAuto(){
+    if (!state.meta.date) {
+      state.meta.date = todayDate();
+      save();
+    }
+  }
+
+  function render(){
+    const current = page();
+    tbody.innerHTML = "";
+    current.rows.forEach((row, r) => {
+      const tr = document.createElement("tr");
+      tr.dataset.row = r;
+      if (selected.row === r) tr.classList.add("selected");
+
+      const no = document.createElement("td");
+      no.className = "row-no";
+      no.textContent = String(r + 1);
+      tr.appendChild(no);
+
+      const time = document.createElement("td");
+      time.className = "time-cell";
+      time.dataset.type = "time";
+      time.textContent = row.time;
+      tr.appendChild(time);
+
+      ORES.forEach(ore => {
+        const td = document.createElement("td");
+        td.className = "ore-cell";
+        td.dataset.type = "ore";
+        td.dataset.ore = ore;
+        td.title = ore;
+        td.innerHTML = bars(row.ores[ore] || 0);
+        tr.appendChild(td);
+      });
+
+      const loader = document.createElement("td");
+      loader.className = "loader-cell";
+      loader.dataset.type = "loader";
+      loader.textContent = row.loader;
+      tr.appendChild(loader);
+
+      ["Silo", "Cr-Pad"].forEach(dest => {
+        const td = document.createElement("td");
+        td.className = "dest-cell";
+        td.dataset.type = "dest";
+        td.dataset.dest = dest;
+        td.textContent = row.dest === dest ? "X" : "";
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+    });
+    updateMetaUI();
+    renderTotals();
+    markNextLine();
+    renderLoaderPlan();
+  }
+
+  function updateMetaUI(){
+    document.getElementById("metaDate").value = state.meta.date || "";
+    document.getElementById("metaTruckNo").value = state.meta.truckNo || "";
+    document.getElementById("metaName").value = state.meta.name || "";
+    const summary = calculateColumnTotals();
+    document.getElementById("metaPoids").value = summary.voyageCount ? (summary.estimatedTonnage + " " + t("tonnes")) : "";
+    document.getElementById("metaVoyage").value = summary.voyageCount ? String(summary.voyageCount) : "";
+    document.querySelectorAll(".truck-choice").forEach(el => {
+      el.classList.toggle("active", el.dataset.truck === state.meta.truckType);
+    });
+    const plan = loaderPlanState();
+    if (!plan.date && state.meta.date) plan.date = state.meta.date;
+    const label = t("pageWord") + " " + (currentPage + 1) + "/" + state.pages.length;
+    const toolbarLabel = document.getElementById("btnPageLabel");
+    const printLabel = document.getElementById("pagePrintLabel");
+    if (toolbarLabel) toolbarLabel.textContent = label;
+    if (printLabel) printLabel.textContent = label;
+  }
+
+  function flash(td){
+    td.classList.remove("flash");
+    void td.offsetWidth;
+    td.classList.add("flash");
+  }
+
+  function findLastLoader(beforeRow){
+    const rows = page().rows;
+    for (let i = beforeRow - 1; i >= 0; i--) {
+      const v = (rows[i].loader || "").trim();
+      if (v) return v;
+    }
+    for (let i = 0; i < rows.length; i++) {
+      const v = (rows[i].loader || "").trim();
+      if (v) return v;
+    }
+    return "";
+  }
+
+  function openLoaderModal(r){
+    loaderRow = r;
+    setSelected(r, "loader", "loader");
+    document.getElementById("loaderInput").value = page().rows[r].loader || "";
+    document.getElementById("loaderModal").classList.add("open");
+    setTimeout(() => document.getElementById("loaderInput").focus(), 50);
+  }
+
+  function repeatLastLoader(r){
+    const previous = findLastLoader(r);
+    if (!previous) {
+      setStatus(t("noPrevLoader"));
+      return;
+    }
+    page().rows[r].loader = previous;
+    setSelected(r, "loader", "loader");
+    save();
+    render();
+    setStatus(t("loaderRepeated", { value: previous, line: r + 1 }));
+  }
+
+  function bindMeta(id, prop){
+    const el = document.getElementById(id);
+    el.value = state.meta[prop] || "";
+    el.addEventListener("input", () => {
+      state.meta[prop] = el.value;
+      save();
+    });
+  }
+
+  function bindPageMeta(id, prop){
+    const el = document.getElementById(id);
+    el.addEventListener("input", () => {
+      page()[prop] = el.value;
+      save();
+    });
+  }
+
+  document.addEventListener("dblclick", (ev) => {
+    ev.preventDefault();
+  }, { passive:false });
+
+  tbody.addEventListener("click", (ev) => {
+    const td = ev.target.closest("td");
+    if (!td) return;
+    const tr = td.closest("tr");
+    const r = Number(tr.dataset.row);
+    const type = td.dataset.type;
+    const rows = page().rows;
+
+    if (!requireSequentialRow(r)) return;
+    if (!requireTimeBeforeEntry(r, type)) return;
+
+    if (type === "time") {
+      rows[r].time = nowHHMM();
+      setSelected(r, "time", "time");
+      save();
+      render();
+      return;
+    }
+
+    if (type === "ore") {
+      const ore = td.dataset.ore;
+      const total = rowTotal(r);
+      if (max3 && total >= 3) {
+        flash(td);
+        setStatus(t("limit3"));
+        setSelected(r, "ore", ore);
+        return;
+      }
+      rows[r].ores[ore] = (rows[r].ores[ore] || 0) + 1;
+      setSelected(r, "ore", ore);
+      save();
+      render();
+      return;
+    }
+
+    if (type === "loader") {
+      const now = Date.now();
+      const isDoubleTap = loaderLastTap.row === r && (now - loaderLastTap.time) < 380;
+      loaderLastTap = { row:r, time:now };
+
+      if (isDoubleTap) {
+        if (loaderTapTimer) clearTimeout(loaderTapTimer);
+        loaderTapTimer = null;
+        repeatLastLoader(r);
+        return;
+      }
+      if (loaderTapTimer) clearTimeout(loaderTapTimer);
+      loaderTapTimer = setTimeout(() => {
+        openLoaderModal(r);
+        loaderTapTimer = null;
+      }, 390);
+      return;
+    }
+
+    if (type === "dest") {
+      const dest = td.dataset.dest;
+      rows[r].dest = (rows[r].dest === dest) ? "" : dest;
+      setSelected(r, "dest", dest);
+      save();
+      render();
+      return;
+    }
+  });
+
+  let pressTimer = null;
+  tbody.addEventListener("pointerdown", (ev) => {
+    const td = ev.target.closest("td.ore-cell");
+    if (!td) return;
+    pressTimer = setTimeout(() => {
+      const r = Number(td.closest("tr").dataset.row);
+      if (!requireSequentialRow(r)) return;
+      const ore = td.dataset.ore;
+      page().rows[r].ores[ore] = 0;
+      setSelected(r, "ore", ore);
+      save();
+      render();
+      setStatus("Case minerai effacée.");
+    }, 650);
+  });
+  ["pointerup","pointercancel","pointerleave"].forEach(evt => {
+    tbody.addEventListener(evt, () => {
+      if (pressTimer) clearTimeout(pressTimer);
+      pressTimer = null;
+    });
+  });
+
+  bindMeta("metaDate", "date");
+  bindMeta("metaTruckNo", "truckNo");
+  bindMeta("metaName", "name");
+  // Poids et # de voyage sont calculés automatiquement.
+  // 1 voyage complet moyen = 40 tonnes.
+  // Ces champs ne sont plus saisis manuellement.
+
+
+  ["loaderPlanDate","loaderPlanName","loaderPlanOperator","loaderPlanShift","loaderPlanTarget","loaderPlanNotes"].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('input', saveLoaderPlanFromInputs);
+  });
+  document.querySelectorAll('.loader-plan-input').forEach(input => {
+    input.addEventListener('input', saveLoaderPlanFromInputs);
+  });
+  let loaderDonePressTimer = null;
+  let loaderDoneLongPressHandled = false;
+
+  function getLoaderTargetBuckets(item){
+    const plan = loaderPlanState();
+    const targetTonnage = parseTonnage(plan.target);
+    const pct = Number(String(plan.items[item] || '').replace(',', '.'));
+    const safePct = Number.isFinite(pct) ? pct : 0;
+    const tonnes = targetTonnage > 0 ? (targetTonnage * safePct / 100) : 0;
+    const bucketsExact = tonnes > 0 ? (tonnes / (40 / 3)) : 0;
+    return bucketsExact > 0 ? Math.max(1, Math.round(bucketsExact)) : 0;
+  }
+
+  function adjustLoaderDone(item, delta){
+    const plan = loaderPlanState();
+    const current = Number(String(plan.done[item] || '').replace(',', '.')) || 0;
+    const target = getLoaderTargetBuckets(item);
+    let next = current + delta;
+    if (delta > 0 && target > 0) next = Math.min(next, target);
+    next = Math.max(0, next);
+    plan.done[item] = next > 0 ? String(next) : '';
+    save();
+    renderLoaderPlan();
+  }
+
+  document.querySelectorAll('.loader-done-tap').forEach(btn => {
+    const item = btn.dataset.done;
+    btn.addEventListener('click', (e) => {
+      if (loaderDoneLongPressHandled) {
+        loaderDoneLongPressHandled = false;
+        e.preventDefault();
+        return;
+      }
+      adjustLoaderDone(item, 1);
+    });
+    const start = () => {
+      loaderDoneLongPressHandled = false;
+      clearTimeout(loaderDonePressTimer);
+      loaderDonePressTimer = setTimeout(() => {
+        loaderDoneLongPressHandled = true;
+        adjustLoaderDone(item, -1);
+      }, 550);
+    };
+    const cancel = () => clearTimeout(loaderDonePressTimer);
+    btn.addEventListener('touchstart', start, {passive:true});
+    btn.addEventListener('touchend', cancel);
+    btn.addEventListener('touchcancel', cancel);
+    btn.addEventListener('mousedown', start);
+    btn.addEventListener('mouseup', cancel);
+    btn.addEventListener('mouseleave', cancel);
+  });
+
+  document.getElementById("metaDate").addEventListener("click", () => {
+    state.meta.date = todayDate();
+    save();
+    updateMetaUI();
+    setStatus(t("dateAuto"));
+  });
+
+  document.querySelectorAll(".truck-choice").forEach(el => {
+    el.addEventListener("click", () => {
+      state.meta.truckType = state.meta.truckType === el.dataset.truck ? "" : el.dataset.truck;
+      save();
+      updateMetaUI();
+    });
+  });
+
+  document.getElementById("btnTime").addEventListener("click", () => {
+    let r = selected.row;
+    const rows = page().rows;
+    if (r === null || !canUseRow(r)) r = nextRealRowIndex();
+    if (r < 0) r = 0;
+    rows[r].time = nowHHMM();
+    setSelected(r, "time", "time");
+    save();
+    render();
+  });
+
+  document.getElementById("btnErase").addEventListener("click", () => {
+    if (selected.row === null) {
+      setStatus(t("selectErase"));
+      return;
+    }
+    const r = selected.row;
+    const rows = page().rows;
+    if (selected.type === "time") rows[r].time = "";
+    if (selected.type === "loader") rows[r].loader = "";
+    if (selected.type === "dest") rows[r].dest = "";
+    if (selected.type === "ore") rows[r].ores[selected.key] = 0;
+    save();
+    render();
+    setStatus(t("cellErased", { line: nextRealRowIndex() + 1 }));
+  });
+
+  document.getElementById("btnMax3").addEventListener("click", () => {
+    max3 = !max3;
+    const b = document.getElementById("btnMax3");
+    b.classList.toggle("on", max3);
+    b.textContent = max3 ? t("maxOn") : t("maxOff");
+    setStatus(max3 ? t("maxOnStatus") : t("maxOffStatus"));
+  });
+
+
+  document.getElementById("btnPrevPage").addEventListener("click", () => {
+    if (currentPage > 0) {
+      currentPage--;
+      selected = { row:null, type:null, key:null };
+      save();
+      render();
+      if (viewMode === "fit") setTimeout(fitFullPage, 80);
+      setStatus(t("pageStatus", { current: currentPage + 1, total: state.pages.length }));
+    }
+  });
+  document.getElementById("btnNextPage").addEventListener("click", () => {
+    if (currentPage < state.pages.length - 1) {
+      currentPage++;
+      selected = { row:null, type:null, key:null };
+      save();
+      render();
+      if (viewMode === "fit") setTimeout(fitFullPage, 80);
+      setStatus(t("pageStatus", { current: currentPage + 1, total: state.pages.length }));
+    }
+  });
+
+  document.getElementById("btnFitPage").addEventListener("click", () => {
+    if (activeView === "loader") {
+      setStatus(t("loaderViewStatus"));
+      return;
+    }
+    viewMode = "fit";
+    localStorage.setItem("recette_touch_view_mode", viewMode);
+    updateMenuButtonStates();
+    fitFullPage();
+  });
+
+  document.getElementById("btnInputView").addEventListener("click", () => {
+    if (activeView === "loader") {
+      setStatus(t("loaderViewStatus"));
+      return;
+    }
+    viewMode = "input";
+    localStorage.setItem("recette_touch_view_mode", viewMode);
+    updateMenuButtonStates();
+    inputView();
+  });
+
+  document.getElementById("btnDarkMode").addEventListener("click", cycleDarkMode);
+
+  document.getElementById("btnLoaderPlan").addEventListener("click", () => {
+    setActiveView(activeView === "loader" ? "hauling" : "loader");
+  });
+
+  document.getElementById("btnLang").addEventListener("click", () => {
+    lang = lang === "fr" ? "en" : "fr";
+    localStorage.setItem("recette_touch_lang", lang);
+    applyLanguage();
+    setStatus(I18N[lang].statusReady);
+  });
+
+  document.getElementById("menuToggle").addEventListener("click", () => {
+    const open = document.body.classList.contains("menu-open");
+    setMenuOpen(!open);
+  });
+
+  window.addEventListener("resize", () => {
+    if (viewMode === "fit") setTimeout(fitFullPage, 120);
+  });
+
+  document.getElementById("btnAddPage").addEventListener("click", () => {
+    state.pages.push(blankPage());
+    currentPage = state.pages.length - 1;
+    selected = { row:null, type:null, key:null };
+    save();
+    render();
+    if (viewMode === "fit") setTimeout(fitFullPage, 80);
+    setStatus(t("newPage", { current: currentPage + 1, total: state.pages.length }));
+  });
+  document.getElementById("btnDeletePage").addEventListener("click", () => {
+    if (state.pages.length <= 1) {
+      setStatus(t("cannotDelete"));
+      return;
+    }
+    const ok = confirm(t("confirmDelete", { page: currentPage + 1 }));
+    if (!ok) return;
+    state.pages.splice(currentPage, 1);
+    if (currentPage >= state.pages.length) currentPage = state.pages.length - 1;
+    selected = { row:null, type:null, key:null };
+    save();
+    render();
+    if (viewMode === "fit") setTimeout(fitFullPage, 80);
+    setStatus(t("deletedPage", { current: currentPage + 1, total: state.pages.length }));
+  });
+
+  function syncInputsForPrint(){
+    document.querySelectorAll("input").forEach(input => input.setAttribute("value", input.value || ""));
+    document.querySelectorAll("textarea").forEach(textarea => { textarea.textContent = textarea.value || ""; });
+  }
+  window.addEventListener("beforeprint", () => {
+    syncInputsForPrint();
+  });
+  document.getElementById("btnPrint").addEventListener("click", () => {
+    syncInputsForPrint();
+    window.print();
+  });
+
+  document.getElementById("btnReset").addEventListener("click", () => {
+    const ok = confirm(t("confirmReset"));
+    if (!ok) return;
+    state = defaultState();
+    currentPage = 0;
+    selected = { row:null, type:null, key:null };
+    save();
+    render();
+    setStatus(t("resetDone"));
+  });
+
+  function csvSafe(v){
+    v = String(v ?? "");
+    if (v.includes(";") || v.includes("\n") || v.includes('"')) {
+      return '"' + v.replaceAll('"','""') + '"';
+    }
+    return v;
+  }
+
+  document.getElementById("btnExport").addEventListener("click", () => {
+    const lines = [];
+    lines.push(["Date", state.meta.date, "Nom", state.meta.name, "No de Camion", state.meta.truckNo, "Truck type", state.meta.truckType].map(csvSafe).join(";"));
+    lines.push("");
+    state.pages.forEach((p, pageIndex) => {
+      lines.push(["PAGE", pageIndex + 1].map(csvSafe).join(";"));
+      lines.push(["Voyage","Heure du chargement", ...ORES, "Numéro Loader", "Silo", "Cr-Pad"].map(csvSafe).join(";"));
+      p.rows.forEach((row, i) => {
+        lines.push([
+          i+1,
+          row.time,
+          ...ORES.map(o => row.ores[o] || ""),
+          row.loader,
+          row.dest === "Silo" ? "X" : "",
+          row.dest === "Cr-Pad" ? "X" : ""
+        ].map(csvSafe).join(";"));
+      });
+      const summary = pageSummaryFor(p);
+      lines.push(["TOTAL","", ...ORES.map(o => summary.totals[o] || ""), "", summary.silo || "", summary.crPad || ""].map(csvSafe).join(";"));
+      lines.push("");
+      lines.push(["Poids", summary.voyageCount ? (summary.estimatedTonnage + " " + t("tonnes")) : "", "# de voyage", summary.voyageCount || "", "(Le relevé du poids doit être fait 1 fois par shift)"].map(csvSafe).join(";"));
+      lines.push("");
+    });
+    const blob = new Blob([lines.join("\n")], { type:"text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "recette_mine_raglan_pages.csv";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 500);
+    setStatus(t("csvDone"));
+  });
+
+  document.getElementById("loaderSave").addEventListener("click", () => {
+    if (loaderRow !== null) {
+      page().rows[loaderRow].loader = document.getElementById("loaderInput").value.trim();
+      save();
+      render();
+    }
+    document.getElementById("loaderModal").classList.remove("open");
+  });
+
+  document.getElementById("loaderClear").addEventListener("click", () => {
+    if (loaderRow !== null) {
+      page().rows[loaderRow].loader = "";
+      save();
+      render();
+    }
+    document.getElementById("loaderModal").classList.remove("open");
+  });
+
+  document.getElementById("loaderCancel").addEventListener("click", () => {
+    document.getElementById("loaderModal").classList.remove("open");
+  });
+
+  document.getElementById("loaderModal").addEventListener("click", (ev) => {
+    if (ev.target.id === "loaderModal") document.getElementById("loaderModal").classList.remove("open");
+  });
+
+  document.addEventListener("keydown", (ev) => {
+    if (ev.key === "Escape") document.getElementById("loaderModal").classList.remove("open");
+  });
+
+  page();
+  ensureDateAuto();
+  render();
+  applyDarkMode();
+  restoreMenuState();
+  setActiveView(activeView, true);
+  applyLanguage();
+  applySavedViewMode();
+  setInterval(() => { if (darkModeSetting === "auto") applyDarkMode(); }, 60000);
+})();
+</script>
+</body>
+</html>

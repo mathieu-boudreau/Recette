@@ -1,0 +1,1 @@
+Sur iPhone, n'ouvre pas seulement index.html depuis Fichiers pour l'installation. Pour avoir une vraie icône d'application hors ligne, il faut l'ouvrir une première fois via un lien HTTPS dans Safari, puis Ajouter à l'écran d'accueil.
