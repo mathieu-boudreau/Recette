@@ -1,4 +1,4 @@
-const CACHE_NAME = "recette-touch-v4.6.0-intuitive-sheet-zoom";
+const CACHE_NAME = "recette-touch-v4.7.0-stable-restore";
 const ASSETS = [
   "./",
   "./index.html",

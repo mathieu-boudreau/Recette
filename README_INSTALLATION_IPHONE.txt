@@ -253,9 +253,9 @@ CORRECTIFS v4.5
 - Recalcul automatique quand on change orientation iPhone/iPad.
 
 
-CORRECTIFS v4.6
-- Correction du problème où le header pouvait être zoomé.
-- Suppression des options de vue redondantes: Vue complète et Vue saisie.
-- Le menu est simplifié: une seule option Plein écran pour la feuille.
-- En plein écran, seule la feuille s’ajuste à la largeur de l’écran.
-- Le header reste fixe et ne zoome plus.
+CORRECTIFS v4.7
+- Restauration stable après le bug d’interface de la version précédente.
+- Le menu burger fonctionne normalement.
+- La feuille revient à une mise en page normale.
+- Les options Vue complète / Vue saisie sont cachées pour simplifier le menu.
+- Le zoom du header est bloqué; seul le plein écran ajuste la feuille.
