@@ -1,4 +1,4 @@
-const CACHE_NAME = "recette-touch-v5.7.1-responsive-sheet-layout";
+const CACHE_NAME = "recette-touch-v5.8.0-responsive-layout-sticky-headers";
 const ASSETS = [
   "./",
   "./index.html",

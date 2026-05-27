@@ -1701,12 +1701,14 @@ body.dark-mode .panel {
           <button id="btnMax3" class="on">Max 3 buckets/voyage: ON</button>
           <button id="btnLang">English</button>
           <button id="btnDarkMode">Mode nuit: Auto</button>
+          <button id="btnCloseMenu">Fermer menu</button>
         </div>
       </section>
 
       <section class="menu-section">
         <h3 class="menu-title" id="menuSectionViews">Feuille</h3>
         <div class="menu-grid">
+          <button id="btnHaulingPlan">Feuille recette</button>
           <button id="btnLoaderPlan">Feuille loader</button>
           <button id="btnPrint">Imprimer/PDF</button>
         </div>
@@ -1726,7 +1728,7 @@ body.dark-mode .panel {
 
       <section class="menu-section menu-status full-span">
         <h3 class="menu-title" id="menuSectionStatus">Statut</h3>
-        <div class="status" id="status">App prête. Les données restent sur ce téléphone. Version 5.7.</div>
+        <div class="status" id="status">App prête. Les données restent sur ce téléphone. Version 5.8.</div>
         <div class="menu-note" id="menuNote">Astuce: ouvre le menu pour les actions et ferme-le pour voir plus de feuille.</div>
         <details class="menu-help-details" id="menuHelpDetails">
           <summary id="menuHelpSummary">Aide rapide</summary>
@@ -2003,11 +2005,12 @@ body.dark-mode .panel {
       darkOnStatus:"Mode nuit activé.",
       darkOffStatus:"Mode nuit désactivé.",
       loaderPlanBtn:"Feuille loader",
-      haulingPlanBtn:"Feuille transport",
+      haulingPlanBtn:"Feuille recette",
       loaderViewStatus:"Vue feuille loader.",
       haulingViewStatus:"Vue feuille transport.",
       menu:"☰",
       menuClose:"×",
+      closeMenu:"Fermer menu",
       timeNow:"Heure maintenant",
       hideMenu:"Cacher menu",
       showMenu:"Afficher menu",
@@ -2029,7 +2032,7 @@ body.dark-mode .panel {
       menuSectionDanger:"Réinitialisation",
       menuNote:"Astuce: ouvre le menu pour les actions et ferme-le pour voir plus de feuille.",
       menuSwipeHint:"Glisse vers le haut en bas du menu pour le fermer.",
-      statusReady:"App prête. Les données restent sur ce téléphone. Version 5.7.",
+      statusReady:"App prête. Les données restent sur ce téléphone. Version 5.8.",
       sheetName:"Feuille de transport / Hauling Sheet",
       sheetTitle:"Recette",
       voyageHeader:"Voyage",
@@ -2127,6 +2130,7 @@ body.dark-mode .panel {
       haulingViewStatus:"Hauling sheet view.",
       menu:"☰",
       menuClose:"×",
+      closeMenu:"Close menu",
       timeNow:"Current time",
       hideMenu:"Hide menu",
       showMenu:"Show menu",
@@ -2148,7 +2152,7 @@ body.dark-mode .panel {
       menuSectionDanger:"Reset",
       menuNote:"Tip: open the menu for actions, then close it to see more of the sheet.",
       menuSwipeHint:"Swipe up at the bottom of the menu to close it.",
-      statusReady:"App ready. Data stays on this phone. Version 5.7.",
+      statusReady:"App ready. Data stays on this phone. Version 5.8.",
       sheetName:"Hauling Sheet",
       sheetTitle:"Receipt",
       voyageHeader:"Trip",
@@ -2248,7 +2252,7 @@ body.dark-mode .panel {
 
 
   function resetLegacyLayoutState(){
-    const version = "v5.7-responsive-sheet-layout";
+    const version = "v5.8-responsive-layout-sticky-headers";
     try {
       if (localStorage.getItem("recette_touch_layout_version") !== version) {
         [
@@ -2541,11 +2545,16 @@ body.dark-mode .panel {
     updateLoaderPlanDerived();
   }
 
-  function updateLoaderPlanButton(){
-    const btn = document.getElementById('btnLoaderPlan');
-    if (btn) {
-      btn.textContent = activeView === 'loader' ? t('haulingPlanBtn') : t('loaderPlanBtn');
-      btn.classList.toggle('loader-switch-active', activeView === 'loader');
+  function updateSheetViewButtons(){
+    const haulingBtn = document.getElementById('btnHaulingPlan');
+    const loaderBtn = document.getElementById('btnLoaderPlan');
+    if (haulingBtn) {
+      haulingBtn.textContent = t('haulingPlanBtn');
+      haulingBtn.classList.toggle('loader-switch-active', activeView === 'hauling');
+    }
+    if (loaderBtn) {
+      loaderBtn.textContent = t('loaderPlanBtn');
+      loaderBtn.classList.toggle('loader-switch-active', activeView === 'loader');
     }
   }
 
@@ -2553,7 +2562,7 @@ body.dark-mode .panel {
     activeView = view === 'loader' ? 'loader' : 'hauling';
     document.body.classList.toggle('loader-plan-active', activeView === 'loader');
     try { localStorage.setItem('recette_touch_active_view', activeView); } catch(e) {}
-    updateLoaderPlanButton();
+    updateSheetViewButtons();
     if (!silent) setStatus(activeView === 'loader' ? t('loaderViewStatus') : t('haulingViewStatus'));
   }
 
@@ -2563,10 +2572,11 @@ body.dark-mode .panel {
 
     setText("btnLang", i.langButton);
     updateDarkButton();
-    updateLoaderPlanButton();
+    updateSheetViewButtons();
     setText("btnTime", i.timeNow);
     setText("btnErase", i.eraseCell);
     setText("btnMax3", max3 ? i.maxOn : i.maxOff);
+    setText("btnCloseMenu", i.closeMenu);
     setText("btnPrevPage", i.pageMinus);
     setText("btnNextPage", i.pagePlus);
     setText("menuHelpSummary", i.helpSummary);
@@ -3352,8 +3362,12 @@ body.dark-mode .panel {
 
   document.getElementById("btnDarkMode").addEventListener("click", cycleDarkMode);
 
+  document.getElementById("btnHaulingPlan").addEventListener("click", () => {
+    setActiveView("hauling");
+  });
+
   document.getElementById("btnLoaderPlan").addEventListener("click", () => {
-    setActiveView(activeView === "loader" ? "hauling" : "loader");
+    setActiveView("loader");
   });
 
   document.getElementById("btnLang").addEventListener("click", () => {
@@ -3366,6 +3380,10 @@ body.dark-mode .panel {
   document.getElementById("menuToggle").addEventListener("click", () => {
     const open = document.body.classList.contains("menu-open");
     setMenuOpen(!open);
+  });
+
+  document.getElementById("btnCloseMenu").addEventListener("click", () => {
+    setMenuOpen(false);
   });
 
   
