@@ -1719,6 +1719,177 @@ body.dark-mode.sheet-fullscreen .sheet {
   }
 }
 
+
+/* v5.4 true fullscreen with sticky headers.
+   No transform scaling in fullscreen. The table is compressed to viewport width,
+   which makes sticky table headers reliable on iPhone/iPad. */
+body.sheet-fullscreen .sheet {
+  position:fixed !important;
+  inset:0 !important;
+  width:100vw !important;
+  height:100dvh !important;
+  max-width:100vw !important;
+  max-height:100dvh !important;
+  margin:0 !important;
+  padding:0 !important;
+  overflow:auto !important;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+  background:#fffdf8 !important;
+}
+
+body.sheet-fullscreen .sheet-inner {
+  transform:none !important;
+  width:100vw !important;
+  max-width:100vw !important;
+  min-width:0 !important;
+  margin:0 !important;
+  padding:0 !important;
+}
+
+body.sheet-fullscreen #sheetTable {
+  width:100vw !important;
+  min-width:100vw !important;
+  max-width:100vw !important;
+  table-layout:fixed !important;
+  border-collapse:separate !important;
+  border-spacing:0 !important;
+  font-size:10px !important;
+}
+
+body.sheet-fullscreen #sheetTable .voy {
+  width:5vw !important;
+}
+
+body.sheet-fullscreen #sheetTable .time {
+  width:11vw !important;
+}
+
+body.sheet-fullscreen #sheetTable .loader {
+  width:7vw !important;
+}
+
+body.sheet-fullscreen #sheetTable .dest {
+  width:4.5vw !important;
+}
+
+body.sheet-fullscreen #sheetTable .ore,
+body.sheet-fullscreen #sheetTable .ore-wide {
+  width:auto !important;
+}
+
+body.sheet-fullscreen #sheetTable th,
+body.sheet-fullscreen #sheetTable td {
+  height:28px !important;
+  padding:1px !important;
+  line-height:1 !important;
+}
+
+body.sheet-fullscreen #sheetTable th {
+  font-size:10px !important;
+}
+
+body.sheet-fullscreen #sheetTable .small-h {
+  font-size:8px !important;
+}
+
+body.sheet-fullscreen #sheetTable td.time-cell {
+  font-size:12px !important;
+}
+
+body.sheet-fullscreen #sheetTable td.ore-cell {
+  font-size:14px !important;
+}
+
+body.sheet-fullscreen #sheetTable .bucket-mark {
+  width:2px !important;
+  height:15px !important;
+}
+
+body.sheet-fullscreen #sheetTable .bucket-x {
+  font-size:14px !important;
+}
+
+/* Reliable sticky header in the fullscreen sheet scroll container. */
+body.sheet-fullscreen #sheetTable thead {
+  position:sticky !important;
+  top:0 !important;
+  z-index:500 !important;
+}
+
+body.sheet-fullscreen #sheetTable thead th {
+  position:sticky !important;
+  background-clip:padding-box !important;
+  box-shadow:0 1px 0 var(--thin) !important;
+}
+
+body.sheet-fullscreen #sheetTable thead tr:nth-child(1) th {
+  top:0 !important;
+  z-index:503 !important;
+}
+
+body.sheet-fullscreen #sheetTable thead tr:nth-child(2) th {
+  top:28px !important;
+  z-index:502 !important;
+}
+
+body.sheet-fullscreen #sheetTable thead tr:nth-child(3) th {
+  top:56px !important;
+  z-index:501 !important;
+}
+
+/* Keep the close button compact and out of the header path. */
+body.sheet-fullscreen .exit-fullscreen-btn {
+  top:8px !important;
+  left:8px !important;
+  right:auto !important;
+  width:44px !important;
+  height:44px !important;
+  min-width:44px !important;
+  min-height:44px !important;
+  padding:0 !important;
+  font-size:0 !important;
+  opacity:.92;
+}
+
+body.sheet-fullscreen .exit-fullscreen-btn::after {
+  content:"×";
+  font-size:32px;
+  line-height:1;
+  font-weight:900;
+}
+
+/* Optional: when the table is at the top, the X can cover the first corner only, not the minerals. */
+body.sheet-fullscreen #sheetTable thead tr:nth-child(1) th:first-child {
+  padding-left:48px !important;
+}
+
+@media print {
+  body.sheet-fullscreen .sheet,
+  body.sheet-fullscreen .sheet-inner {
+    position:static !important;
+    width:100% !important;
+    height:auto !important;
+    max-width:100% !important;
+    max-height:none !important;
+    overflow:visible !important;
+    transform:none !important;
+  }
+
+  body.sheet-fullscreen #sheetTable {
+    width:100% !important;
+    max-width:100% !important;
+    min-width:0 !important;
+    table-layout:fixed !important;
+    border-collapse:collapse !important;
+  }
+
+  body.sheet-fullscreen #sheetTable thead,
+  body.sheet-fullscreen #sheetTable thead th {
+    position:static !important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -1766,7 +1937,7 @@ body.dark-mode.sheet-fullscreen .sheet {
 
       <section class="menu-section menu-status full-span">
         <h3 class="menu-title" id="menuSectionStatus">Statut</h3>
-        <div class="status" id="status">App prête. Les données restent sur ce téléphone. Version 5.3.</div>
+        <div class="status" id="status">App prête. Les données restent sur ce téléphone. Version 5.4.</div>
         <div class="menu-note" id="menuNote">Astuce: ouvre le menu pour les actions et ferme-le pour voir plus de feuille.</div>
         <details class="menu-help-details" id="menuHelpDetails">
           <summary id="menuHelpSummary">Aide rapide</summary>
@@ -2041,7 +2212,7 @@ body.dark-mode.sheet-fullscreen .sheet {
       menuSectionDanger:"Réinitialisation",
       menuNote:"Astuce: ouvre le menu pour les actions et ferme-le pour voir plus de feuille.",
       menuSwipeHint:"Glisse vers le haut en bas du menu pour le fermer.",
-      statusReady:"App prête. Les données restent sur ce téléphone. Version 5.3.",
+      statusReady:"App prête. Les données restent sur ce téléphone. Version 5.4.",
       sheetName:"Feuille de transport / Hauling Sheet",
       sheetTitle:"Recette",
       voyageHeader:"Voyage",
@@ -2166,7 +2337,7 @@ body.dark-mode.sheet-fullscreen .sheet {
       menuSectionDanger:"Reset",
       menuNote:"Tip: open the menu for actions, then close it to see more of the sheet.",
       menuSwipeHint:"Swipe up at the bottom of the menu to close it.",
-      statusReady:"App ready. Data stays on this phone. Version 5.3.",
+      statusReady:"App ready. Data stays on this phone. Version 5.4.",
       sheetName:"Hauling Sheet",
       sheetTitle:"Receipt",
       voyageHeader:"Trip",
@@ -2704,10 +2875,19 @@ body.dark-mode.sheet-fullscreen .sheet {
 
 
   function fitTrueFullscreenSheet(){
-    if (!document.body.classList.contains("sheet-fullscreen")) {
-      document.documentElement.style.setProperty("--true-fs-scale", "1");
-      return;
+    // v5.4: no transform scaling in fullscreen. CSS compresses the table to viewport width,
+    // so sticky headers work reliably while scrolling.
+    document.documentElement.style.setProperty("--true-fs-scale", "1");
+    if (document.body.classList.contains("sheet-fullscreen")) {
+      const sheet = document.body.classList.contains("loader-plan-active")
+        ? document.querySelector("#loaderPlanView")
+        : document.querySelector("#haulingSheetWrapper .sheet");
+      if (sheet && !sheet.dataset.wasFullscreenOpened) {
+        sheet.scrollTop = 0;
+        sheet.dataset.wasFullscreenOpened = "1";
+      }
     }
+  }
 
     const sheet = document.body.classList.contains("loader-plan-active")
       ? document.querySelector("#loaderPlanView")
@@ -2736,6 +2916,7 @@ body.dark-mode.sheet-fullscreen .sheet {
       setTimeout(fitTrueFullscreenSheet, 60);
     } else {
       document.documentElement.style.setProperty("--true-fs-scale", "1");
+      document.querySelectorAll(".sheet").forEach(sheet => { delete sheet.dataset.wasFullscreenOpened; });
     }
 
     try { localStorage.setItem("recette_touch_sheet_fullscreen", active ? "1" : "0"); } catch(e) {}

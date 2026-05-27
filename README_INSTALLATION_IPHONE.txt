@@ -254,3 +254,10 @@ CORRECTIFS v5.3
 - Le tableau est mis à l’échelle pour voir toutes les colonnes sans glisser horizontalement.
 - Le header et le menu sont cachés en plein écran.
 - Bouton × compact pour quitter le plein écran.
+
+
+CORRECTIFS v5.4
+- Correction du plein écran: les en-têtes du tableau restent visibles pendant le scroll.
+- Suppression du scaling transform en plein écran, qui empêchait les en-têtes sticky de fonctionner sur iPhone.
+- Le tableau est maintenant compressé à la largeur de l’écran en CSS, donc toutes les colonnes restent visibles.
+- Bouton × compact conservé.
