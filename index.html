@@ -661,6 +661,33 @@ body.fit-mode .sheet {
   background:#e9f4ff;
   border-color:#111;
 }
+
+/* Sticky table headers while scrolling the sheet. */
+#sheetTable thead th {
+  position:sticky;
+  z-index:20;
+}
+#sheetTable thead tr:nth-child(1) th {
+  top:0;
+  z-index:23;
+}
+#sheetTable thead tr:nth-child(2) th {
+  top:30px;
+  z-index:22;
+}
+#sheetTable thead tr:nth-child(3) th {
+  top:58px;
+  z-index:21;
+}
+body.dark-mode #sheetTable thead th {
+  box-shadow:0 1px 0 #555;
+}
+@media print {
+  #sheetTable thead th {
+    position:static !important;
+  }
+}
+
 table {
   width:100%;
   min-width:1280px;
@@ -1202,7 +1229,7 @@ body.loader-plan-active #loaderPlanView { display:block; }
 
       <section class="menu-section menu-status full-span">
         <h3 class="menu-title" id="menuSectionStatus">Statut</h3>
-        <div class="status" id="status">App prête. Les données restent sur ce téléphone. Version 3.8.</div>
+        <div class="status" id="status">App prête. Les données restent sur ce téléphone. Version 4.1.</div>
         <div class="menu-note" id="menuNote">Astuce: ouvre le menu pour les actions et ferme-le pour voir plus de feuille.</div>
         <details class="menu-help-details" id="menuHelpDetails">
           <summary id="menuHelpSummary">Aide rapide</summary>
@@ -1391,6 +1418,20 @@ body.loader-plan-active #loaderPlanView { display:block; }
   </div>
 </div>
 
+
+<div class="modal" id="timeModal">
+  <div class="panel">
+    <h2 id="timeTitle">Heure de chargement</h2>
+    <input id="timeInput" inputmode="numeric" autocomplete="off" placeholder="Ex: 18:30">
+    <div class="panel-row">
+      <button id="timeNowBtn">Maintenant</button>
+      <button id="timeClear">Effacer</button>
+      <button id="timeCancel">Annuler</button>
+      <button id="timeSave" class="primary">Sauver</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal" id="loaderModal">
   <div class="panel">
     <h2 id="loaderTitle">Numéro Loader</h2>
@@ -1463,7 +1504,7 @@ body.loader-plan-active #loaderPlanView { display:block; }
       menuSectionDanger:"Réinitialisation",
       menuNote:"Astuce: ouvre le menu pour les actions et ferme-le pour voir plus de feuille.",
       menuSwipeHint:"Glisse vers le haut en bas du menu pour le fermer.",
-      statusReady:"App prête. Les données restent sur ce téléphone. Version 3.8.",
+      statusReady:"App prête. Les données restent sur ce téléphone. Version 4.1.",
       sheetName:"Feuille de transport / Hauling Sheet",
       sheetTitle:"Recette",
       voyageHeader:"Voyage",
@@ -1505,6 +1546,14 @@ body.loader-plan-active #loaderPlanView { display:block; }
       destination:"DESTINATION",
       loader:"Numéro Loader",
       loaderTitle:"Numéro Loader",
+      timeTitle:"Heure de chargement",
+      timeNowBtn:"Maintenant",
+      timeClear:"Effacer",
+      timeCancel:"Annuler",
+      timeSave:"Sauver",
+      timeLocked:"Heure déjà inscrite. Touche la case heure pour la modifier manuellement.",
+      timeSaved:"Heure modifiée manuellement.",
+      timeInvalid:"Format d’heure invalide. Exemple valide: 18:30.",
       clear:"Effacer",
       cancel:"Annuler",
       save:"Sauver",
@@ -1580,7 +1629,7 @@ body.loader-plan-active #loaderPlanView { display:block; }
       menuSectionDanger:"Reset",
       menuNote:"Tip: open the menu for actions, then close it to see more of the sheet.",
       menuSwipeHint:"Swipe up at the bottom of the menu to close it.",
-      statusReady:"App ready. Data stays on this phone. Version 3.8.",
+      statusReady:"App ready. Data stays on this phone. Version 4.1.",
       sheetName:"Hauling Sheet",
       sheetTitle:"Receipt",
       voyageHeader:"Trip",
@@ -1622,6 +1671,14 @@ body.loader-plan-active #loaderPlanView { display:block; }
       destination:"DESTINATION",
       loader:"Loader Number",
       loaderTitle:"Loader Number",
+      timeTitle:"Loading time",
+      timeNowBtn:"Now",
+      timeClear:"Erase",
+      timeCancel:"Cancel",
+      timeSave:"Save",
+      timeLocked:"Time already entered. Tap the time cell to edit it manually.",
+      timeSaved:"Time edited manually.",
+      timeInvalid:"Invalid time format. Valid example: 18:30.",
       clear:"Erase",
       cancel:"Cancel",
       save:"Save",
@@ -1664,6 +1721,7 @@ body.loader-plan-active #loaderPlanView { display:block; }
   let selected = { row:null, type:null, key:null };
   let max3 = true;
   let loaderRow = null;
+  let timeRow = null;
   let loaderTapTimer = null;
   let loaderLastTap = { row:null, time:0 };
   let currentPage = Number(localStorage.getItem("recette_touch_current_page") || "0");
@@ -2039,6 +2097,11 @@ body.loader-plan-active #loaderPlanView { display:block; }
     setText("labelLoaderBlend", i.loaderBlend);
     setText("labelLoaderNotes", i.loaderNotes);
     setText("loaderTitle", i.loaderTitle);
+    setText("timeTitle", i.timeTitle);
+    setText("timeNowBtn", i.timeNowBtn);
+    setText("timeClear", i.timeClear);
+    setText("timeCancel", i.timeCancel);
+    setText("timeSave", i.timeSave);
     setText("loaderClear", i.clear);
     setText("loaderCancel", i.cancel);
     setText("loaderSave", i.save);
@@ -2528,6 +2591,29 @@ body.loader-plan-active #loaderPlanView { display:block; }
     return "";
   }
 
+
+  function normalizeTimeInput(value){
+    let v = String(value || "").trim();
+    if (!v) return "";
+    v = v.replace(".", ":").replace("h", ":").replace("H", ":");
+    if (/^\d{1,2}$/.test(v)) v = v.padStart(2, "0") + ":00";
+    const match = v.match(/^(\d{1,2}):?(\d{2})$/);
+    if (!match) return null;
+    const h = Number(match[1]);
+    const m = Number(match[2]);
+    if (!Number.isInteger(h) || !Number.isInteger(m) || h < 0 || h > 23 || m < 0 || m > 59) return null;
+    return String(h).padStart(2, "0") + ":" + String(m).padStart(2, "0");
+  }
+
+  function openTimeModal(r){
+    timeRow = r;
+    setSelected(r, "time", "time");
+    const input = document.getElementById("timeInput");
+    input.value = page().rows[r].time || nowHHMM();
+    document.getElementById("timeModal").classList.add("open");
+    setTimeout(() => input.focus(), 50);
+  }
+
   function openLoaderModal(r){
     loaderRow = r;
     setSelected(r, "loader", "loader");
@@ -2582,10 +2668,15 @@ body.loader-plan-active #loaderPlanView { display:block; }
     if (!requireTimeBeforeEntry(r, type)) return;
 
     if (type === "time") {
-      rows[r].time = nowHHMM();
-      setSelected(r, "time", "time");
-      save();
-      render();
+      if (!rows[r].time) {
+        rows[r].time = nowHHMM();
+        setSelected(r, "time", "time");
+        save();
+        render();
+      } else {
+        openTimeModal(r);
+        setStatus(t("timeLocked"));
+      }
       return;
     }
 
@@ -2744,10 +2835,15 @@ body.loader-plan-active #loaderPlanView { display:block; }
     const rows = page().rows;
     if (r === null || !canUseRow(r)) r = nextRealRowIndex();
     if (r < 0) r = 0;
-    rows[r].time = nowHHMM();
-    setSelected(r, "time", "time");
-    save();
-    render();
+    if (!rows[r].time) {
+      rows[r].time = nowHHMM();
+      setSelected(r, "time", "time");
+      save();
+      render();
+    } else {
+      openTimeModal(r);
+      setStatus(t("timeLocked"));
+    }
   });
 
   document.getElementById("btnErase").addEventListener("click", () => {
@@ -2959,6 +3055,42 @@ body.loader-plan-active #loaderPlanView { display:block; }
     setStatus(t("csvDone"));
   });
 
+  
+  document.getElementById("timeNowBtn").addEventListener("click", () => {
+    document.getElementById("timeInput").value = nowHHMM();
+  });
+
+  document.getElementById("timeSave").addEventListener("click", () => {
+    if (timeRow === null) return;
+    const normalized = normalizeTimeInput(document.getElementById("timeInput").value);
+    if (normalized === null) {
+      setStatus(t("timeInvalid"));
+      return;
+    }
+    page().rows[timeRow].time = normalized;
+    save();
+    render();
+    setStatus(t("timeSaved"));
+    document.getElementById("timeModal").classList.remove("open");
+  });
+
+  document.getElementById("timeClear").addEventListener("click", () => {
+    if (timeRow !== null) {
+      page().rows[timeRow].time = "";
+      save();
+      render();
+    }
+    document.getElementById("timeModal").classList.remove("open");
+  });
+
+  document.getElementById("timeCancel").addEventListener("click", () => {
+    document.getElementById("timeModal").classList.remove("open");
+  });
+
+  document.getElementById("timeModal").addEventListener("click", (ev) => {
+    if (ev.target.id === "timeModal") document.getElementById("timeModal").classList.remove("open");
+  });
+
   document.getElementById("loaderSave").addEventListener("click", () => {
     if (loaderRow !== null) {
       page().rows[loaderRow].loader = document.getElementById("loaderInput").value.trim();
@@ -2986,7 +3118,10 @@ body.loader-plan-active #loaderPlanView { display:block; }
   });
 
   document.addEventListener("keydown", (ev) => {
-    if (ev.key === "Escape") document.getElementById("loaderModal").classList.remove("open");
+    if (ev.key === "Escape") {
+      document.getElementById("loaderModal").classList.remove("open");
+      document.getElementById("timeModal").classList.remove("open");
+    }
   });
 
   page();

@@ -215,3 +215,10 @@ CORRECTIFS v3.8
 - Texte d’aide déplacé dans le menu, sous Aide rapide.
 - Ajout d’une option Plein écran feuille.
 - En plein écran, le header et le menu sont cachés pour donner toute la place à la feuille.
+
+
+CORRECTIFS v4.1
+- Les en-têtes du tableau restent visibles pendant le scroll de la feuille.
+- Toucher une case heure vide inscrit l’heure automatiquement.
+- Si l’heure est déjà inscrite, elle ne change plus automatiquement.
+- Pour modifier une heure existante, toucher la case heure ouvre une fenêtre de modification manuelle.
