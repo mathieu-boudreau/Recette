@@ -1748,6 +1748,121 @@ body.dark-mode #sheetTable thead th {
   }
 }
 
+
+/* v5.1 stable menu + safe fullscreen */
+#btnSheetFullscreen {
+  display:block !important;
+}
+
+#btnFitPage,
+#btnInputView {
+  display:none !important;
+}
+
+#btnHaulingPlan.active,
+#btnLoaderPlan.active,
+#btnSheetFullscreen.active {
+  background:#ffcd23 !important;
+  color:#111 !important;
+  border-color:#9b7a00 !important;
+}
+
+body.sheet-fullscreen .fixed-app-header,
+body.sheet-fullscreen .toolbar,
+body.sheet-fullscreen .installbox {
+  display:none !important;
+}
+
+body.sheet-fullscreen .exit-fullscreen-btn {
+  display:block !important;
+  position:fixed !important;
+  top:calc(8px + env(safe-area-inset-top));
+  right:8px;
+  z-index:140;
+  min-height:38px;
+  padding:8px 12px;
+  border-radius:12px;
+  background:#111;
+  color:#ffcd23;
+  border:1px solid #111;
+}
+
+body.sheet-fullscreen .app {
+  max-width:none !important;
+  padding:calc(8px + env(safe-area-inset-top)) 0 calc(12px + env(safe-area-inset-bottom)) !important;
+}
+
+body.sheet-fullscreen .sheet {
+  height:calc(100dvh - 8px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
+  max-height:calc(100dvh - 8px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
+  overflow:auto !important;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+  padding:6px !important;
+  border-left:0;
+  border-right:0;
+}
+
+body.sheet-fullscreen .sheet-inner {
+  transform:none !important;
+  width:100% !important;
+  max-width:none !important;
+}
+
+body.sheet-fullscreen #sheetTable {
+  min-width:1280px;
+}
+
+body.sheet-fullscreen #sheetTable thead {
+  position:sticky;
+  top:0;
+  z-index:120;
+}
+
+body.sheet-fullscreen #sheetTable thead th {
+  position:sticky;
+  background-clip:padding-box;
+  box-shadow:0 1px 0 var(--thin);
+}
+
+body.sheet-fullscreen #sheetTable thead tr:nth-child(1) th {
+  top:0;
+  z-index:123;
+}
+
+body.sheet-fullscreen #sheetTable thead tr:nth-child(2) th {
+  top:30px;
+  z-index:122;
+}
+
+body.sheet-fullscreen #sheetTable thead tr:nth-child(3) th {
+  top:60px;
+  z-index:121;
+}
+
+@media print {
+  #btnSheetFullscreen,
+  .exit-fullscreen-btn {
+    display:none !important;
+  }
+
+  body.sheet-fullscreen .sheet {
+    height:auto !important;
+    max-height:none !important;
+    overflow:visible !important;
+  }
+
+  body.sheet-fullscreen .sheet-inner {
+    transform:none !important;
+    width:100% !important;
+  }
+
+  body.sheet-fullscreen #sheetTable thead,
+  body.sheet-fullscreen #sheetTable thead th {
+    position:static !important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -1773,6 +1888,7 @@ body.dark-mode #sheetTable thead th {
       <section class="menu-section">
         <h3 class="menu-title" id="menuSectionViews">Vues et feuilles</h3>
         <div class="menu-grid">
+          <button id="btnHaulingPlan">Feuille recette</button>
           <button id="btnLoaderPlan">Feuille loader</button>
           <button id="btnFitPage">Vue complète</button>
           <button id="btnInputView">Vue saisie</button>
@@ -1795,8 +1911,12 @@ body.dark-mode #sheetTable thead th {
 
       <section class="menu-section menu-status full-span">
         <h3 class="menu-title" id="menuSectionStatus">Statut</h3>
-        <div class="status" id="status">App prête. Les données restent sur ce téléphone. Version 5.0.</div>
+        <div class="status" id="status">App prête. Les données restent sur ce téléphone. Version 5.1.</div>
         <div class="menu-note" id="menuNote">Astuce: ouvre le menu pour les actions et ferme-le pour voir plus de feuille.</div>
+        <div class="menu-grid">
+          <button id="btnQuickHelp">Aide rapide</button>
+          <button id="btnCloseMenu">Fermer menu</button>
+        </div>
         <details class="menu-help-details" id="menuHelpDetails">
           <summary id="menuHelpSummary">Aide rapide</summary>
           <div id="helpText" class="menu-help-text"></div>
@@ -2039,6 +2159,7 @@ body.dark-mode #sheetTable thead th {
       darkAutoStatus:"Mode nuit automatique activé.",
       darkOnStatus:"Mode nuit activé.",
       darkOffStatus:"Mode nuit désactivé.",
+      haulingSheetBtn:"Feuille recette",
       loaderPlanBtn:"Feuille loader",
       haulingPlanBtn:"Feuille transport",
       loaderViewStatus:"Vue feuille loader.",
@@ -2058,6 +2179,8 @@ body.dark-mode #sheetTable thead th {
       sheetFullscreen:"Plein écran feuille",
       exitFullscreen:"Quitter plein écran",
       helpSummary:"Aide rapide",
+      quickHelp:"Aide rapide",
+      closeMenu:"Fermer menu",
       addPage:"+ Nouvelle page",
       deletePage:"Supprimer page",
       exportCsv:"Exporter CSV",
@@ -2070,7 +2193,7 @@ body.dark-mode #sheetTable thead th {
       menuSectionDanger:"Réinitialisation",
       menuNote:"Astuce: ouvre le menu pour les actions et ferme-le pour voir plus de feuille.",
       menuSwipeHint:"Glisse vers le haut en bas du menu pour le fermer.",
-      statusReady:"App prête. Les données restent sur ce téléphone. Version 5.0.",
+      statusReady:"App prête. Les données restent sur ce téléphone. Version 5.1.",
       sheetName:"Feuille de transport / Hauling Sheet",
       sheetTitle:"Recette",
       voyageHeader:"Voyage",
@@ -2164,6 +2287,7 @@ body.dark-mode #sheetTable thead th {
       darkAutoStatus:"Automatic night mode enabled.",
       darkOnStatus:"Night mode enabled.",
       darkOffStatus:"Night mode disabled.",
+      haulingSheetBtn:"Hauling sheet",
       loaderPlanBtn:"Loader sheet",
       haulingPlanBtn:"Hauling sheet",
       loaderViewStatus:"Loader sheet view.",
@@ -2183,6 +2307,8 @@ body.dark-mode #sheetTable thead th {
       sheetFullscreen:"Sheet fullscreen",
       exitFullscreen:"Exit fullscreen",
       helpSummary:"Quick help",
+      quickHelp:"Quick help",
+      closeMenu:"Close menu",
       addPage:"+ New page",
       deletePage:"Delete page",
       exportCsv:"Export CSV",
@@ -2195,7 +2321,7 @@ body.dark-mode #sheetTable thead th {
       menuSectionDanger:"Reset",
       menuNote:"Tip: open the menu for actions, then close it to see more of the sheet.",
       menuSwipeHint:"Swipe up at the bottom of the menu to close it.",
-      statusReady:"App ready. Data stays on this phone. Version 5.0.",
+      statusReady:"App ready. Data stays on this phone. Version 5.1.",
       sheetName:"Hauling Sheet",
       sheetTitle:"Receipt",
       voyageHeader:"Trip",
@@ -2298,7 +2424,7 @@ body.dark-mode #sheetTable thead th {
 
 
   function resetLegacyLayoutStateForV5(){
-    const version = "v5.0-clean-restore";
+    const version = "v5.1-stable-menu-fullscreen";
     try {
       if (localStorage.getItem("recette_touch_layout_version") !== version) {
         [
@@ -2590,18 +2716,26 @@ body.dark-mode #sheetTable thead th {
   }
 
   function updateLoaderPlanButton(){
-    const btn = document.getElementById('btnLoaderPlan');
-    if (btn) {
-      btn.textContent = activeView === 'loader' ? t('haulingPlanBtn') : t('loaderPlanBtn');
-      btn.classList.toggle('loader-switch-active', activeView === 'loader');
+    const loaderBtn = document.getElementById('btnLoaderPlan');
+    const haulingBtn = document.getElementById('btnHaulingPlan');
+    if (loaderBtn) {
+      loaderBtn.textContent = t('loaderPlanBtn');
+      loaderBtn.classList.toggle('active', activeView === 'loader');
+      loaderBtn.classList.toggle('loader-switch-active', activeView === 'loader');
+    }
+    if (haulingBtn) {
+      haulingBtn.textContent = t('haulingSheetBtn');
+      haulingBtn.classList.toggle('active', activeView === 'hauling');
     }
   }
 
   function updateMenuButtonStates(){
-    const fitBtn = document.getElementById('btnFitPage');
-    const inputBtn = document.getElementById('btnInputView');
-    if (fitBtn) fitBtn.classList.toggle('active', activeView === 'hauling' && viewMode === 'fit');
-    if (inputBtn) inputBtn.classList.toggle('active', activeView === 'hauling' && viewMode === 'input');
+    const fullscreenBtn = document.getElementById('btnSheetFullscreen');
+    if (fullscreenBtn) fullscreenBtn.classList.toggle('active', document.body.classList.contains('sheet-fullscreen'));
+    const haulingBtn = document.getElementById('btnHaulingPlan');
+    const loaderBtn = document.getElementById('btnLoaderPlan');
+    if (haulingBtn) haulingBtn.classList.toggle('active', activeView === 'hauling');
+    if (loaderBtn) loaderBtn.classList.toggle('active', activeView === 'loader');
   }
 
   function setActiveView(view, silent = false){
@@ -2613,6 +2747,7 @@ body.dark-mode #sheetTable thead th {
     }
     try { localStorage.setItem('recette_touch_active_view', activeView); } catch(e) {}
     updateLoaderPlanButton();
+    setText("btnHaulingPlan", i.haulingSheetBtn);
     updateMenuButtonStates();
     if (!silent) setStatus(activeView === 'loader' ? t('loaderViewStatus') : t('haulingViewStatus'));
     if (activeView === 'hauling' && viewMode === 'fit') setTimeout(fitFullPage, 80);
@@ -2635,6 +2770,8 @@ body.dark-mode #sheetTable thead th {
     setText("btnSheetFullscreen", i.sheetFullscreen);
     setText("btnExitSheetFullscreen", i.exitFullscreen);
     setText("menuHelpSummary", i.helpSummary);
+    setText("btnQuickHelp", i.quickHelp);
+    setText("btnCloseMenu", i.closeMenu);
     setText("btnAddPage", i.addPage);
     setText("btnDeletePage", i.deletePage);
     setText("btnExport", i.exportCsv);
@@ -2732,9 +2869,17 @@ body.dark-mode #sheetTable thead th {
 
 
   function setSheetFullscreen(active){
-    document.body.classList.remove("sheet-fullscreen", "fit-width-active");
+    document.body.classList.toggle("sheet-fullscreen", active);
+    document.body.classList.remove("fit-mode", "fit-width-active");
     document.documentElement.style.setProperty("--sheet-fullscreen-scale", "1");
-    try { localStorage.removeItem("recette_touch_sheet_fullscreen"); } catch(e) {}
+    document.documentElement.style.setProperty("--view-scale", "1");
+    if (active) {
+      setMenuOpen(false);
+      const sheet = document.querySelector(".sheet");
+      if (sheet) sheet.scrollTop = 0;
+    }
+    updateMenuButtonStates();
+    try { localStorage.setItem("recette_touch_sheet_fullscreen", active ? "1" : "0"); } catch(e) {}
   }
 
   function restoreSheetFullscreen(){
@@ -3497,8 +3642,21 @@ body.dark-mode #sheetTable thead th {
 
   document.getElementById("btnDarkMode").addEventListener("click", cycleDarkMode);
 
+  document.getElementById("btnHaulingPlan").addEventListener("click", () => {
+    setActiveView("hauling");
+  });
+
   document.getElementById("btnLoaderPlan").addEventListener("click", () => {
-    setActiveView(activeView === "loader" ? "hauling" : "loader");
+    setActiveView("loader");
+  });
+
+  document.getElementById("btnQuickHelp").addEventListener("click", () => {
+    const details = document.getElementById("menuHelpDetails");
+    if (details) details.open = !details.open;
+  });
+
+  document.getElementById("btnCloseMenu").addEventListener("click", () => {
+    setMenuOpen(false);
   });
 
   document.getElementById("btnLang").addEventListener("click", () => {

@@ -1,4 +1,4 @@
-const CACHE_NAME = "recette-touch-v5.0.0-clean-restore";
+const CACHE_NAME = "recette-touch-v5.1.0-stable-menu-fullscreen";
 const ASSETS = [
   "./",
   "./index.html",

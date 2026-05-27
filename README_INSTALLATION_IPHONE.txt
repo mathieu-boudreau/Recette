@@ -246,3 +246,11 @@ CORRECTIFS v5.0
 - En-têtes du tableau visibles pendant le scroll dans la feuille.
 - Options Vue complète / Vue saisie / plein écran cachées pour enlever la confusion.
 - Impression/PDF conservée en mode clair original.
+
+
+CORRECTIFS v5.1
+- Remet le bouton Plein écran feuille en version stable.
+- Ajoute un vrai choix Feuille recette / Feuille loader.
+- Ajoute un bouton Aide rapide dans le menu.
+- Ajoute un bouton Fermer menu.
+- Garde la base stable de v5.0 sans réintroduire Vue complète / Vue saisie.
