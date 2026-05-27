@@ -24,6 +24,9 @@
   --gray:#e7e7e7;
   --selected:#fff4b8;
   --kiewit-yellow:#ffcd23;
+  --panel:#fffdf6;
+  --panel-line:#d9cfb7;
+  --button-line:#7e7e7e;
   --app-header-height:74px;
   --sheet-pad:8px;
   --sheet-min-width:1280px;
@@ -142,10 +145,11 @@ body.menu-open .menu-toggle {
   overscroll-behavior:contain;
   touch-action:pan-y;
   padding:12px;
-  background:rgba(255,253,244,.985);
-  border:1px solid rgba(17,17,17,.2);
+  background:linear-gradient(180deg, rgba(255,254,248,.99), rgba(247,244,232,.99));
+  border:1px solid rgba(17,17,17,.24);
+  border-top:4px solid var(--kiewit-yellow);
   border-radius:8px;
-  box-shadow:0 16px 40px rgba(0,0,0,.22);
+  box-shadow:0 18px 42px rgba(0,0,0,.26);
   transform:none;
   zoom:1;
 }
@@ -175,8 +179,8 @@ body.menu-open .sheet {
 }
 
 .menu-section {
-  background:#fffdf4;
-  border:1px solid #ddd4bf;
+  background:#fff;
+  border:1px solid var(--panel-line);
   border-radius:8px;
   padding:12px;
 }
@@ -186,8 +190,10 @@ body.menu-open .sheet {
   font-size:12px;
   font-weight:900;
   text-transform:uppercase;
-  letter-spacing:.08em;
-  color:#6a5b1a;
+  letter-spacing:.06em;
+  color:#111;
+  border-left:5px solid var(--kiewit-yellow);
+  padding-left:8px;
 }
 
 .menu-grid {
@@ -206,14 +212,14 @@ body.menu-open .sheet {
 
 button {
   min-height:46px;
-  border:1.5px solid #9c9c9c;
+  border:1.5px solid var(--button-line);
   border-radius:8px;
-  background:#fff;
+  background:linear-gradient(180deg, #fff, #f7f7f3);
   padding:9px 10px;
   font-size:14px;
   font-weight:800;
   color:#111;
-  box-shadow:0 1px 0 rgba(0,0,0,.04);
+  box-shadow:inset 0 -1px 0 rgba(0,0,0,.08), 0 1px 0 rgba(255,255,255,.8);
   overflow-wrap:anywhere;
 }
 
@@ -237,6 +243,12 @@ button.loader-switch-active {
   border-color:#9b7a00 !important;
 }
 
+#btnCloseMenu {
+  background:#111;
+  color:var(--kiewit-yellow);
+  border-color:#111;
+}
+
 #btnPageLabel {
   pointer-events:none;
   background:#f2eee2;
@@ -255,8 +267,9 @@ button.loader-switch-active {
 
 .status {
   color:#222;
-  background:#fff9df;
-  border:1px solid #eadc9b;
+  background:#fff8d6;
+  border:1px solid #d7bd42;
+  border-left:5px solid var(--kiewit-yellow);
   border-radius:8px;
   padding:10px 12px;
 }
@@ -1241,6 +1254,190 @@ body.dark-mode .panel {
   }
 }
 
+@media (orientation:landscape) {
+  :root {
+    --app-header-height:58px;
+    --sheet-min-width:0;
+    --sheet-pad:4px;
+    --sheet-row-height:30px;
+    --sheet-head-row-height:28px;
+  }
+
+  .fixed-app-header {
+    padding:calc(4px + env(safe-area-inset-top)) 8px 4px;
+    grid-template-columns:42px minmax(0, 1fr) 28px;
+  }
+
+  .menu-toggle {
+    width:40px;
+    height:40px;
+    min-height:40px;
+    font-size:22px;
+  }
+
+  .kiewit-header-img {
+    height:40px;
+    max-width:min(380px, 66vw);
+  }
+
+  .app {
+    padding-top:calc(var(--app-header-height) + 4px + env(safe-area-inset-top));
+    padding-left:4px;
+    padding-right:4px;
+    padding-bottom:calc(4px + env(safe-area-inset-bottom));
+  }
+
+  .toolbar {
+    top:calc(var(--app-header-height) + env(safe-area-inset-top) + 5px);
+    left:6px;
+    right:6px;
+    padding:10px;
+  }
+
+  .installbox.show {
+    display:none;
+  }
+
+  .screen-meta {
+    margin-bottom:4px;
+    padding:5px;
+  }
+
+  .screen-meta-top {
+    grid-template-columns:38px minmax(0,1fr) minmax(72px,112px);
+    gap:6px;
+  }
+
+  .screen-left-logo {
+    width:36px;
+    height:36px;
+  }
+
+  .screen-right-logo {
+    max-height:28px;
+  }
+
+  .screen-sheet-name {
+    margin-bottom:2px;
+    font-size:11px;
+  }
+
+  .screen-title-box {
+    padding:2px 6px;
+    font-size:15px;
+  }
+
+  .screen-fields {
+    grid-template-columns:repeat(4, minmax(0,1fr));
+    gap:5px;
+    margin-top:5px;
+  }
+
+  .screen-fields label {
+    grid-template-columns:auto minmax(0,1fr);
+    gap:4px;
+    font-size:11px;
+  }
+
+  .screen-line-input {
+    min-height:22px;
+    padding:1px 3px;
+    font-size:13px;
+  }
+
+  .screen-truck-row {
+    justify-content:flex-start;
+    gap:5px;
+    font-size:11px;
+  }
+
+  .screen-truck-choice {
+    min-height:28px;
+    padding:2px 8px;
+    font-size:14px;
+  }
+
+  #sheetTable {
+    width:100%;
+    min-width:0;
+    max-width:100%;
+    font-size:8px;
+  }
+
+  #sheetTable th,
+  #sheetTable td {
+    height:var(--sheet-row-height);
+    padding:1px;
+    overflow:hidden;
+    text-overflow:clip;
+    line-height:1;
+  }
+
+  #sheetTable th {
+    font-size:8px;
+  }
+
+  #sheetTable .source-main {
+    font-size:10px;
+  }
+
+  #sheetTable .small-h {
+    font-size:6px;
+  }
+
+  #sheetTable td.time-cell,
+  #sheetTable td.loader-cell {
+    font-size:10px;
+  }
+
+  #sheetTable td.ore-cell,
+  #sheetTable td.dest-cell {
+    font-size:12px;
+  }
+
+  #sheetTable .bucket-marks {
+    gap:2px;
+    min-width:14px;
+  }
+
+  #sheetTable .bucket-mark {
+    width:2px;
+    height:13px;
+  }
+
+  #sheetTable .bucket-x {
+    font-size:12px;
+  }
+
+  #haulingSheetWrapper .foot,
+  #haulingSheetWrapper .page-print-label,
+  #haulingSheetWrapper .note {
+    min-width:0;
+  }
+}
+
+@media (orientation:landscape) and (min-width:900px) {
+  :root {
+    --app-header-height:60px;
+    --sheet-row-height:31px;
+    --sheet-head-row-height:29px;
+  }
+
+  #sheetTable,
+  #sheetTable th {
+    font-size:9px;
+  }
+
+  #sheetTable .small-h {
+    font-size:7px;
+  }
+
+  #sheetTable td.ore-cell,
+  #sheetTable td.dest-cell {
+    font-size:13px;
+  }
+}
+
 @media (orientation:landscape) and (max-height:500px) {
   :root {
     --app-header-height:54px;
@@ -1728,7 +1925,7 @@ body.dark-mode .panel {
 
       <section class="menu-section menu-status full-span">
         <h3 class="menu-title" id="menuSectionStatus">Statut</h3>
-        <div class="status" id="status">App prête. Les données restent sur ce téléphone. Version 5.8.</div>
+        <div class="status" id="status">App prête. Les données restent sur ce téléphone. Version 5.9.</div>
         <div class="menu-note" id="menuNote">Astuce: ouvre le menu pour les actions et ferme-le pour voir plus de feuille.</div>
         <details class="menu-help-details" id="menuHelpDetails">
           <summary id="menuHelpSummary">Aide rapide</summary>
@@ -2032,7 +2229,7 @@ body.dark-mode .panel {
       menuSectionDanger:"Réinitialisation",
       menuNote:"Astuce: ouvre le menu pour les actions et ferme-le pour voir plus de feuille.",
       menuSwipeHint:"Glisse vers le haut en bas du menu pour le fermer.",
-      statusReady:"App prête. Les données restent sur ce téléphone. Version 5.8.",
+      statusReady:"App prête. Les données restent sur ce téléphone. Version 5.9.",
       sheetName:"Feuille de transport / Hauling Sheet",
       sheetTitle:"Recette",
       voyageHeader:"Voyage",
@@ -2152,7 +2349,7 @@ body.dark-mode .panel {
       menuSectionDanger:"Reset",
       menuNote:"Tip: open the menu for actions, then close it to see more of the sheet.",
       menuSwipeHint:"Swipe up at the bottom of the menu to close it.",
-      statusReady:"App ready. Data stays on this phone. Version 5.8.",
+      statusReady:"App ready. Data stays on this phone. Version 5.9.",
       sheetName:"Hauling Sheet",
       sheetTitle:"Receipt",
       voyageHeader:"Trip",
@@ -2252,7 +2449,7 @@ body.dark-mode .panel {
 
 
   function resetLegacyLayoutState(){
-    const version = "v5.8-responsive-layout-sticky-headers";
+    const version = "v5.9-landscape-field-table";
     try {
       if (localStorage.getItem("recette_touch_layout_version") !== version) {
         [

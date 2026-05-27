@@ -1,4 +1,4 @@
-const CACHE_NAME = "recette-touch-v5.8.0-responsive-layout-sticky-headers";
+const CACHE_NAME = "recette-touch-v5.9.0-landscape-field-table";
 const ASSETS = [
   "./",
   "./index.html",
