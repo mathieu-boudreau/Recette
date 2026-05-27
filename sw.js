@@ -1,4 +1,4 @@
-const CACHE_NAME = "recette-touch-v5.10.0-normal-screen-layout";
+const CACHE_NAME = "recette-touch-v5.11.1-premium-field-layout";
 const ASSETS = [
   "./",
   "./index.html",
@@ -9,8 +9,7 @@ const ASSETS = [
   "./apple-touch-icon.png",
   "./logo.png",
   "./wordmark.png",
-  "./kiewit-header.png",
-  "./.nojekyll"
+  "./kiewit-header.png"
 ];
 
 self.addEventListener("install", event => {

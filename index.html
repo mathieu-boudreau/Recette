@@ -377,10 +377,11 @@ body.loader-plan-active #loaderPlanView {
   max-width:100%;
   margin:0 0 6px;
   padding:8px;
-  background:var(--paper);
-  border:1px solid #b6ad98;
+  background:linear-gradient(135deg, #111 0%, #1f1f1f 100%);
+  color:#fff;
+  border:1px solid rgba(255,205,35,.38);
   border-left:5px solid var(--kiewit-yellow);
-  box-shadow:0 1px 0 rgba(0,0,0,.05);
+  box-shadow:0 6px 16px rgba(0,0,0,.22);
 }
 
 .screen-sheet-header-top {
@@ -410,17 +411,17 @@ body.loader-plan-active #loaderPlanView {
 
 .screen-sheet-name {
   margin-bottom:4px;
+  color:#f4f1e8;
   font-size:14px;
   line-height:1.1;
   font-weight:900;
-  text-decoration:underline;
 }
 
 .screen-title-box {
-  padding:4px 8px;
-  background:var(--blue);
-  border:1px solid #777;
-  color:#111;
+  padding:2px 0;
+  background:transparent;
+  border:0;
+  color:var(--kiewit-yellow);
   font-size:20px;
   line-height:1.1;
   font-weight:900;
@@ -441,6 +442,7 @@ body.loader-plan-active #loaderPlanView {
   align-items:center;
   font-size:13px;
   font-weight:800;
+  color:#f4f1e8;
   min-width:0;
 }
 
@@ -455,11 +457,12 @@ body.loader-plan-active #loaderPlanView {
   min-width:0;
   min-height:28px;
   border:0;
-  border-bottom:2px solid #777;
+  border-bottom:2px solid rgba(255,255,255,.48);
   border-radius:0;
   background:transparent;
   padding:2px 4px;
-  color:var(--ink);
+  color:#fff;
+  -webkit-text-fill-color:#fff;
   font-size:16px;
   font-weight:800;
 }
@@ -468,6 +471,7 @@ body.loader-plan-active #loaderPlanView {
   display:flex;
   align-items:center;
   gap:8px;
+  color:#f4f1e8;
   font-size:13px;
   font-weight:900;
 }
@@ -475,17 +479,18 @@ body.loader-plan-active #loaderPlanView {
 .screen-truck-choice {
   min-height:36px;
   padding:4px 12px;
-  border:1px solid transparent;
+  border:1px solid rgba(255,255,255,.35);
   border-radius:8px;
-  background:#fff;
-  color:#111;
+  background:rgba(255,255,255,.08);
+  color:#fff;
   font-size:18px;
   font-weight:900;
 }
 
 .screen-truck-choice.active {
-  background:#e9f4ff;
-  border-color:#111;
+  background:var(--kiewit-yellow);
+  border-color:var(--kiewit-yellow);
+  color:#111;
 }
 
 .print-sheet-header {
@@ -992,11 +997,18 @@ tfoot td,
 
 .panel {
   width:min(430px, 100%);
+  max-height:calc(100dvh - 36px);
+  overflow:auto;
+  -webkit-overflow-scrolling:touch;
   padding:18px;
   border-radius:8px;
   background:#fff;
   color:#111;
   box-shadow:0 10px 30px rgba(0,0,0,.25);
+}
+
+.picker-panel {
+  width:min(480px, 100%);
 }
 
 .panel h2 {
@@ -1015,16 +1027,114 @@ tfoot td,
 
 .panel-row {
   display:flex;
+  flex-wrap:wrap;
   gap:8px;
   justify-content:flex-end;
   margin-top:12px;
 }
 
+.date-picker-input {
+  width:100%;
+}
+
+.time-preview {
+  margin:2px 0 10px;
+  padding:8px 12px;
+  border:1px solid #111;
+  border-radius:8px;
+  background:#ffcd23;
+  color:#111;
+  font-size:26px;
+  line-height:1;
+  font-weight:900;
+  text-align:center;
+  letter-spacing:0;
+}
+
+.time-picker-grid {
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  gap:10px;
+  align-items:center;
+}
+
+.picker-label {
+  margin-bottom:6px;
+  font-size:12px;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:0;
+}
+
+.time-separator {
+  align-self:center;
+  padding-top:22px;
+  color:#111;
+  font-size:26px;
+  font-weight:900;
+}
+
+.time-options {
+  max-height:156px;
+  overflow:auto;
+  -webkit-overflow-scrolling:touch;
+  border:1px solid #aaa;
+  border-radius:8px;
+  background:#f7f7f7;
+  scroll-snap-type:y mandatory;
+}
+
+.time-option {
+  width:100%;
+  min-height:42px;
+  border:0;
+  border-bottom:1px solid #ddd;
+  border-radius:0;
+  background:#fff;
+  color:#111;
+  font-size:20px;
+  font-weight:900;
+  scroll-snap-align:center;
+}
+
+.time-option:last-child {
+  border-bottom:0;
+}
+
+.time-option.active {
+  background:#111;
+  color:#ffcd23;
+}
+
+.time-manual {
+  margin-top:10px;
+  border:1px solid #ddd;
+  border-radius:8px;
+  padding:8px 10px;
+  background:#fafafa;
+}
+
+.time-manual summary {
+  cursor:pointer;
+  font-size:13px;
+  font-weight:800;
+}
+
+.time-manual input {
+  margin-top:8px;
+}
+
 body.dark-mode .sheet,
-body.dark-mode .screen-sheet-header {
+body.dark-mode .sheet {
   background:#141414;
   border-color:#444;
   box-shadow:0 3px 18px rgba(0,0,0,.65);
+}
+
+body.dark-mode .screen-sheet-header {
+  background:linear-gradient(135deg, #0d0d0d 0%, #191919 100%);
+  border-color:rgba(255,205,35,.35);
+  box-shadow:0 6px 18px rgba(0,0,0,.68);
 }
 
 body.dark-mode th,
@@ -1129,15 +1239,48 @@ body.dark-mode .loader-notes-wrap textarea {
   border-color:#666;
 }
 
-body.dark-mode .screen-title-box,
+body.dark-mode .time-options,
+body.dark-mode .time-manual {
+  background:#1a1a1a;
+  border-color:#555;
+}
+
+body.dark-mode .screen-sheet-header .screen-line-input {
+  background:transparent;
+  color:#fff;
+  -webkit-text-fill-color:#fff;
+  border-color:rgba(255,255,255,.48);
+}
+
+body.dark-mode .time-option {
+  background:#111;
+  color:#f4f1e8;
+  border-color:#333;
+}
+
+body.dark-mode .time-option.active {
+  background:#ffcd23;
+  color:#111;
+}
+
+body.dark-mode .time-separator {
+  color:#f4f1e8;
+}
+
 body.dark-mode .title-box {
   background:#cfe7f6;
   color:#111;
   border-color:#8fb5cf;
 }
 
+body.dark-mode .screen-title-box {
+  background:transparent;
+  color:#ffcd23;
+  border:0;
+}
+
 body.dark-mode .truck-choice,
-body.dark-mode .screen-truck-choice {
+body.dark-mode .truck-choice {
   background:#1f1f1f;
   color:#f4f1e8;
   border-color:#555;
@@ -1218,6 +1361,7 @@ body.dark-mode .panel {
 
   .screen-sheet-header {
     padding:6px;
+    border-left-width:4px;
   }
 
   .screen-sheet-header-top {
@@ -1318,6 +1462,7 @@ body.dark-mode .panel {
   .screen-sheet-header {
     margin-bottom:4px;
     padding:5px;
+    border-left-width:4px;
   }
 
   .screen-sheet-header-top {
@@ -1487,6 +1632,7 @@ body.dark-mode .panel {
   .screen-sheet-header {
     margin-bottom:4px;
     padding:4px;
+    border-left-width:4px;
   }
 
   .screen-sheet-header-top {
@@ -1540,6 +1686,32 @@ body.dark-mode .panel {
     min-height:28px;
     padding:2px 8px;
     font-size:14px;
+  }
+
+  .modal {
+    padding:8px;
+  }
+
+  .panel {
+    padding:12px;
+  }
+
+  .panel h2 {
+    margin-bottom:8px;
+    font-size:18px;
+  }
+
+  .time-preview {
+    font-size:22px;
+  }
+
+  .time-options {
+    max-height:118px;
+  }
+
+  .time-option {
+    min-height:36px;
+    font-size:18px;
   }
 }
 
@@ -1942,7 +2114,7 @@ body.dark-mode .panel {
 
       <section class="menu-section menu-status full-span">
         <h3 class="menu-title" id="menuSectionStatus">Statut</h3>
-        <div class="status" id="status">App prête. Les données restent sur ce téléphone. Version 5.10.</div>
+        <div class="status" id="status">App prête. Les données restent sur ce téléphone. Version 5.11.</div>
         <div class="menu-note" id="menuNote">Astuce: ouvre le menu pour les actions et ferme-le pour voir plus de feuille.</div>
         <details class="menu-help-details" id="menuHelpDetails">
           <summary id="menuHelpSummary">Aide rapide</summary>
@@ -2165,14 +2337,41 @@ body.dark-mode .panel {
 
 
 <div class="modal" id="timeModal">
-  <div class="panel">
+  <div class="panel picker-panel">
     <h2 id="timeTitle">Heure de chargement</h2>
-    <input id="timeInput" inputmode="numeric" autocomplete="off" placeholder="Ex: 18:30">
+    <div class="time-preview" id="timePreview">00:00</div>
+    <div class="time-picker-grid" aria-label="Sélecteur d'heure">
+      <div>
+        <div class="picker-label" id="timeHourLabel">Heure</div>
+        <div class="time-options" id="timeHourOptions"></div>
+      </div>
+      <div class="time-separator">:</div>
+      <div>
+        <div class="picker-label" id="timeMinuteLabel">Minute</div>
+        <div class="time-options" id="timeMinuteOptions"></div>
+      </div>
+    </div>
+    <details class="time-manual" id="timeManualDetails">
+      <summary id="timeManualSummary">Entrée manuelle</summary>
+      <input id="timeInput" inputmode="numeric" autocomplete="off" placeholder="Ex: 18:30">
+    </details>
     <div class="panel-row">
       <button id="timeNowBtn">Maintenant</button>
       <button id="timeClear">Effacer</button>
       <button id="timeCancel">Annuler</button>
       <button id="timeSave" class="primary">Sauver</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="dateModal">
+  <div class="panel picker-panel">
+    <h2 id="dateTitle">Date de la feuille</h2>
+    <input class="date-picker-input" id="dateInput" type="date" autocomplete="off">
+    <div class="panel-row">
+      <button id="dateTodayBtn">Aujourd’hui</button>
+      <button id="dateCancel">Annuler</button>
+      <button id="dateSave" class="primary">Sauver</button>
     </div>
   </div>
 </div>
@@ -2246,7 +2445,7 @@ body.dark-mode .panel {
       menuSectionDanger:"Réinitialisation",
       menuNote:"Astuce: ouvre le menu pour les actions et ferme-le pour voir plus de feuille.",
       menuSwipeHint:"Glisse vers le haut en bas du menu pour le fermer.",
-      statusReady:"App prête. Les données restent sur ce téléphone. Version 5.10.",
+      statusReady:"App prête. Les données restent sur ce téléphone. Version 5.11.",
       sheetName:"Feuille de transport / Hauling Sheet",
       sheetTitle:"Recette",
       voyageHeader:"Voyage",
@@ -2288,7 +2487,17 @@ body.dark-mode .panel {
       destination:"DESTINATION",
       loader:"Numéro Loader",
       loaderTitle:"Numéro Loader",
+      dateTitle:"Date de la feuille",
+      dateToday:"Aujourd’hui",
+      dateCancel:"Annuler",
+      dateSave:"Sauver",
+      dateSaved:"Date modifiée.",
+      dateInvalid:"Date invalide.",
       timeTitle:"Heure de chargement",
+      timeHour:"Heure",
+      timeMinute:"Minute",
+      timeManualSummary:"Entrée manuelle",
+      timeManualPlaceholder:"Ex: 18:30",
       timeNowBtn:"Maintenant",
       timeClear:"Effacer",
       timeCancel:"Annuler",
@@ -2366,7 +2575,7 @@ body.dark-mode .panel {
       menuSectionDanger:"Reset",
       menuNote:"Tip: open the menu for actions, then close it to see more of the sheet.",
       menuSwipeHint:"Swipe up at the bottom of the menu to close it.",
-      statusReady:"App ready. Data stays on this phone. Version 5.10.",
+      statusReady:"App ready. Data stays on this phone. Version 5.11.",
       sheetName:"Hauling Sheet",
       sheetTitle:"Receipt",
       voyageHeader:"Trip",
@@ -2408,7 +2617,17 @@ body.dark-mode .panel {
       destination:"DESTINATION",
       loader:"Loader Number",
       loaderTitle:"Loader Number",
+      dateTitle:"Sheet date",
+      dateToday:"Today",
+      dateCancel:"Cancel",
+      dateSave:"Save",
+      dateSaved:"Date updated.",
+      dateInvalid:"Invalid date.",
       timeTitle:"Loading time",
+      timeHour:"Hour",
+      timeMinute:"Minute",
+      timeManualSummary:"Manual entry",
+      timeManualPlaceholder:"Example: 18:30",
       timeNowBtn:"Now",
       timeClear:"Erase",
       timeCancel:"Cancel",
@@ -2457,6 +2676,8 @@ body.dark-mode .panel {
   let max3 = true;
   let loaderRow = null;
   let timeRow = null;
+  let datePickerPrevious = "";
+  let timePickerValue = { hour:"00", minute:"00" };
   let loaderTapTimer = null;
   let loaderLastTap = { row:null, time:0 };
   let currentPage = Number(localStorage.getItem("recette_touch_current_page") || "0");
@@ -2466,7 +2687,7 @@ body.dark-mode .panel {
 
 
   function resetLegacyLayoutState(){
-    const version = "v5.10-normal-screen-print-layout";
+    const version = "v5.11-premium-responsive-field-layout";
     try {
       if (localStorage.getItem("recette_touch_layout_version") !== version) {
         [
@@ -2849,7 +3070,14 @@ body.dark-mode .panel {
     setText("labelLoaderBlend", i.loaderBlend);
     setText("labelLoaderNotes", i.loaderNotes);
     setText("loaderTitle", i.loaderTitle);
+    setText("dateTitle", i.dateTitle);
+    setText("dateTodayBtn", i.dateToday);
+    setText("dateCancel", i.dateCancel);
+    setText("dateSave", i.dateSave);
     setText("timeTitle", i.timeTitle);
+    setText("timeHourLabel", i.timeHour);
+    setText("timeMinuteLabel", i.timeMinute);
+    setText("timeManualSummary", i.timeManualSummary);
     setText("timeNowBtn", i.timeNowBtn);
     setText("timeClear", i.timeClear);
     setText("timeCancel", i.timeCancel);
@@ -2857,6 +3085,8 @@ body.dark-mode .panel {
     setText("loaderClear", i.clear);
     setText("loaderCancel", i.cancel);
     setText("loaderSave", i.save);
+    const manualTimeInput = document.getElementById("timeInput");
+    if (manualTimeInput) manualTimeInput.placeholder = i.timeManualPlaceholder;
 
     updateMetaUI();
     renderLoaderPlan();
@@ -2917,7 +3147,8 @@ body.dark-mode .panel {
     for (const row of rows) {
       row.ores = row.ores || {};
       ORES.forEach(o => { if (typeof row.ores[o] !== "number") row.ores[o] = 0; });
-      row.time = row.time || "";
+      const normalizedTime = normalizeTimeInput(row.time);
+      row.time = normalizedTime === null ? (row.time || "") : normalizedTime;
       row.loader = row.loader || "";
       row.dest = row.dest || "";
     }
@@ -3165,12 +3396,35 @@ body.dark-mode .panel {
 
   function nowHHMM(){
     const d = new Date();
-    return d.toLocaleTimeString("fr-CA", { hour:"2-digit", minute:"2-digit", hour12:false });
+    return String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0");
   }
 
   function todayDate(){
     const d = new Date();
     return d.toLocaleDateString("fr-CA", { year:"numeric", month:"2-digit", day:"2-digit" });
+  }
+
+  function validIsoDate(value){
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(String(value || ""))) return false;
+    const [year, month, day] = value.split("-").map(Number);
+    const d = new Date(year, month - 1, day);
+    return d.getFullYear() === year && d.getMonth() === month - 1 && d.getDate() === day;
+  }
+
+  function openDateModal(){
+    datePickerPrevious = state.meta.date || todayDate();
+    const input = document.getElementById("dateInput");
+    input.value = validIsoDate(datePickerPrevious) ? datePickerPrevious : todayDate();
+    document.getElementById("dateModal").classList.add("open");
+    setTimeout(() => {
+      if (typeof input.showPicker === "function") {
+        try { input.showPicker(); } catch(e) {}
+      }
+    }, 80);
+  }
+
+  function closeDateModal(){
+    document.getElementById("dateModal").classList.remove("open");
   }
 
   function ensureDateAuto(){
@@ -3276,6 +3530,7 @@ body.dark-mode .panel {
   function normalizeTimeInput(value){
     let v = String(value || "").trim();
     if (!v) return "";
+    v = v.replace(/\s+/g, "");
     v = v.replace(".", ":").replace("h", ":").replace("H", ":");
     if (/^\d{1,2}$/.test(v)) v = v.padStart(2, "0") + ":00";
     const match = v.match(/^(\d{1,2}):?(\d{2})$/);
@@ -3286,13 +3541,75 @@ body.dark-mode .panel {
     return String(h).padStart(2, "0") + ":" + String(m).padStart(2, "0");
   }
 
+  function buildTimePickerOptions(){
+    const hourBox = document.getElementById("timeHourOptions");
+    const minuteBox = document.getElementById("timeMinuteOptions");
+    if (!hourBox || !minuteBox || hourBox.children.length) return;
+
+    for (let h = 0; h < 24; h++) {
+      const value = String(h).padStart(2, "0");
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "time-option";
+      btn.dataset.part = "hour";
+      btn.dataset.value = value;
+      btn.textContent = value;
+      hourBox.appendChild(btn);
+    }
+
+    for (let m = 0; m < 60; m++) {
+      const value = String(m).padStart(2, "0");
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "time-option";
+      btn.dataset.part = "minute";
+      btn.dataset.value = value;
+      btn.textContent = value;
+      minuteBox.appendChild(btn);
+    }
+  }
+
+  function selectedTimeString(){
+    return timePickerValue.hour + ":" + timePickerValue.minute;
+  }
+
+  function updateTimePickerUI(scrollToActive = false){
+    document.querySelectorAll(".time-option").forEach(btn => {
+      const active = btn.dataset.part === "hour"
+        ? btn.dataset.value === timePickerValue.hour
+        : btn.dataset.value === timePickerValue.minute;
+      btn.classList.toggle("active", active);
+      if (active) btn.setAttribute("aria-pressed", "true");
+      else btn.setAttribute("aria-pressed", "false");
+    });
+    const preview = document.getElementById("timePreview");
+    if (preview) preview.textContent = selectedTimeString();
+
+    if (scrollToActive) {
+      ["hour", "minute"].forEach(part => {
+        const active = document.querySelector('.time-option.active[data-part="' + part + '"]');
+        if (active) active.scrollIntoView({ block:"center" });
+      });
+    }
+  }
+
+  function setTimePickerValue(value, scrollToActive = false){
+    const normalized = normalizeTimeInput(value) || nowHHMM();
+    const parts = normalized.split(":");
+    timePickerValue = { hour:parts[0], minute:parts[1] };
+    updateTimePickerUI(scrollToActive);
+  }
+
   function openTimeModal(r){
     timeRow = r;
     setSelected(r, "time", "time");
+    buildTimePickerOptions();
+    setTimePickerValue(page().rows[r].time || nowHHMM(), true);
     const input = document.getElementById("timeInput");
-    input.value = page().rows[r].time || nowHHMM();
+    const details = document.getElementById("timeManualDetails");
+    if (input) input.value = "";
+    if (details) details.open = false;
     document.getElementById("timeModal").classList.add("open");
-    setTimeout(() => input.focus(), 50);
   }
 
   function openLoaderModal(r){
@@ -3322,6 +3639,23 @@ body.dark-mode .panel {
     el.addEventListener("input", () => {
       state.meta[prop] = el.value;
       save();
+    });
+  }
+
+  function bindDateField(id){
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.readOnly = true;
+    el.setAttribute("aria-haspopup", "dialog");
+    el.addEventListener("click", (ev) => {
+      ev.preventDefault();
+      openDateModal();
+    });
+    el.addEventListener("keydown", (ev) => {
+      if (ev.key === "Enter" || ev.key === " ") {
+        ev.preventDefault();
+        openDateModal();
+      }
     });
   }
 
@@ -3428,10 +3762,10 @@ body.dark-mode .panel {
     });
   });
 
-  bindMeta("metaDate", "date");
+  bindDateField("metaDate");
   bindMeta("metaTruckNo", "truckNo");
   bindMeta("metaName", "name");
-  bindMeta("screenMetaDate", "date");
+  bindDateField("screenMetaDate");
   bindMeta("screenMetaTruckNo", "truckNo");
   bindMeta("screenMetaName", "name");
   // Poids et # de voyage sont calculés automatiquement.
@@ -3499,11 +3833,29 @@ body.dark-mode .panel {
     btn.addEventListener('mouseleave', cancel);
   });
 
-  document.getElementById("metaDate").addEventListener("click", () => {
-    state.meta.date = todayDate();
+  document.getElementById("dateTodayBtn").addEventListener("click", () => {
+    document.getElementById("dateInput").value = todayDate();
+  });
+
+  document.getElementById("dateSave").addEventListener("click", () => {
+    const value = document.getElementById("dateInput").value;
+    if (!validIsoDate(value)) {
+      setStatus(t("dateInvalid"));
+      return;
+    }
+    const plan = loaderPlanState();
+    if (!plan.date || plan.date === datePickerPrevious) plan.date = value;
+    state.meta.date = value;
     save();
-    updateMetaUI();
-    setStatus(t("dateAuto"));
+    render();
+    closeDateModal();
+    setStatus(t("dateSaved"));
+  });
+
+  document.getElementById("dateCancel").addEventListener("click", closeDateModal);
+
+  document.getElementById("dateModal").addEventListener("click", (ev) => {
+    if (ev.target.id === "dateModal") closeDateModal();
   });
 
   document.querySelectorAll(".truck-choice, .screen-truck-choice").forEach(el => {
@@ -3714,13 +4066,36 @@ body.dark-mode .panel {
   });
 
   
+  document.getElementById("timeHourOptions").addEventListener("click", (ev) => {
+    const btn = ev.target.closest(".time-option");
+    if (!btn) return;
+    timePickerValue.hour = btn.dataset.value;
+    document.getElementById("timeInput").value = "";
+    updateTimePickerUI();
+  });
+
+  document.getElementById("timeMinuteOptions").addEventListener("click", (ev) => {
+    const btn = ev.target.closest(".time-option");
+    if (!btn) return;
+    timePickerValue.minute = btn.dataset.value;
+    document.getElementById("timeInput").value = "";
+    updateTimePickerUI();
+  });
+
+  document.getElementById("timeInput").addEventListener("input", () => {
+    const normalized = normalizeTimeInput(document.getElementById("timeInput").value);
+    if (normalized) setTimePickerValue(normalized, false);
+  });
+
   document.getElementById("timeNowBtn").addEventListener("click", () => {
-    document.getElementById("timeInput").value = nowHHMM();
+    document.getElementById("timeInput").value = "";
+    setTimePickerValue(nowHHMM(), true);
   });
 
   document.getElementById("timeSave").addEventListener("click", () => {
     if (timeRow === null) return;
-    const normalized = normalizeTimeInput(document.getElementById("timeInput").value);
+    const manualValue = document.getElementById("timeInput").value.trim();
+    const normalized = manualValue ? normalizeTimeInput(manualValue) : selectedTimeString();
     if (normalized === null) {
       setStatus(t("timeInvalid"));
       return;
@@ -3779,6 +4154,7 @@ body.dark-mode .panel {
     if (ev.key === "Escape") {
       document.getElementById("loaderModal").classList.remove("open");
       document.getElementById("timeModal").classList.remove("open");
+      document.getElementById("dateModal").classList.remove("open");
     }
   });
 
