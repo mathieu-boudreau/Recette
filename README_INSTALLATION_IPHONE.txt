@@ -255,3 +255,10 @@ CORRECTIFS v5.5
 - Tableau compressé à la largeur de l’écran.
 - En-têtes du tableau visibles pendant le scroll.
 - Reset automatique des anciens états de plein écran/fit conservés par Safari.
+
+
+CORRECTIFS v5.6
+- Remplace l’en-tête officiel à l’écran par un en-tête compact lisible.
+- L’en-tête officiel complet reste utilisé pour l’impression/PDF.
+- Corrige la section du haut qui devenait écrasée en mode pleine largeur.
+- Les champs Date, No de camion, Nom et Truck type restent synchronisés.

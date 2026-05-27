@@ -2102,6 +2102,203 @@ body.dark-mode #sheetTable thead th {
   }
 }
 
+
+/* v5.6 clean screen header: official paper header is for print, compact header is for screen */
+.screen-meta {
+  display:block;
+  width:100%;
+  max-width:100%;
+  background:#fffdf8;
+  border:1px solid #aaa;
+  margin:0 0 6px;
+  padding:8px;
+  box-sizing:border-box;
+}
+
+.screen-meta-top {
+  display:grid;
+  grid-template-columns:52px minmax(0,1fr) minmax(90px,150px);
+  gap:8px;
+  align-items:center;
+}
+
+.screen-left-logo {
+  width:48px;
+  height:48px;
+  object-fit:contain;
+}
+
+.screen-right-logo {
+  width:100%;
+  max-height:42px;
+  object-fit:contain;
+  justify-self:end;
+}
+
+.screen-title {
+  min-width:0;
+  text-align:center;
+}
+
+.screen-sheet-name {
+  font-weight:900;
+  text-decoration:underline;
+  font-size:14px;
+  line-height:1.1;
+  margin-bottom:4px;
+}
+
+.screen-title-box {
+  background:var(--blue);
+  border:1px solid #777;
+  font-size:20px;
+  line-height:1.1;
+  font-weight:900;
+  padding:4px 8px;
+  color:#111;
+}
+
+.screen-fields {
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0,1fr));
+  gap:8px 10px;
+  margin-top:8px;
+  align-items:end;
+}
+
+.screen-fields label {
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr);
+  gap:6px;
+  align-items:center;
+  font-weight:800;
+  font-size:13px;
+}
+
+.screen-line-input {
+  width:100%;
+  min-width:0;
+  border:0;
+  border-bottom:2px solid #777;
+  background:transparent;
+  min-height:28px;
+  font-size:16px;
+  font-weight:800;
+  padding:2px 4px;
+}
+
+.screen-truck-row {
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-weight:900;
+  font-size:13px;
+}
+
+.screen-truck-choice {
+  min-height:36px;
+  padding:4px 12px;
+  border-radius:10px;
+  border:1px solid transparent;
+  background:#fff;
+  color:#111;
+  font-size:18px;
+  font-weight:900;
+}
+
+.screen-truck-choice.active {
+  background:#e9f4ff;
+  border-color:#111;
+}
+
+body.dark-mode .screen-meta {
+  background:#141414;
+  border-color:#444;
+}
+
+body.dark-mode .screen-title-box {
+  background:#cfe7f6;
+  color:#111;
+}
+
+body.dark-mode .screen-line-input {
+  color:#f4f1e8;
+  -webkit-text-fill-color:#f4f1e8;
+  border-color:#666;
+}
+
+body.dark-mode .screen-truck-choice {
+  background:#1f1f1f;
+  color:#f4f1e8;
+  border-color:#555;
+}
+
+body.dark-mode .screen-truck-choice.active {
+  background:#ffcd23;
+  color:#111;
+  border-color:#ffcd23;
+}
+
+@media screen {
+  #haulingSheetWrapper .top {
+    display:none !important;
+  }
+}
+
+@media (max-width:767px) {
+  .screen-meta {
+    padding:6px;
+  }
+
+  .screen-meta-top {
+    grid-template-columns:44px minmax(0,1fr) minmax(70px,110px);
+    gap:6px;
+  }
+
+  .screen-left-logo {
+    width:40px;
+    height:40px;
+  }
+
+  .screen-right-logo {
+    max-height:32px;
+  }
+
+  .screen-sheet-name {
+    font-size:12px;
+  }
+
+  .screen-title-box {
+    font-size:17px;
+    padding:3px 6px;
+  }
+
+  .screen-fields {
+    grid-template-columns:1fr;
+    gap:6px;
+  }
+
+  .screen-fields label {
+    font-size:12px;
+    grid-template-columns:82px minmax(0,1fr);
+  }
+
+  .screen-truck-row {
+    justify-content:center;
+    font-size:12px;
+  }
+}
+
+@media print {
+  .screen-meta {
+    display:none !important;
+  }
+
+  #haulingSheetWrapper .top {
+    display:grid !important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -2149,7 +2346,7 @@ body.dark-mode #sheetTable thead th {
 
       <section class="menu-section menu-status full-span">
         <h3 class="menu-title" id="menuSectionStatus">Statut</h3>
-        <div class="status" id="status">App prête. Les données restent sur ce téléphone. Version 5.5.</div>
+        <div class="status" id="status">App prête. Les données restent sur ce téléphone. Version 5.6.</div>
         <div class="menu-note" id="menuNote">Astuce: ouvre le menu pour les actions et ferme-le pour voir plus de feuille.</div>
         <details class="menu-help-details" id="menuHelpDetails">
           <summary id="menuHelpSummary">Aide rapide</summary>
@@ -2175,6 +2372,27 @@ body.dark-mode #sheetTable thead th {
   <div id="haulingSheetWrapper">
   <div class="sheet">
     <div class="sheet-inner">
+    <div class="screen-meta" id="screenMeta">
+      <div class="screen-meta-top">
+        <img class="screen-left-logo" src="./logo.png" alt="Logo">
+        <div class="screen-title">
+          <div class="screen-sheet-name" id="screenSheetName">Feuille de transport / Hauling Sheet</div>
+          <div class="screen-title-box" id="screenSheetTitle">Recette</div>
+        </div>
+        <img class="screen-right-logo" src="./wordmark.png" alt="MINE RAGLAN">
+      </div>
+      <div class="screen-fields">
+        <label><span id="screenLabelDate">Date:</span><input class="screen-line-input" id="screenMetaDate" autocomplete="off"></label>
+        <label><span id="screenLabelTruckNo">No de Camion :</span><input class="screen-line-input" id="screenMetaTruckNo" autocomplete="off"></label>
+        <label><span id="screenLabelName">Nom:</span><input class="screen-line-input" id="screenMetaName" autocomplete="off"></label>
+        <div class="screen-truck-row">
+          <span id="screenLabelTruckType">Truck type :</span>
+          <button type="button" class="screen-truck-choice" data-truck="40T">40T</button>
+          <button type="button" class="screen-truck-choice" data-truck="50T">50T</button>
+        </div>
+      </div>
+    </div>
+
     <div class="top">
       <div class="brand-left">
         <img class="left-logo" src="./logo.png" alt="Logo">
@@ -2435,7 +2653,7 @@ body.dark-mode #sheetTable thead th {
       menuSectionDanger:"Réinitialisation",
       menuNote:"Astuce: ouvre le menu pour les actions et ferme-le pour voir plus de feuille.",
       menuSwipeHint:"Glisse vers le haut en bas du menu pour le fermer.",
-      statusReady:"App prête. Les données restent sur ce téléphone. Version 5.5.",
+      statusReady:"App prête. Les données restent sur ce téléphone. Version 5.6.",
       sheetName:"Feuille de transport / Hauling Sheet",
       sheetTitle:"Recette",
       voyageHeader:"Voyage",
@@ -2560,7 +2778,7 @@ body.dark-mode #sheetTable thead th {
       menuSectionDanger:"Reset",
       menuNote:"Tip: open the menu for actions, then close it to see more of the sheet.",
       menuSwipeHint:"Swipe up at the bottom of the menu to close it.",
-      statusReady:"App ready. Data stays on this phone. Version 5.5.",
+      statusReady:"App ready. Data stays on this phone. Version 5.6.",
       sheetName:"Hauling Sheet",
       sheetTitle:"Receipt",
       voyageHeader:"Trip",
@@ -3018,6 +3236,12 @@ body.dark-mode #sheetTable thead th {
     setHtml("helpText", i.help);
     setText("sheetName", i.sheetName);
     setText("sheetTitle", i.sheetTitle);
+    setText("screenSheetName", i.sheetName);
+    setText("screenSheetTitle", i.sheetTitle);
+    setText("screenLabelDate", i.date);
+    setText("screenLabelTruckNo", i.truckNo);
+    setText("screenLabelName", i.name);
+    setText("screenLabelTruckType", i.truckType);
     setText("thVoyage", i.voyageHeader);
     setHtml("thLoadingTime", i.loadingTimeHeader);
     setText("thSource", i.source);
@@ -3499,10 +3723,13 @@ body.dark-mode #sheetTable thead th {
     document.getElementById("metaDate").value = state.meta.date || "";
     document.getElementById("metaTruckNo").value = state.meta.truckNo || "";
     document.getElementById("metaName").value = state.meta.name || "";
+    if (document.getElementById("screenMetaDate")) document.getElementById("screenMetaDate").value = state.meta.date || "";
+    if (document.getElementById("screenMetaTruckNo")) document.getElementById("screenMetaTruckNo").value = state.meta.truckNo || "";
+    if (document.getElementById("screenMetaName")) document.getElementById("screenMetaName").value = state.meta.name || "";
     const summary = calculateColumnTotals();
     document.getElementById("metaPoids").value = summary.voyageCount ? (summary.estimatedTonnage + " " + t("tonnes")) : "";
     document.getElementById("metaVoyage").value = summary.voyageCount ? String(summary.voyageCount) : "";
-    document.querySelectorAll(".truck-choice").forEach(el => {
+    document.querySelectorAll(".truck-choice, .screen-truck-choice").forEach(el => {
       el.classList.toggle("active", el.dataset.truck === state.meta.truckType);
     });
     const plan = loaderPlanState();
@@ -3692,6 +3919,9 @@ body.dark-mode #sheetTable thead th {
   bindMeta("metaDate", "date");
   bindMeta("metaTruckNo", "truckNo");
   bindMeta("metaName", "name");
+  bindMeta("screenMetaDate", "date");
+  bindMeta("screenMetaTruckNo", "truckNo");
+  bindMeta("screenMetaName", "name");
   // Poids et # de voyage sont calculés automatiquement.
   // 1 voyage complet moyen = 40 tonnes.
   // Ces champs ne sont plus saisis manuellement.
@@ -3764,7 +3994,7 @@ body.dark-mode #sheetTable thead th {
     setStatus(t("dateAuto"));
   });
 
-  document.querySelectorAll(".truck-choice").forEach(el => {
+  document.querySelectorAll(".truck-choice, .screen-truck-choice").forEach(el => {
     el.addEventListener("click", () => {
       state.meta.truckType = state.meta.truckType === el.dataset.truck ? "" : el.dataset.truck;
       save();
