@@ -254,3 +254,10 @@ CORRECTIFS v5.1
 - Ajoute un bouton Aide rapide dans le menu.
 - Ajoute un bouton Fermer menu.
 - Garde la base stable de v5.0 sans réintroduire Vue complète / Vue saisie.
+
+
+CORRECTIFS v5.2
+- Correction du plein écran en mode paysage iPhone.
+- Ajout de safe-area à droite/gauche pour ne plus cacher les colonnes sous la zone noire iPhone.
+- Bouton Quitter remplacé par un petit × à gauche pour ne plus cacher les colonnes de droite.
+- Ajout d’un espace de scroll à droite pour pouvoir voir les dernières colonnes.
