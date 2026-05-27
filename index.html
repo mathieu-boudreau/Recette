@@ -13,7 +13,6 @@
 <style>
 :root {
   --bg:#f4f0e7;
-  --view-scale:1;
   --paper:#fffdf8;
   --ink:#111;
   --grid:#545454;
@@ -24,6 +23,34 @@
   --pink:#ead5dc;
   --gray:#e7e7e7;
   --selected:#fff4b8;
+  --kiewit-yellow:#ffcd23;
+  --app-header-height:74px;
+  --sheet-pad:8px;
+  --sheet-min-width:1280px;
+  --sheet-row-height:32px;
+  --sheet-head-row-height:30px;
+}
+
+* {
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html,
+body {
+  width:100%;
+  height:100%;
+  margin:0;
+  padding:0;
+  overflow:hidden;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:Arial, Helvetica, sans-serif;
+  -webkit-text-size-adjust:100%;
+  -webkit-user-select:none;
+  user-select:none;
+  overscroll-behavior:none;
+  touch-action:manipulation;
 }
 
 body.dark-mode {
@@ -33,162 +60,217 @@ body.dark-mode {
   --thin:#555;
   --grid:#777;
   --selected:#3a3212;
-}
-body.dark-mode {
   background:#090909;
   color:#f4f1e8;
 }
-body.dark-mode .sheet {
-  background:#141414;
-  border-color:#444;
-  box-shadow:0 3px 18px rgba(0,0,0,.65);
-}
-body.dark-mode .sheet input,
-body.dark-mode .sheet textarea {
-  color:#f4f1e8;
-  -webkit-text-fill-color:#f4f1e8;
-}
-body.dark-mode th,
-body.dark-mode td {
-  background:#171717;
-  color:#f4f1e8;
-  border-color:#555;
-}
-body.dark-mode .row-no,
-body.dark-mode th {
-  background:#222;
-}
-body.dark-mode .source-main {
-  background:#2d2d2d !important;
-}
-body.dark-mode .group-anuri {
-  background:#5f5010 !important;
-}
-body.dark-mode .group-qaki {
-  background:#253d22 !important;
-}
-body.dark-mode .group-pad {
-  background:#183247 !important;
-}
-body.dark-mode .group-kiki {
-  background:#3e2530 !important;
-}
-body.dark-mode td.ore-cell:not(:empty),
-body.dark-mode tr.selected td.ore-cell:not(:empty) {
-  background:#111 !important;
-}
-body.dark-mode .bucket-mark {
-  background:#fff5c2;
-}
-body.dark-mode .bucket-x {
-  color:#fff5c2;
-}
-body.dark-mode tr.selected td {
-  background:#3a3212 !important;
-}
-body.dark-mode tr.next-line td {
-  box-shadow: inset 0 0 0 2px rgba(255,204,36,.35);
-}
-body.dark-mode tfoot td,
-body.dark-mode .total-cell {
-  background:#1f2a30 !important;
-  color:#f4f1e8;
-  border-color:#777;
-}
-body.dark-mode .toolbar {
-  background:rgba(18,18,18,.985);
-  border-color:#3a3a3a;
-}
-body.dark-mode .menu-section {
-  background:#151515;
-  border-color:#3a3a3a;
-}
-body.dark-mode .menu-title {
-  color:#ffcd23;
-}
-body.dark-mode button {
-  background:#1f1f1f;
-  color:#f4f1e8;
-  border-color:#555;
-}
-body.dark-mode button.primary {
-  background:#ffcd23;
-  color:#111;
-  border-color:#ffcd23;
-}
-body.dark-mode button.on,
-body.dark-mode button.active,
-body.dark-mode button.loader-switch-active {
-  background:#ffcd23 !important;
-  color:#111 !important;
-  border-color:#ffcd23 !important;
-}
-body.dark-mode button.danger {
-  background:#2a1110;
-  color:#ffb3aa;
-  border-color:#7d2c24;
-}
-body.dark-mode .status,
-body.dark-mode .offline,
-body.dark-mode .installbox,
-body.dark-mode .menu-note {
-  background:#151515;
-  color:#f4f1e8;
-  border-color:#3a3a3a;
-}
-body.dark-mode .line-input,
-body.dark-mode .foot input,
-body.dark-mode .loader-plan-input,
-body.dark-mode .loader-done-tap,
-body.dark-mode .loader-notes-wrap textarea {
-  background:#111;
-  color:#f4f1e8;
-  -webkit-text-fill-color:#f4f1e8;
-  border-color:#666;
-}
-body.dark-mode .loader-tonnes,
-body.dark-mode .loader-buckets,
-body.dark-mode .loader-status {
-  background:#171717;
-}
-body.dark-mode .right-logo,
-body.dark-mode .left-logo {
-  filter:brightness(.9);
-}
-
-body.dark-mode .title-box {
-  color:#111;
-  background:#cfe7f6;
-  border-color:#8fb5cf;
-}
-body.dark-mode .truck-choice {
-  color:#f4f1e8;
-}
-body.dark-mode .truck-choice.active {
-  background:#ffcd23;
-  color:#111;
-  border-color:#ffcd23;
-  box-shadow:0 0 0 1px rgba(0,0,0,.25) inset;
-}
-
-:root {
-  --kiewit-yellow:#ffcd23;
-}
 
 .fixed-app-header {
-  background:var(--kiewit-yellow) !important;
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  z-index:90;
+  height:calc(var(--app-header-height) + env(safe-area-inset-top));
+  padding:calc(6px + env(safe-area-inset-top)) 10px 6px;
+  display:grid;
+  grid-template-columns:48px minmax(0, 1fr) 48px;
+  align-items:center;
+  gap:8px;
+  background:var(--kiewit-yellow);
+  border-bottom:1px solid rgba(0,0,0,.25);
+  box-shadow:0 2px 12px rgba(0,0,0,.18);
+  transform:none;
+  zoom:1;
+}
+
+.menu-toggle {
+  width:44px;
+  height:44px;
+  min-height:44px;
+  padding:0;
+  display:grid;
+  place-items:center;
+  border:1px solid #111;
+  border-radius:8px;
+  background:#111;
+  color:#fff;
+  font-size:24px;
+  line-height:1;
+  font-weight:900;
+  transform:none;
+  zoom:1;
 }
 
 .kiewit-header-img {
+  width:100%;
+  max-width:420px;
+  height:56px;
+  object-fit:contain;
+  justify-self:center;
   background:var(--kiewit-yellow);
-  border-radius:6px;
+  transform:none;
+  zoom:1;
+}
+
+body.menu-open .menu-toggle {
+  background:#fff;
+  color:#111;
+}
+
+.app {
+  width:100%;
+  height:100dvh;
+  max-width:none;
+  margin:0;
+  padding:calc(var(--app-header-height) + 8px + env(safe-area-inset-top)) 6px calc(8px + env(safe-area-inset-bottom));
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  overflow:hidden;
+}
+
+.toolbar {
+  position:fixed;
+  top:calc(var(--app-header-height) + env(safe-area-inset-top) + 8px);
+  left:8px;
+  right:8px;
+  z-index:85;
+  display:none;
+  max-height:calc(100dvh - var(--app-header-height) - env(safe-area-inset-top) - 18px);
+  overflow:auto;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+  touch-action:pan-y;
+  padding:12px;
+  background:rgba(255,253,244,.985);
+  border:1px solid rgba(17,17,17,.2);
+  border-radius:8px;
+  box-shadow:0 16px 40px rgba(0,0,0,.22);
+  transform:none;
+  zoom:1;
+}
+
+body.menu-open .toolbar {
+  display:block;
+}
+
+body.menu-open {
+  overscroll-behavior:none;
+}
+
+body.menu-open.menu-scroll-locked {
+  position:fixed;
+  left:0;
+  right:0;
+  width:100%;
+}
+
+body.menu-open .sheet {
+  touch-action:none;
+}
+
+.toolbar-layout {
+  display:grid;
+  gap:12px;
+}
+
+.menu-section {
+  background:#fffdf4;
+  border:1px solid #ddd4bf;
+  border-radius:8px;
+  padding:12px;
+}
+
+.menu-title {
+  margin:0 0 10px;
+  font-size:12px;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  color:#6a5b1a;
+}
+
+.menu-grid {
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0, 1fr));
+  gap:10px;
+}
+
+.menu-grid.columns-3 {
+  grid-template-columns:repeat(3, minmax(0, 1fr));
+}
+
+.menu-grid.single {
+  grid-template-columns:1fr;
+}
+
+button {
+  min-height:46px;
+  border:1.5px solid #9c9c9c;
+  border-radius:8px;
+  background:#fff;
+  padding:9px 10px;
+  font-size:14px;
+  font-weight:800;
+  color:#111;
+  box-shadow:0 1px 0 rgba(0,0,0,.04);
+  overflow-wrap:anywhere;
+}
+
+button.primary {
+  background:#111;
+  color:#ffcd23;
+  border-color:#111;
+}
+
+button.danger {
+  background:#fff3f1;
+  color:#9b2115;
+  border-color:#e5b0a9;
+}
+
+button.on,
+button.active,
+button.loader-switch-active {
+  background:#ffcd23 !important;
+  color:#111 !important;
+  border-color:#9b7a00 !important;
+}
+
+#btnPageLabel {
+  pointer-events:none;
+  background:#f2eee2;
+  border-color:#cfc6ae;
+  color:#111;
+}
+
+.status,
+.offline,
+.installbox,
+.menu-note,
+.menu-help-details {
+  font-size:13px;
+  line-height:1.35;
+}
+
+.status {
+  color:#222;
+  background:#fff9df;
+  border:1px solid #eadc9b;
+  border-radius:8px;
+  padding:10px 12px;
+}
+
+.menu-note {
+  color:#4e4a39;
+  margin-top:8px;
 }
 
 .menu-help-details {
   margin-top:10px;
   background:#fffdf4;
   border:1px solid #ddd4bf;
-  border-radius:12px;
+  border-radius:8px;
   padding:8px 10px;
 }
 
@@ -200,141 +282,9 @@ body.dark-mode .truck-choice.active {
 
 .menu-help-text {
   margin-top:8px;
-  font-size:13px;
-  line-height:1.35;
   color:#222;
 }
 
-body.dark-mode .menu-help-details {
-  background:#151515;
-  border-color:#3a3a3a;
-}
-
-body.dark-mode .menu-help-details summary,
-body.dark-mode .menu-help-text {
-  color:#f4f1e8;
-}
-
-.exit-fullscreen-btn {
-  display:none;
-  position:fixed;
-  top:calc(8px + env(safe-area-inset-top));
-  right:8px;
-  z-index:120;
-  min-height:38px;
-  padding:8px 12px;
-  border-radius:12px;
-  background:#111;
-  color:var(--kiewit-yellow);
-  border:1px solid #111;
-}
-
-body.sheet-fullscreen .fixed-app-header,
-body.sheet-fullscreen .toolbar,
-body.sheet-fullscreen .installbox {
-  display:none !important;
-}
-
-body.sheet-fullscreen .exit-fullscreen-btn {
-  display:block;
-}
-
-body.sheet-fullscreen .app {
-  max-width:none;
-  padding:calc(8px + env(safe-area-inset-top)) 0 calc(20px + env(safe-area-inset-bottom));
-}
-
-body.sheet-fullscreen .sheet {
-  border-left:0;
-  border-right:0;
-  box-shadow:none;
-  padding:4px;
-}
-
-body.sheet-fullscreen .sheet-inner {
-  transform:none !important;
-  width:100% !important;
-}
-
-body.sheet-fullscreen #loaderPlanView {
-  margin-top:0;
-}
-
-body.sheet-fullscreen #haulingSheetWrapper {
-  margin-top:0;
-}
-
-body.sheet-fullscreen #btnExitSheetFullscreen {
-  display:block;
-}
-
-body.sheet-fullscreen.menu-open {
-  position:static !important;
-}
-
-@media print {
-  .exit-fullscreen-btn,
-  .menu-help-details {
-    display:none !important;
-  }
-}
-
-* { box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
-html,body {
-  margin:0;
-  padding:0;
-  background:var(--bg);
-  color:var(--ink);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-user-select:none;
-  user-select:none;
-  touch-action:manipulation;
-}
-.app {
-  max-width:1440px;
-  margin:0 auto;
-  padding:calc(84px + env(safe-area-inset-top)) 8px calc(90px + env(safe-area-inset-bottom));
-}
-.toolbar {
-  position:fixed;
-  top:calc(78px + env(safe-area-inset-top));
-  left:8px;
-  right:8px;
-  z-index:85;
-  display:none;
-  max-height:min(72vh, 760px);
-  overflow:auto;
-  padding:14px;
-  background:rgba(255,253,244,.985);
-  border:2px solid rgba(17,17,17,.18);
-  border-radius:20px;
-  box-shadow:0 16px 40px rgba(0,0,0,.22);
-  backdrop-filter: blur(10px);
-}
-body.menu-open .toolbar {
-  display:block;
-}
-
-body.menu-open {
-  overscroll-behavior:none;
-}
-body.menu-open.menu-scroll-locked {
-  position:fixed;
-  left:0;
-  right:0;
-  width:100%;
-}
-body.menu-open .toolbar {
-  -webkit-overflow-scrolling:touch;
-  overscroll-behavior:contain;
-  touch-action:pan-y;
-}
-body.menu-open .sheet,
-body.menu-open .sheet-inner,
-body.menu-open #haulingSheetWrapper,
-body.menu-open #loaderPlanView {
-  touch-action:none;
-}
 .menu-swipe-hint {
   display:none;
   margin-top:10px;
@@ -343,1781 +293,84 @@ body.menu-open #loaderPlanView {
   font-size:12px;
   font-weight:800;
 }
+
 body.menu-open .menu-swipe-hint {
   display:block;
 }
-body.dark-mode .menu-swipe-hint {
-  color:#ffcd23;
-}
 
-.toolbar-layout {
-  display:grid;
-  gap:14px;
-}
-.menu-section {
-  background:#fffdf4;
-  border:1px solid #ddd4bf;
-  border-radius:16px;
-  padding:12px;
-}
-.menu-title {
-  margin:0 0 10px;
-  font-size:12px;
-  font-weight:900;
-  text-transform:uppercase;
-  letter-spacing:.08em;
-  color:#6a5b1a;
-}
-.menu-grid {
-  display:grid;
-  grid-template-columns:repeat(2, minmax(0, 1fr));
-  gap:10px;
-}
-.menu-grid.columns-3 {
-  grid-template-columns:repeat(3, minmax(0, 1fr));
-}
-.menu-grid.single {
-  grid-template-columns:1fr;
-}
-button {
-  min-height:48px;
-  border:1.5px solid #9c9c9c;
-  border-radius:14px;
-  background:#fff;
-  padding:10px 12px;
-  font-size:15px;
-  font-weight:800;
-  color:#111;
-  box-shadow:0 1px 0 rgba(0,0,0,.04);
-}
-button.primary {
-  background:#111;
-  color:#ffcd23;
-  border-color:#111;
-}
-button.danger {
-  background:#fff3f1;
-  color:#9b2115;
-  border-color:#e5b0a9;
-}
-button.on,
-button.active,
-button.loader-switch-active {
-  background:#ffcd23 !important;
-  color:#111 !important;
-  border-color:#9b7a00 !important;
-}
-#btnPageLabel {
-  pointer-events:none;
-  background:#f2eee2;
-  border-color:#cfc6ae;
-  color:#111;
-}
-.fixed-app-header {
-  position:fixed;
-  top:0;
-  left:0;
-  right:0;
-  z-index:90;
-  height:calc(74px + env(safe-area-inset-top));
-  padding:calc(6px + env(safe-area-inset-top)) 10px 6px;
-  display:grid;
-  grid-template-columns:48px 1fr 48px;
-  align-items:center;
-  gap:8px;
-  background:#ffcd23;
-  border-bottom:1px solid rgba(0,0,0,.25);
-  box-shadow:0 2px 12px rgba(0,0,0,.18);
-}
-.menu-toggle {
-  width:44px;
-  height:44px;
-  min-height:44px;
-  padding:0;
-  border-radius:12px;
-  background:#111;
-  color:#fff;
-  border:1px solid #111;
-  display:grid;
-  place-items:center;
-  font-size:24px;
-  line-height:1;
-}
-.kiewit-header-img {
-  width:100%;
-  height:56px;
-  object-fit:contain;
-  justify-self:center;
-}
-body.menu-open .menu-toggle {
-  background:#fff;
-  color:#111;
-}
-tfoot td, .total-cell {
-  background:#eef7ff !important;
-  font-weight:900;
-  color:#000;
-  border:1.5px solid #555;
-}
-.total-label {
-  text-align:right !important;
-  padding-right:8px !important;
-  font-size:12px;
-}
-.total-number {
-  font-size:15px;
-}
-
-.status {
-  font-size:13px;
-  line-height:1.35;
-  color:#222;
-  background:#fff9df;
-  border:1px solid #eadc9b;
-  border-radius:12px;
-  padding:10px 12px;
-}
-.menu-note {
-  font-size:12px;
-  line-height:1.35;
-  color:#4e4a39;
-  margin-top:8px;
-}
-.offline {
-  margin:8px 0;
-  padding:8px 10px;
-  border:1px solid #d6d0c6;
-  border-radius:12px;
-  background:#fff;
-  font-size:13px;
-  line-height:1.35;
-}
 .installbox {
   display:none;
-  margin:8px 0;
+  flex:0 0 auto;
   padding:10px;
   border:1px solid #bbb;
-  border-radius:12px;
+  border-radius:8px;
   background:#fff9d8;
-  font-size:13px;
-  line-height:1.35;
 }
-.installbox.show { display:block; }
-body.fit-mode .offline,
-body.fit-mode .installbox {
-  display:none !important;
+
+.installbox.show {
+  display:block;
 }
-body.fit-mode .app {
-  padding-top:calc(62px + env(safe-area-inset-top));
+
+#haulingSheetWrapper {
+  flex:1 1 auto;
+  min-height:0;
+  display:block;
 }
-body.fit-mode .fixed-app-header {
-  height:calc(52px + env(safe-area-inset-top));
-  padding:calc(4px + env(safe-area-inset-top)) 8px 4px;
-  grid-template-columns:40px 1fr 24px;
-  gap:6px;
+
+#loaderPlanView {
+  display:none;
 }
-body.fit-mode .kiewit-header-img {
-  height:34px;
+
+body.loader-plan-active #haulingSheetWrapper {
+  display:none;
 }
-body.fit-mode .menu-toggle {
-  width:38px;
-  height:38px;
-  min-height:38px;
-  border-radius:10px;
-  font-size:22px;
+
+body.loader-plan-active #loaderPlanView {
+  display:block;
 }
-body.fit-mode .toolbar {
-  top:calc(56px + env(safe-area-inset-top));
-  padding:10px;
-}
-body.fit-mode .menu-section {
-  padding:9px;
-}
-body.fit-mode button {
-  min-height:38px;
-  padding:7px 9px;
-  font-size:13px;
-}
-body.fit-mode .status {
-  font-size:11px;
-}
-body.fit-mode .sheet {
-  padding:4px;
-}
+
 .sheet {
+  width:100%;
+  height:100%;
+  min-height:0;
+  overflow:auto;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+  touch-action:pan-x pan-y;
+  padding:var(--sheet-pad);
   background:var(--paper);
   border:1px solid #aaa;
   box-shadow:0 3px 14px rgba(0,0,0,.13);
-  padding:12px;
-  overflow:auto;
-}
-.sheet-inner {
-  transform:scale(var(--view-scale));
-  transform-origin:top left;
-  width:calc(100% / var(--view-scale));
-  touch-action:manipulation;
-}
-.top {
-  display:grid;
-  grid-template-columns: 1fr 1.35fr 1fr;
-  gap:12px;
-  align-items:start;
-  margin-bottom:6px;
-  min-width:1280px;
-}
-.brand-left {
-  display:grid;
-  grid-template-columns:70px 1fr;
-  gap:8px;
-  align-items:center;
-}
-.left-logo {
-  width:58px;
-  height:58px;
-  object-fit:contain;
-}
-.logo-placeholder {
-  width:58px;
-  height:58px;
-  border:2px solid #444;
-  border-radius:50%;
-  display:grid;
-  place-items:center;
-  font-weight:800;
-}
-.right-logo {
-  justify-self:end;
-  max-width:270px;
-  height:64px;
-  object-fit:contain;
-}
-.wordmark-placeholder {
-  justify-self:end;
-  text-align:right;
-  font-size:27px;
-  letter-spacing:2px;
-  font-weight:700;
-}
-.wordmark-placeholder small {
-  display:block;
-  font-size:10px;
-  letter-spacing:.8px;
-  font-weight:500;
-}
-.sheet-name {
-  font-size:12px;
-  font-weight:700;
-  text-decoration:underline;
-}
-.title { text-align:center; }
-.title-box {
-  display:inline-block;
-  min-width:390px;
-  padding:4px 40px;
-  border:1px solid #777;
-  background:var(--blue);
-  font-size:22px;
-  font-weight:700;
-}
-.fields {
-  display:grid;
-  grid-template-columns:94px 1fr;
-  gap:6px;
-  align-items:center;
-  margin-top:4px;
-  font-size:12px;
-  font-weight:700;
-}
-.line-input {
-  width:100%;
-  min-height:28px;
-  border:0;
-  border-bottom:2px solid #777;
-  border-radius:0;
-  background:transparent;
-  padding:3px 6px;
-  font-size:15px;
-  font-weight:600;
-}
-.truck {
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:18px;
-  margin-top:8px;
-  font-size:13px;
-  font-weight:700;
-}
-.truck-choice {
-  min-width:54px;
-  padding:4px 8px;
-  border:1px solid transparent;
-  border-radius:8px;
-  font-size:23px;
-  font-weight:900;
-  cursor:pointer;
-}
-.truck-choice.active {
-  background:#e9f4ff;
-  border-color:#111;
 }
 
-
-/* v4.2: Strong sticky table headers.
-   The sheet itself becomes the scroll container, so the SOURCE/mineral headers stay visible. */
-.sheet {
-  overscroll-behavior:contain;
-}
-body.sheet-fullscreen .sheet,
-body.fit-mode .sheet {
-  height:calc(100dvh - 54px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
-  max-height:calc(100dvh - 54px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
-  overflow:auto !important;
-  -webkit-overflow-scrolling:touch;
-}
-body.sheet-fullscreen .sheet-inner,
-body.fit-mode .sheet-inner {
-  transform:none !important;
-  width:100% !important;
-}
-#sheetTable {
-  border-collapse:separate;
-  border-spacing:0;
-}
-#sheetTable thead {
-  position:sticky;
-  top:0;
-  z-index:80;
-}
-#sheetTable thead th {
-  position:sticky;
-  background-clip:padding-box;
-}
-#sheetTable thead tr:nth-child(1) th {
-  top:0;
-  z-index:83;
-}
-#sheetTable thead tr:nth-child(2) th {
-  top:30px;
-  z-index:82;
-}
-#sheetTable thead tr:nth-child(3) th {
-  top:58px;
-  z-index:81;
-}
-body.dark-mode #sheetTable thead th {
-  box-shadow:0 1px 0 #555;
-}
-body.sheet-fullscreen #sheetTable thead tr:nth-child(1) th,
-body.fit-mode #sheetTable thead tr:nth-child(1) th {
-  top:0;
-}
-body.sheet-fullscreen #sheetTable thead tr:nth-child(2) th,
-body.fit-mode #sheetTable thead tr:nth-child(2) th {
-  top:30px;
-}
-body.sheet-fullscreen #sheetTable thead tr:nth-child(3) th,
-body.fit-mode #sheetTable thead tr:nth-child(3) th {
-  top:58px;
-}
-@media print {
-  #sheetTable {
-    border-collapse:collapse;
-  }
-  #sheetTable thead,
-  #sheetTable thead th {
-    position:static !important;
-  }
-  body.sheet-fullscreen .sheet,
-  body.fit-mode .sheet {
-    height:auto !important;
-    max-height:none !important;
-    overflow:visible !important;
-  }
-}
-
-table {
-  width:100%;
-  min-width:1280px;
-  border-collapse:collapse;
-  table-layout:fixed;
-  font-size:12px;
-}
-th,td {
-  border:1px solid var(--thin);
-  text-align:center;
-  height:30px;
-  padding:2px;
-  background:#fffdf8;
-}
-th {
-  font-weight:900;
-  background:#f2f2f2;
-}
-.source-main { background:#dedede; font-size:14px; }
-.group-anuri { background:var(--yellow); }
-.group-qaki { background:var(--green); }
-.group-pad { background:var(--blue); }
-.group-kiki { background:var(--pink); }
-.small-h { font-size:9px; line-height:1.04; }
-.voy { width:42px; }
-.time { width:92px; }
-.ore { width:62px; }
-.ore-wide { width:82px; }
-.loader { width:86px; }
-.dest { width:62px; }
-.row-no {
-  background:#fafafa;
-  font-size:12px;
-  font-weight:700;
-  color:#333;
-}
-td.time-cell, td.ore-cell, td.loader-cell, td.dest-cell {
-  cursor:pointer;
-}
-td.time-cell {
-  font-size:15px;
-  font-weight:800;
-}
-td.ore-cell {
-  font-size:19px;
-  font-weight:900;
-  letter-spacing:0;
-  line-height:1;
-  font-family: Arial, Helvetica, sans-serif;
-  text-shadow:none;
-}
-.bucket-marks {
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  gap:4px;
-  min-width:22px;
-}
-.bucket-mark {
-  display:inline-block;
-  width:3px;
-  height:18px;
-  background:#111;
-  border-radius:1px;
-}
-.bucket-x {
-  display:inline-block;
-  font-size:18px;
-  font-weight:900;
-  line-height:1;
-}
-td.ore-cell:not(:empty) {
-  background:#fff;
-}
-td.loader-cell {
-  font-size:15px;
-  font-weight:800;
-}
-td.dest-cell {
-  font-size:17px;
-  font-weight:900;
-}
-tr.selected td {
-  background:var(--selected);
-}
-tr.selected td.ore-cell:not(:empty) {
-  background:#fff;
-}
-td.flash { animation: flash .5s ease; }
-tr.next-line td {
-  box-shadow: inset 0 0 0 2px rgba(0,120,255,.22);
-}
-tr.blocked-line td {
-  animation: blockedLine .65s ease;
-}
-@keyframes blockedLine {
-  0% { background:#ffd6d6; }
-  100% { background:inherit; }
-}
-@keyframes flash {
-  0% { background:#ffd0d0; }
-  100% { background:inherit; }
-}
-.foot {
-  min-width:1280px;
-  display:flex;
-  justify-content:center;
-  gap:70px;
-  align-items:center;
-  margin-top:10px;
-  font-size:13px;
-  font-weight:700;
-}
-.foot input {
-  border:0;
-  border-bottom:2px solid #777;
-  background:transparent;
-  min-width:130px;
-  padding:3px 6px;
-  font-size:14px;
-  font-weight:700;
-}
-.foot input[readonly] {
-  color:#000;
-  -webkit-text-fill-color:#000;
-  opacity:1;
-}
-.page-print-label {
-  min-width:1280px;
-  text-align:right;
-  font-size:12px;
-  margin-top:6px;
-  font-weight:800;
-}
-.note {
-  min-width:1280px;
-  text-align:center;
-  font-size:12px;
-  margin-top:3px;
-  font-weight:700;
-}
-.modal {
-  display:none;
-  position:fixed;
-  inset:0;
-  z-index:100;
-  align-items:center;
-  justify-content:center;
-  padding:18px;
-  background:rgba(0,0,0,.42);
-}
-.modal.open { display:flex; }
-.panel {
-  width:min(430px,100%);
-  background:#fff;
-  border-radius:18px;
-  padding:18px;
-  box-shadow:0 10px 30px rgba(0,0,0,.25);
-}
-.panel h2 {
-  margin:0 0 12px;
-  font-size:20px;
-}
-.panel input {
-  width:100%;
-  min-height:48px;
-  border:1px solid #aaa;
-  border-radius:10px;
-  padding:8px 10px;
-  font-size:22px;
-}
-.panel-row {
-  display:flex;
-  gap:8px;
-  justify-content:flex-end;
-  margin-top:12px;
-}
-
-.loader-switch-active {
-  background:#111 !important;
-  color:#fff !important;
-  border-color:#111 !important;
-}
-#loaderPlanView { display:none; }
-body.loader-plan-active #haulingSheetWrapper { display:none; }
-body.loader-plan-active #loaderPlanView { display:block; }
-.loader-plan-table {
-  min-width:0;
-  width:100%;
-  border-collapse:collapse;
-  table-layout:fixed;
-}
-.loader-plan-table th,
-.loader-plan-table td {
-  border:1px solid var(--grid);
-  min-height:34px;
-  height:auto;
-  padding:6px 8px;
-  text-align:center;
-}
-.loader-plan-table th:first-child,
-.loader-plan-table td:first-child {
-  text-align:left;
-  font-weight:700;
-}
-.loader-plan-table tfoot td {
-  background:#f8f8f8;
-  font-weight:800;
-}
-.loader-plan-input {
-  width:100%;
-  border:0;
-  border-bottom:1px solid #666;
-  background:transparent;
-  text-align:center;
-  font-size:16px;
-  font-weight:800;
-  padding:2px 0;
-}
-.loader-plan-input:focus,
-.loader-notes-wrap textarea:focus {
-  outline:2px solid rgba(0,120,255,.18);
-}
-.loader-plan-extra {
-  display:grid;
-  grid-template-columns: repeat(2, minmax(180px, 1fr));
-  gap:14px 24px;
-  margin-top:10px;
-}
-.loader-plan-extra label {
-  display:flex;
-  align-items:center;
-  gap:8px;
-  font-weight:700;
-}
-.loader-plan-extra .line-input {
-  min-width:0;
+#loaderPlanView.sheet {
   flex:1 1 auto;
+  min-height:0;
+  height:auto;
 }
-.loader-notes-wrap {
-  margin-top:12px;
-}
-.loader-notes-wrap label {
-  display:block;
-  font-weight:800;
-  margin-bottom:6px;
-}
-.loader-notes-wrap textarea {
+
+.sheet-inner {
   width:100%;
-  min-height:90px;
-  border:1px solid #aaa;
-  border-radius:10px;
-  padding:10px;
-  font-size:15px;
-  resize:vertical;
-}
-#loaderPlanBlend { min-width:340px; }
-.loader-tonnes,
-.loader-buckets,
-.loader-status {
-  font-weight:800;
-  background:#fffdf8;
-}
-.loader-done-tap {
-  width:100%;
-  border:1px solid #666;
-  background:#fff;
-  text-align:center;
-  font-size:18px;
-  font-weight:800;
-  padding:8px 0;
-  border-radius:8px;
-  cursor:pointer;
+  min-width:0;
+  transform:none;
+  transform-origin:top left;
   touch-action:manipulation;
 }
-.loader-done-tap.complete {
-  background:#eef7ee;
-  border-color:#157347;
-  color:#157347;
-}
-.loader-status.complete {
-  color:#157347;
-}
-.loader-status.remaining {
-  color:#b42318;
-}
-.loader-status.partial {
-  color:#664d03;
-}
-.loader-plan-table th:nth-child(1) { width:24%; }
-.loader-plan-table th:nth-child(2) { width:12%; }
-.loader-plan-table th:nth-child(3) { width:16%; }
-.loader-plan-table th:nth-child(4) { width:16%; }
-.loader-plan-table th:nth-child(5) { width:14%; }
-.loader-plan-table th:nth-child(6) { width:18%; }
-#loaderPercentTotal.ok { color:#157347; }
-#loaderPercentTotal.warn { color:#b42318; }
 
-@media (max-width:700px) {
-  .app { padding:calc(82px + env(safe-area-inset-top)) 6px calc(88px + env(safe-area-inset-bottom)); }
-  .toolbar button { width:100%; }
-@media (min-width: 820px) {
-  .toolbar-layout {
-    grid-template-columns:repeat(2, minmax(0, 1fr));
-    align-items:start;
-  }
-  .menu-section.full-span,
-  .menu-section.menu-status {
-    grid-column:1 / -1;
-  }
-}
-  .status { flex-basis:100%; }
-  .sheet { padding:8px; }
-  .loader-plan-extra { grid-template-columns:1fr; gap:10px; }
-  #loaderPlanBlend { min-width:0; width:100%; }
-  th,td { height:32px; }
-}
-@media print {
-  :root { --app-zoom:1 !important; }
-  html, body { background:#fff; width:100%; margin:0; padding:0; overflow:visible; }
-  .toolbar,.offline,.installbox,.modal,.menu-toggle,.fixed-app-header { display:none !important; }
-  body.loader-plan-active #haulingSheetWrapper { display:none !important; }
-  body:not(.loader-plan-active) #loaderPlanView { display:none !important; }
-  .app { max-width:none; padding:0; margin:0; }
-  .sheet { box-shadow:none; border:0; padding:0; overflow:visible; width:100%; max-width:100%; }
-  body.loader-plan-active .sheet-inner { transform:none !important; width:auto !important; }
-  body.loader-plan-active .loader-plan-table { font-size:8px; }
-  body.loader-plan-active .loader-plan-table th,
-  body.loader-plan-active .loader-plan-table td { height:auto; padding:2px 4px; }
-  body.loader-plan-active .loader-plan-input,
-  body.loader-plan-active .loader-done-tap,
-  body.loader-plan-active #loaderPlanNotes,
-  body.loader-plan-active #loaderPlanBlend,
-  body.loader-plan-active #loaderPlanDate,
-  body.loader-plan-active #loaderPlanName,
-  body.loader-plan-active #loaderPlanShift,
-  body.loader-plan-active #loaderPlanTarget { font-size:9px !important; min-height:12px !important; }
-  /* Print at real page width. The grid itself is sized to fill the page. */
-  body:not(.loader-plan-active) .sheet-inner,
-  body.loader-plan-active .sheet-inner {
-    transform:none !important;
-    width:100% !important;
-    max-width:100% !important;
-  }
-  .top, table, .foot, .note, .page-print-label { min-width:0; max-width:100%; }
-  .top {
-    grid-template-columns: 1.7fr 1.1fr 1.1fr;
-    gap:2px;
-    margin-bottom:2px;
-    break-inside: avoid;
-    page-break-inside: avoid;
-    align-items:start;
-  }
-  .brand-left { grid-template-columns:26px minmax(0,1fr); gap:3px; }
-  .left-logo { width:24px; height:24px; }
-  .right-logo { height:22px; max-width:120px; }
-  .sheet-name { font-size:6px; line-height:1; }
-  .title-box { font-size:10px; min-width:150px; padding:1px 8px; }
-  .fields {
-    font-size:6px;
-    gap:1px;
-    grid-template-columns: 48px minmax(96px,1fr);
-  }
-  .line-input, .foot input {
-    color:#000 !important;
-    -webkit-text-fill-color:#000 !important;
-    opacity:1 !important;
-    background:transparent !important;
-    border-bottom:1px solid #555 !important;
-    font-size:7px !important;
-    font-weight:800 !important;
-    min-height:11px !important;
-    padding:0 1px !important;
-    line-height:1 !important;
-  }
-  #metaDate, #metaTruckNo { min-width:135px !important; font-size:7.5px !important; }
-  #metaName { min-width:96px !important; }
-  .truck { margin-top:1px; gap:5px; font-size:6px; }
-  .truck-choice { font-size:9px; min-width:20px; padding:0 2px; }
-  table {
-    font-size:5px;
-    table-layout:fixed;
-    width:100%;
-    page-break-inside:auto;
-    border-collapse:collapse;
-  }
-  thead { display:table-header-group; }
-  tr { page-break-inside:avoid; break-inside:avoid; }
-  th,td { height:10.8px; padding:0; line-height:1; }
-  td.ore-cell {
-    font-size:7px;
-    font-weight:900;
-    letter-spacing:0;
-    font-family: Arial, Helvetica, sans-serif;
-    text-shadow:none;
-  }
-  .bucket-marks { gap:2px; min-width:12px; }
-  .bucket-mark { width:2px; height:8px; border-radius:0; }
-  .bucket-x { font-size:8px; font-weight:900; }
-  tr.selected td,
-  tr.next-line td {
-    background:#fffdf8 !important;
-    box-shadow:none !important;
-  }
-  tr.selected td.ore-cell:not(:empty),
-  tr.next-line td.ore-cell:not(:empty) {
-    background:#fff !important;
-  }
-  td.time-cell,td.loader-cell,td.dest-cell { font-size:6px; }
-  tfoot td { height:10.8px; font-size:6px !important; }
-  .total-number { font-size:6px !important; }
-  .total-label { font-size:6px !important; }
-  .small-h { font-size:4px; }
-  .foot,.note,.page-print-label { font-size:6px; margin-top:1px; }
-  .foot { gap:34px; }
-  .foot input { min-width:88px !important; }
-  .note { line-height:1; margin-top:1px !important; }
-  #weightNote { white-space:nowrap; }
-  #haulingSheetWrapper .sheet {
-    break-inside: avoid-page;
-    page-break-inside: avoid;
-  }
-  #haulingSheetWrapper .sheet-inner {
-    margin:0 !important;
-    padding:0 !important;
-  }
-  
-  body.dark-mode,
-  body.dark-mode .sheet,
-  body.dark-mode th,
-  body.dark-mode td,
-  body.dark-mode .row-no,
-  body.dark-mode .source-main,
-  body.dark-mode .group-anuri,
-  body.dark-mode .group-qaki,
-  body.dark-mode .group-pad,
-  body.dark-mode .group-kiki,
-  body.dark-mode tfoot td,
-  body.dark-mode .total-cell {
-    color:#000 !important;
-    -webkit-text-fill-color:#000 !important;
-  }
-  body.dark-mode {
-    background:#fff !important;
-  }
-  body.dark-mode .sheet {
-    background:#fffdf8 !important;
-  }
-  body.dark-mode th,
-  body.dark-mode td {
-    background:#fffdf8 !important;
-    border-color:#aaa !important;
-  }
-  body.dark-mode th {
-    background:#f2f2f2 !important;
-  }
-  body.dark-mode .source-main {
-    background:#dedede !important;
-  }
-  body.dark-mode .group-anuri {
-    background:var(--yellow) !important;
-  }
-  body.dark-mode .group-qaki {
-    background:var(--green) !important;
-  }
-  body.dark-mode .group-pad {
-    background:var(--blue) !important;
-  }
-  body.dark-mode .group-kiki {
-    background:var(--pink) !important;
-  }
-  body.dark-mode td.ore-cell:not(:empty) {
-    background:#fff !important;
-  }
-  body.dark-mode .bucket-mark {
-    background:#111 !important;
-  }
-  body.dark-mode .bucket-x {
-    color:#111 !important;
-  }
-
-
-  body:not(.loader-plan-active) #haulingSheetWrapper .sheet {
-    height:auto !important;
-  }
-  body:not(.loader-plan-active) #sheetTable {
-    width:100% !important;
-  }
-  body:not(.loader-plan-active) #sheetTable tbody tr td {
-    height:10.8px !important;
-  }
-
-  @page { size: landscape; margin:2mm; }
-}
-
-/* v4.3 print/PDF visibility fix */
-@media print {
-  html,
-  body {
-    background:#fff !important;
-    color:#000 !important;
-    height:auto !important;
-    min-height:0 !important;
-    overflow:visible !important;
-    position:static !important;
-    width:100% !important;
-  }
-
-  body.menu-open,
-  body.menu-open.menu-scroll-locked,
-  body.sheet-fullscreen,
-  body.fit-mode,
-  body.dark-mode {
-    position:static !important;
-    overflow:visible !important;
-    background:#fff !important;
-  }
-
-  body.menu-open.menu-scroll-locked {
-    top:auto !important;
-    left:auto !important;
-    right:auto !important;
-    width:100% !important;
-  }
-
-  .fixed-app-header,
-  .toolbar,
-  .offline,
-  .installbox,
-  .modal,
-  .menu-toggle,
-  .exit-fullscreen-btn,
-  .menu-help-details {
-    display:none !important;
-  }
-
-  .app {
-    display:block !important;
-    max-width:none !important;
-    width:100% !important;
-    margin:0 !important;
-    padding:0 !important;
-    background:#fff !important;
-    overflow:visible !important;
-  }
-
-  body:not(.loader-plan-active) #haulingSheetWrapper {
-    display:block !important;
-    visibility:visible !important;
-    width:100% !important;
-    overflow:visible !important;
-  }
-
-  body:not(.loader-plan-active) #loaderPlanView {
-    display:none !important;
-  }
-
-  body.loader-plan-active #haulingSheetWrapper {
-    display:none !important;
-  }
-
-  body.loader-plan-active #loaderPlanView {
-    display:block !important;
-    visibility:visible !important;
-    width:100% !important;
-    overflow:visible !important;
-  }
-
-  .sheet,
-  body.sheet-fullscreen .sheet,
-  body.fit-mode .sheet {
-    display:block !important;
-    visibility:visible !important;
-    height:auto !important;
-    max-height:none !important;
-    min-height:0 !important;
-    width:100% !important;
-    max-width:100% !important;
-    overflow:visible !important;
-    margin:0 !important;
-    padding:0 !important;
-    border:0 !important;
-    box-shadow:none !important;
-    background:#fffdf8 !important;
-  }
-
-  .sheet-inner,
-  body.sheet-fullscreen .sheet-inner,
-  body.fit-mode .sheet-inner,
-  body:not(.loader-plan-active) .sheet-inner,
-  body.loader-plan-active .sheet-inner {
-    display:block !important;
-    visibility:visible !important;
-    transform:none !important;
-    transform-origin:top left !important;
-    width:100% !important;
-    max-width:100% !important;
-    height:auto !important;
-    max-height:none !important;
-    overflow:visible !important;
-    margin:0 !important;
-    padding:0 !important;
-    background:#fffdf8 !important;
-  }
-
-  #sheetTable,
-  .loader-plan-table {
-    display:table !important;
-    visibility:visible !important;
-    width:100% !important;
-    max-width:100% !important;
-    table-layout:fixed !important;
-    border-collapse:collapse !important;
-    page-break-inside:avoid !important;
-    break-inside:avoid-page !important;
-    background:#fffdf8 !important;
-  }
-
-  #sheetTable thead,
-  #sheetTable tbody,
-  #sheetTable tfoot,
-  #sheetTable tr,
-  #sheetTable th,
-  #sheetTable td,
-  .loader-plan-table thead,
-  .loader-plan-table tbody,
-  .loader-plan-table tfoot,
-  .loader-plan-table tr,
-  .loader-plan-table th,
-  .loader-plan-table td {
-    visibility:visible !important;
-    position:static !important;
-    color:#000 !important;
-    -webkit-text-fill-color:#000 !important;
-  }
-
-  #sheetTable thead th,
-  #sheetTable th,
-  #sheetTable td {
-    border:1px solid #aaa !important;
-  }
-
-  #sheetTable th,
-  #sheetTable td {
-    height:10.2px !important;
-    min-height:0 !important;
-    padding:0 !important;
-    line-height:1 !important;
-    font-size:5.8px !important;
-  }
-
-  #sheetTable thead th {
-    background:#f2f2f2 !important;
-  }
-
-  #sheetTable .source-main {
-    background:#dedede !important;
-  }
-  #sheetTable .group-anuri {
-    background:var(--yellow) !important;
-  }
-  #sheetTable .group-qaki {
-    background:var(--green) !important;
-  }
-  #sheetTable .group-pad {
-    background:var(--blue) !important;
-  }
-  #sheetTable .group-kiki {
-    background:var(--pink) !important;
-  }
-
-  #sheetTable td.ore-cell:not(:empty),
-  #sheetTable tr.selected td.ore-cell:not(:empty),
-  #sheetTable tr.next-line td.ore-cell:not(:empty) {
-    background:#fff !important;
-  }
-
-  #sheetTable tr.selected td,
-  #sheetTable tr.next-line td {
-    box-shadow:none !important;
-  }
-
-  .bucket-mark {
-    background:#111 !important;
-    height:7px !important;
-    width:2px !important;
-  }
-
-  .bucket-x {
-    color:#111 !important;
-    font-size:7px !important;
-  }
-
-  .top,
-  .foot,
-  .note,
-  .page-print-label {
-    display:flex !important;
-    visibility:visible !important;
-    max-width:100% !important;
-    overflow:visible !important;
-  }
-
-  .top {
-    display:grid !important;
-    grid-template-columns:1.65fr 1.15fr 1.1fr !important;
-    gap:2px !important;
-    margin-bottom:2px !important;
-    page-break-inside:avoid !important;
-    break-inside:avoid-page !important;
-  }
-
-  .brand-left {
-    grid-template-columns:24px minmax(0,1fr) !important;
-    gap:2px !important;
-  }
-
-  .left-logo {
-    width:22px !important;
-    height:22px !important;
-  }
-
-  .right-logo {
-    height:20px !important;
-    max-width:110px !important;
-  }
-
-  .title-box {
-    font-size:9px !important;
-    min-width:138px !important;
-    padding:1px 6px !important;
-    color:#000 !important;
-    -webkit-text-fill-color:#000 !important;
-  }
-
-  .line-input,
-  .foot input {
-    color:#000 !important;
-    -webkit-text-fill-color:#000 !important;
-    font-size:6.8px !important;
-    min-height:10px !important;
-    border-bottom:1px solid #555 !important;
-    background:transparent !important;
-  }
-
-  .sheet-name,
-  .fields,
-  .truck,
-  .foot,
-  .note,
-  .page-print-label {
-    color:#000 !important;
-    -webkit-text-fill-color:#000 !important;
-    font-size:5.8px !important;
-  }
-
-  tfoot td,
-  .total-cell {
-    background:#eef7ff !important;
-    color:#000 !important;
-    -webkit-text-fill-color:#000 !important;
-  }
-
-  @page {
-    size: landscape;
-    margin:2mm;
-  }
-}
-
-
-/* v5.0 clean restore: stable iPhone/iPad layout */
-:root {
-  --stable-header-height:74px;
-}
-
-html,
-body {
-  overflow-x:hidden;
-  overscroll-behavior:none;
-}
-
-.fixed-app-header,
-.toolbar,
-.menu-toggle {
-  transform:none !important;
-  zoom:1 !important;
-}
-
-.app {
-  padding-top:calc(var(--stable-header-height) + 12px + env(safe-area-inset-top)) !important;
-}
-
-/* Hide unstable legacy view controls. The app now uses one stable sheet view. */
-#btnFitPage,
-#btnInputView,
-#btnSheetFullscreen,
-.exit-fullscreen-btn,
-.fullscreen-topbar {
-  display:none !important;
-}
-
-/* Prevent old fullscreen classes from affecting layout if Safari restores them. */
-body.sheet-fullscreen .fixed-app-header,
-body.sheet-fullscreen .toolbar,
-body.sheet-fullscreen .installbox {
-  display:initial;
-}
-
-body.sheet-fullscreen .fixed-app-header {
-  display:grid !important;
-}
-
-body.sheet-fullscreen .toolbar {
-  display:none !important;
-}
-
-body.sheet-fullscreen .app,
-body.fit-mode .app {
-  padding-top:calc(var(--stable-header-height) + 12px + env(safe-area-inset-top)) !important;
-}
-
-/* Make the sheet itself the scroll container so the table header can stick. */
-.sheet,
-body.sheet-fullscreen .sheet,
-body.fit-mode .sheet {
-  height:calc(100dvh - var(--stable-header-height) - 22px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
-  max-height:calc(100dvh - var(--stable-header-height) - 22px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
-  overflow:auto !important;
-  -webkit-overflow-scrolling:touch;
-  overscroll-behavior:contain;
-  padding:8px !important;
-}
-
-.sheet-inner,
-body.sheet-fullscreen .sheet-inner,
-body.fit-mode .sheet-inner {
-  transform:none !important;
-  width:100% !important;
-  max-width:none !important;
-}
-
-#sheetTable {
-  min-width:1280px;
-  border-collapse:separate !important;
-  border-spacing:0 !important;
-}
-
-#sheetTable thead {
-  position:sticky;
-  top:0;
-  z-index:100;
-}
-
-#sheetTable thead th {
-  position:sticky;
-  background-clip:padding-box;
-  z-index:101;
-  box-shadow:0 1px 0 var(--thin);
-}
-
-#sheetTable thead tr:nth-child(1) th {
-  top:0;
-  z-index:104;
-}
-
-#sheetTable thead tr:nth-child(2) th {
-  top:30px;
-  z-index:103;
-}
-
-#sheetTable thead tr:nth-child(3) th {
-  top:60px;
-  z-index:102;
-}
-
-body.dark-mode #sheetTable thead th {
-  box-shadow:0 1px 0 #555;
-}
-
-@media (max-width: 767px) {
-  :root {
-    --stable-header-height:64px;
-  }
-
-  .fixed-app-header {
-    height:calc(var(--stable-header-height) + env(safe-area-inset-top)) !important;
-    padding:calc(5px + env(safe-area-inset-top)) 8px 5px !important;
-    grid-template-columns:44px 1fr 32px !important;
-  }
-
-  .kiewit-header-img {
-    height:46px !important;
-    max-width:min(300px, 70vw) !important;
-  }
-
-  .menu-toggle {
-    width:42px !important;
-    height:42px !important;
-    min-height:42px !important;
-  }
-
-  .toolbar {
-    top:calc(var(--stable-header-height) + env(safe-area-inset-top) + 6px) !important;
-    left:6px !important;
-    right:6px !important;
-    max-width:none !important;
-    transform:none !important;
-    max-height:calc(100dvh - var(--stable-header-height) - env(safe-area-inset-top) - 18px) !important;
-  }
-
-  .menu-grid,
-  .menu-grid.columns-3 {
-    grid-template-columns:repeat(2, minmax(0, 1fr)) !important;
-  }
-}
-
-@media (max-width:390px) {
-  .menu-grid,
-  .menu-grid.columns-3 {
-    grid-template-columns:1fr !important;
-  }
-}
-
-@media (min-width:768px) {
-  :root {
-    --stable-header-height:82px;
-  }
-
-  .fixed-app-header {
-    height:calc(var(--stable-header-height) + env(safe-area-inset-top)) !important;
-  }
-
-  .toolbar {
-    top:calc(var(--stable-header-height) + env(safe-area-inset-top) + 10px) !important;
-  }
-}
-
-/* Printing always uses normal light printable layout. */
-@media print {
-  html,
-  body {
-    background:#fff !important;
-    color:#000 !important;
-    height:auto !important;
-    overflow:visible !important;
-    position:static !important;
-  }
-
-  .fixed-app-header,
-  .toolbar,
-  .offline,
-  .installbox,
-  .modal,
-  .menu-toggle,
-  .exit-fullscreen-btn,
-  .fullscreen-topbar {
-    display:none !important;
-  }
-
-  .app {
-    max-width:none !important;
-    margin:0 !important;
-    padding:0 !important;
-    overflow:visible !important;
-    background:#fff !important;
-  }
-
-  .sheet,
-  body.sheet-fullscreen .sheet,
-  body.fit-mode .sheet {
-    height:auto !important;
-    max-height:none !important;
-    overflow:visible !important;
-    padding:0 !important;
-    border:0 !important;
-    box-shadow:none !important;
-    background:#fffdf8 !important;
-  }
-
-  .sheet-inner,
-  body.sheet-fullscreen .sheet-inner,
-  body.fit-mode .sheet-inner {
-    transform:none !important;
-    width:100% !important;
-    max-width:100% !important;
-    overflow:visible !important;
-    background:#fffdf8 !important;
-  }
-
-  #sheetTable {
-    width:100% !important;
-    max-width:100% !important;
-    table-layout:fixed !important;
-    border-collapse:collapse !important;
-  }
-
-  #sheetTable thead,
-  #sheetTable thead th,
-  #sheetTable tr,
-  #sheetTable th,
-  #sheetTable td {
-    position:static !important;
-    color:#000 !important;
-    -webkit-text-fill-color:#000 !important;
-  }
-
-  @page {
-    size:landscape;
-    margin:2mm;
-  }
-}
-
-
-/* v5.5 stable full-width sheet: one clear view, all columns visible */
-:root {
-  --stable-header-height:74px;
-}
-
-html,
-body {
-  overflow-x:hidden !important;
-  overscroll-behavior:none;
-}
-
-.fixed-app-header,
-.toolbar,
-.menu-toggle {
-  transform:none !important;
-  zoom:1 !important;
-}
-
-/* Remove unstable/legacy view controls. */
-#btnFitPage,
-#btnInputView,
-#btnSheetFullscreen,
-.exit-fullscreen-btn,
-.fullscreen-topbar {
-  display:none !important;
-}
-
-/* Ignore any old fullscreen/fit classes restored by Safari. */
-body.sheet-fullscreen,
-body.fit-mode,
-body.fit-width-active {
-  position:static !important;
-  overflow-x:hidden !important;
-}
-
-body.sheet-fullscreen .fixed-app-header,
-body.sheet-fullscreen .toolbar,
-body.sheet-fullscreen .installbox {
-  display:initial;
-}
-
-body.sheet-fullscreen .fixed-app-header {
-  display:grid !important;
-}
-
-body.sheet-fullscreen .toolbar {
-  display:none !important;
-}
-
-.app {
-  max-width:none !important;
-  width:100vw !important;
-  margin:0 !important;
-  padding-top:calc(var(--stable-header-height) + 10px + env(safe-area-inset-top)) !important;
-  padding-left:4px !important;
-  padding-right:4px !important;
-  padding-bottom:calc(20px + env(safe-area-inset-bottom)) !important;
-  overflow-x:hidden !important;
-}
-
-.sheet,
-body.sheet-fullscreen .sheet,
-body.fit-mode .sheet {
-  width:100% !important;
-  max-width:100% !important;
-  height:calc(100dvh - var(--stable-header-height) - 18px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
-  max-height:calc(100dvh - var(--stable-header-height) - 18px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
-  overflow:auto !important;
-  overflow-x:hidden !important;
-  -webkit-overflow-scrolling:touch;
-  overscroll-behavior:contain;
-  padding:4px !important;
-  box-sizing:border-box !important;
-}
-
-.sheet-inner,
-body.sheet-fullscreen .sheet-inner,
-body.fit-mode .sheet-inner {
-  transform:none !important;
-  width:100% !important;
-  max-width:100% !important;
-  min-width:0 !important;
-  margin:0 !important;
-  padding:0 !important;
-}
-
-.top {
-  min-width:0 !important;
-  width:100% !important;
-  max-width:100% !important;
-  grid-template-columns:1fr 1.2fr .9fr !important;
-  gap:6px !important;
-}
-
-.brand-left {
-  grid-template-columns:54px minmax(0,1fr) !important;
-  gap:6px !important;
-}
-
-.left-logo {
-  width:48px !important;
-  height:48px !important;
-}
-
-.right-logo {
-  max-width:150px !important;
-  height:34px !important;
-}
-
-.sheet-name {
-  font-size:11px !important;
-}
-
-.title-box {
-  min-width:0 !important;
-  width:100% !important;
-  padding:3px 8px !important;
-  font-size:18px !important;
-}
-
-.fields {
-  grid-template-columns:74px minmax(0,1fr) !important;
-  font-size:11px !important;
-  gap:4px !important;
-}
-
-.line-input {
-  min-width:0 !important;
-  font-size:14px !important;
-}
-
-.truck {
-  gap:10px !important;
-  font-size:12px !important;
-}
-
-.truck-choice {
-  min-width:42px !important;
-  padding:3px 5px !important;
-  font-size:18px !important;
-}
-
-/* Full table visible, no horizontal scrolling. */
-#sheetTable {
-  width:100% !important;
-  min-width:0 !important;
-  max-width:100% !important;
-  table-layout:fixed !important;
-  border-collapse:separate !important;
-  border-spacing:0 !important;
-  font-size:9px !important;
-}
-
-#sheetTable th,
-#sheetTable td {
-  height:28px !important;
-  padding:1px !important;
-  line-height:1 !important;
-  overflow:hidden !important;
-  text-overflow:clip !important;
-}
-
-#sheetTable th {
-  font-size:9px !important;
-}
-
-#sheetTable .small-h {
-  font-size:7px !important;
-}
-
-#sheetTable td.time-cell {
-  font-size:11px !important;
-}
-
-#sheetTable td.ore-cell {
-  font-size:13px !important;
-}
-
-#sheetTable .bucket-mark {
-  width:2px !important;
-  height:14px !important;
-}
-
-#sheetTable .bucket-x {
-  font-size:13px !important;
-}
-
-/* Reliable sticky headers in the sheet scroll container. */
-#sheetTable thead {
-  position:sticky !important;
-  top:0 !important;
-  z-index:200 !important;
-}
-
-#sheetTable thead th {
-  position:sticky !important;
-  background-clip:padding-box;
-  box-shadow:0 1px 0 var(--thin);
-}
-
-#sheetTable thead tr:nth-child(1) th {
-  top:0 !important;
-  z-index:203 !important;
-}
-
-#sheetTable thead tr:nth-child(2) th {
-  top:28px !important;
-  z-index:202 !important;
-}
-
-#sheetTable thead tr:nth-child(3) th {
-  top:56px !important;
-  z-index:201 !important;
-}
-
-body.dark-mode #sheetTable thead th {
-  box-shadow:0 1px 0 #555;
-}
-
-@media (max-width:767px) {
-  :root {
-    --stable-header-height:64px;
-  }
-
-  .fixed-app-header {
-    height:calc(var(--stable-header-height) + env(safe-area-inset-top)) !important;
-    padding:calc(5px + env(safe-area-inset-top)) 8px 5px !important;
-    grid-template-columns:44px 1fr 32px !important;
-  }
-
-  .kiewit-header-img {
-    height:44px !important;
-    max-width:min(280px, 68vw) !important;
-  }
-
-  .menu-toggle {
-    width:42px !important;
-    height:42px !important;
-    min-height:42px !important;
-  }
-
-  .top {
-    grid-template-columns:1.05fr 1.15fr .75fr !important;
-    gap:4px !important;
-  }
-
-  .brand-left {
-    grid-template-columns:46px minmax(0,1fr) !important;
-    gap:4px !important;
-  }
-
-  .left-logo {
-    width:42px !important;
-    height:42px !important;
-  }
-
-  .right-logo {
-    max-width:110px !important;
-    height:28px !important;
-  }
-
-  .sheet-name {
-    font-size:10px !important;
-  }
-
-  .title-box {
-    font-size:16px !important;
-  }
-
-  .fields {
-    grid-template-columns:66px minmax(0,1fr) !important;
-    font-size:10px !important;
-  }
-
-  #sheetTable {
-    font-size:8px !important;
-  }
-
-  #sheetTable th {
-    font-size:8px !important;
-  }
-
-  #sheetTable .small-h {
-    font-size:6px !important;
-  }
-}
-
-/* Print stays original/light and printable. */
-@media print {
-  html,
-  body {
-    overflow:visible !important;
-    background:#fff !important;
-    color:#000 !important;
-  }
-
-  .fixed-app-header,
-  .toolbar,
-  .offline,
-  .installbox,
-  .modal,
-  .menu-toggle,
-  .exit-fullscreen-btn,
-  .fullscreen-topbar {
-    display:none !important;
-  }
-
-  .app {
-    max-width:none !important;
-    width:100% !important;
-    margin:0 !important;
-    padding:0 !important;
-    overflow:visible !important;
-  }
-
-  .sheet,
-  body.sheet-fullscreen .sheet,
-  body.fit-mode .sheet {
-    height:auto !important;
-    max-height:none !important;
-    overflow:visible !important;
-    padding:0 !important;
-    border:0 !important;
-    box-shadow:none !important;
-  }
-
-  .sheet-inner,
-  body.sheet-fullscreen .sheet-inner,
-  body.fit-mode .sheet-inner {
-    transform:none !important;
-    width:100% !important;
-    max-width:100% !important;
-    overflow:visible !important;
-  }
-
-  #sheetTable {
-    width:100% !important;
-    max-width:100% !important;
-    table-layout:fixed !important;
-    border-collapse:collapse !important;
-  }
-
-  #sheetTable thead,
-  #sheetTable thead th {
-    position:static !important;
-  }
-
-  @page {
-    size:landscape;
-    margin:2mm;
-  }
-}
-
-
-/* v5.6 clean screen header: official paper header is for print, compact header is for screen */
 .screen-meta {
   display:block;
   width:100%;
+  min-width:0;
   max-width:100%;
-  background:#fffdf8;
-  border:1px solid #aaa;
   margin:0 0 6px;
   padding:8px;
-  box-sizing:border-box;
+  background:var(--paper);
+  border:1px solid #aaa;
 }
 
 .screen-meta-top {
   display:grid;
-  grid-template-columns:52px minmax(0,1fr) minmax(90px,150px);
+  grid-template-columns:52px minmax(0,1fr) minmax(92px,150px);
   gap:8px;
   align-items:center;
 }
@@ -2141,21 +394,21 @@ body.dark-mode #sheetTable thead th {
 }
 
 .screen-sheet-name {
-  font-weight:900;
-  text-decoration:underline;
+  margin-bottom:4px;
   font-size:14px;
   line-height:1.1;
-  margin-bottom:4px;
+  font-weight:900;
+  text-decoration:underline;
 }
 
 .screen-title-box {
+  padding:4px 8px;
   background:var(--blue);
   border:1px solid #777;
+  color:#111;
   font-size:20px;
   line-height:1.1;
   font-weight:900;
-  padding:4px 8px;
-  color:#111;
 }
 
 .screen-fields {
@@ -2171,35 +424,37 @@ body.dark-mode #sheetTable thead th {
   grid-template-columns:auto minmax(0,1fr);
   gap:6px;
   align-items:center;
-  font-weight:800;
   font-size:13px;
+  font-weight:800;
 }
 
 .screen-line-input {
   width:100%;
   min-width:0;
+  min-height:28px;
   border:0;
   border-bottom:2px solid #777;
+  border-radius:0;
   background:transparent;
-  min-height:28px;
+  padding:2px 4px;
+  color:var(--ink);
   font-size:16px;
   font-weight:800;
-  padding:2px 4px;
 }
 
 .screen-truck-row {
   display:flex;
   align-items:center;
   gap:8px;
-  font-weight:900;
   font-size:13px;
+  font-weight:900;
 }
 
 .screen-truck-choice {
   min-height:36px;
   padding:4px 12px;
-  border-radius:10px;
   border:1px solid transparent;
+  border-radius:8px;
   background:#fff;
   color:#111;
   font-size:18px;
@@ -2211,41 +466,726 @@ body.dark-mode #sheetTable thead th {
   border-color:#111;
 }
 
+.top {
+  display:grid;
+  grid-template-columns:1fr 1.35fr 1fr;
+  gap:12px;
+  align-items:start;
+  min-width:760px;
+  margin-bottom:6px;
+}
+
+#haulingSheetWrapper .top {
+  min-width:var(--sheet-min-width);
+}
+
+@media screen {
+  #haulingSheetWrapper .top {
+    display:none;
+  }
+}
+
+.brand-left {
+  display:grid;
+  grid-template-columns:70px minmax(0,1fr);
+  gap:8px;
+  align-items:center;
+}
+
+.left-logo {
+  width:58px;
+  height:58px;
+  object-fit:contain;
+}
+
+.right-logo {
+  justify-self:end;
+  max-width:270px;
+  height:64px;
+  object-fit:contain;
+}
+
+.sheet-name {
+  font-size:12px;
+  font-weight:700;
+  text-decoration:underline;
+}
+
+.title {
+  text-align:center;
+}
+
+.title-box {
+  display:inline-block;
+  min-width:390px;
+  padding:4px 40px;
+  border:1px solid #777;
+  background:var(--blue);
+  color:#111;
+  font-size:22px;
+  font-weight:700;
+}
+
+.fields {
+  display:grid;
+  grid-template-columns:94px minmax(0,1fr);
+  gap:6px;
+  align-items:center;
+  margin-top:4px;
+  font-size:12px;
+  font-weight:700;
+}
+
+.line-input {
+  width:100%;
+  min-width:0;
+  min-height:28px;
+  border:0;
+  border-bottom:2px solid #777;
+  border-radius:0;
+  background:transparent;
+  padding:3px 6px;
+  color:var(--ink);
+  font-size:15px;
+  font-weight:600;
+}
+
+.truck {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:18px;
+  margin-top:8px;
+  font-size:13px;
+  font-weight:700;
+}
+
+.truck-choice {
+  min-width:54px;
+  padding:4px 8px;
+  border:1px solid transparent;
+  border-radius:8px;
+  font-size:23px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.truck-choice.active {
+  background:#e9f4ff;
+  border-color:#111;
+}
+
+table {
+  width:100%;
+  border-collapse:collapse;
+  table-layout:fixed;
+  font-size:12px;
+}
+
+#sheetTable {
+  width:var(--sheet-min-width);
+  min-width:var(--sheet-min-width);
+  border-collapse:separate;
+  border-spacing:0;
+}
+
+#sheetTable thead th {
+  position:sticky;
+  height:var(--sheet-head-row-height);
+  min-height:var(--sheet-head-row-height);
+  background-clip:padding-box;
+  box-shadow:0 1px 0 var(--thin);
+}
+
+#sheetTable thead tr:nth-child(1) th {
+  top:0;
+  z-index:43;
+}
+
+#sheetTable thead tr:nth-child(2) th {
+  top:var(--sheet-head-row-height);
+  z-index:42;
+}
+
+#sheetTable thead tr:nth-child(3) th {
+  top:calc(var(--sheet-head-row-height) * 2);
+  z-index:41;
+}
+
+th,
+td {
+  height:var(--sheet-row-height);
+  border:1px solid var(--thin);
+  padding:2px;
+  background:#fffdf8;
+  color:#111;
+  text-align:center;
+  line-height:1.05;
+}
+
+th {
+  background:#f2f2f2;
+  font-weight:900;
+}
+
+.source-main {
+  background:#dedede !important;
+  font-size:14px;
+}
+
+.group-anuri {
+  background:var(--yellow) !important;
+}
+
+.group-qaki {
+  background:var(--green) !important;
+}
+
+.group-pad {
+  background:var(--blue) !important;
+}
+
+.group-kiki {
+  background:var(--pink) !important;
+}
+
+.small-h {
+  font-size:9px;
+  line-height:1.04;
+}
+
+.voy { width:42px; }
+.time { width:92px; }
+.ore { width:62px; }
+.ore-wide { width:82px; }
+.loader { width:86px; }
+.dest { width:62px; }
+
+.row-no {
+  background:#fafafa;
+  color:#333;
+  font-size:12px;
+  font-weight:700;
+}
+
+td.time-cell,
+td.ore-cell,
+td.loader-cell,
+td.dest-cell {
+  cursor:pointer;
+}
+
+td.time-cell {
+  font-size:15px;
+  font-weight:800;
+}
+
+td.ore-cell {
+  font-family:Arial, Helvetica, sans-serif;
+  font-size:19px;
+  font-weight:900;
+  letter-spacing:0;
+  line-height:1;
+  text-shadow:none;
+}
+
+.bucket-marks {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  min-width:22px;
+}
+
+.bucket-mark {
+  display:inline-block;
+  width:3px;
+  height:18px;
+  background:#111;
+  border-radius:1px;
+}
+
+.bucket-x {
+  display:inline-block;
+  color:#111;
+  font-size:18px;
+  font-weight:900;
+  line-height:1;
+}
+
+td.ore-cell:not(:empty),
+tr.selected td.ore-cell:not(:empty),
+tr.next-line td.ore-cell:not(:empty) {
+  background:#fff;
+}
+
+td.loader-cell {
+  font-size:15px;
+  font-weight:800;
+}
+
+td.dest-cell {
+  font-size:17px;
+  font-weight:900;
+}
+
+tr.selected td {
+  background:var(--selected);
+}
+
+tr.next-line td {
+  box-shadow:inset 0 0 0 2px rgba(0,120,255,.22);
+}
+
+tr.blocked-line td {
+  animation:blockedLine .65s ease;
+}
+
+td.flash {
+  animation:flash .5s ease;
+}
+
+@keyframes blockedLine {
+  0% { background:#ffd6d6; }
+  100% { background:inherit; }
+}
+
+@keyframes flash {
+  0% { background:#ffd0d0; }
+  100% { background:inherit; }
+}
+
+tfoot td,
+.total-cell {
+  background:#eef7ff !important;
+  color:#000;
+  border:1.5px solid #555;
+  font-weight:900;
+}
+
+.total-label {
+  padding-right:8px !important;
+  font-size:12px;
+  text-align:right !important;
+}
+
+.total-number {
+  font-size:15px;
+}
+
+#haulingSheetWrapper .foot,
+#haulingSheetWrapper .page-print-label,
+#haulingSheetWrapper .note {
+  min-width:var(--sheet-min-width);
+}
+
+.foot {
+  display:flex;
+  justify-content:center;
+  gap:70px;
+  align-items:center;
+  margin-top:10px;
+  font-size:13px;
+  font-weight:700;
+}
+
+.foot input {
+  min-width:130px;
+  border:0;
+  border-bottom:2px solid #777;
+  background:transparent;
+  padding:3px 6px;
+  color:#000;
+  -webkit-text-fill-color:#000;
+  font-size:14px;
+  font-weight:700;
+  opacity:1;
+}
+
+.page-print-label {
+  margin-top:6px;
+  font-size:12px;
+  font-weight:800;
+  text-align:right;
+}
+
+.note {
+  margin-top:3px;
+  font-size:12px;
+  font-weight:700;
+  text-align:center;
+}
+
+.loader-plan-table {
+  min-width:760px;
+  width:100%;
+  border-collapse:collapse;
+  table-layout:fixed;
+}
+
+.loader-plan-table th,
+.loader-plan-table td {
+  height:auto;
+  min-height:34px;
+  border:1px solid var(--grid);
+  padding:6px 8px;
+  text-align:center;
+}
+
+.loader-plan-table th:first-child,
+.loader-plan-table td:first-child {
+  text-align:left;
+  font-weight:700;
+}
+
+.loader-plan-table tfoot td {
+  background:#f8f8f8;
+  font-weight:800;
+}
+
+.loader-plan-input {
+  width:100%;
+  border:0;
+  border-bottom:1px solid #666;
+  background:transparent;
+  padding:2px 0;
+  color:var(--ink);
+  text-align:center;
+  font-size:16px;
+  font-weight:800;
+}
+
+.loader-plan-input:focus,
+.loader-notes-wrap textarea:focus,
+.line-input:focus,
+.screen-line-input:focus,
+.panel input:focus {
+  outline:2px solid rgba(0,120,255,.18);
+}
+
+.loader-plan-extra {
+  display:grid;
+  grid-template-columns:repeat(2, minmax(180px, 1fr));
+  gap:14px 24px;
+  min-width:760px;
+  margin-top:10px;
+}
+
+.loader-plan-extra label {
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-weight:700;
+}
+
+#loaderPlanBlend {
+  min-width:340px;
+}
+
+.loader-tonnes,
+.loader-buckets,
+.loader-status {
+  background:#fffdf8;
+  font-weight:800;
+}
+
+.loader-done-tap {
+  width:100%;
+  border:1px solid #666;
+  border-radius:8px;
+  background:#fff;
+  padding:8px 0;
+  text-align:center;
+  font-size:18px;
+  font-weight:800;
+  cursor:pointer;
+  touch-action:manipulation;
+}
+
+.loader-done-tap.complete {
+  background:#eef7ee;
+  border-color:#157347;
+  color:#157347;
+}
+
+.loader-status.complete { color:#157347; }
+.loader-status.remaining { color:#b42318; }
+.loader-status.partial { color:#664d03; }
+
+.loader-plan-table th:nth-child(1) { width:24%; }
+.loader-plan-table th:nth-child(2) { width:12%; }
+.loader-plan-table th:nth-child(3) { width:16%; }
+.loader-plan-table th:nth-child(4) { width:16%; }
+.loader-plan-table th:nth-child(5) { width:14%; }
+.loader-plan-table th:nth-child(6) { width:18%; }
+
+#loaderPercentTotal.ok { color:#157347; }
+#loaderPercentTotal.warn { color:#b42318; }
+
+.loader-notes-wrap {
+  min-width:760px;
+  margin-top:12px;
+}
+
+.loader-notes-wrap label {
+  display:block;
+  margin-bottom:6px;
+  font-weight:800;
+}
+
+.loader-notes-wrap textarea {
+  width:100%;
+  min-height:90px;
+  border:1px solid #aaa;
+  border-radius:8px;
+  padding:10px;
+  background:#fff;
+  color:var(--ink);
+  font-size:15px;
+  resize:vertical;
+}
+
+.modal {
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:100;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  background:rgba(0,0,0,.42);
+}
+
+.modal.open {
+  display:flex;
+}
+
+.panel {
+  width:min(430px, 100%);
+  padding:18px;
+  border-radius:8px;
+  background:#fff;
+  color:#111;
+  box-shadow:0 10px 30px rgba(0,0,0,.25);
+}
+
+.panel h2 {
+  margin:0 0 12px;
+  font-size:20px;
+}
+
+.panel input {
+  width:100%;
+  min-height:48px;
+  border:1px solid #aaa;
+  border-radius:8px;
+  padding:8px 10px;
+  font-size:22px;
+}
+
+.panel-row {
+  display:flex;
+  gap:8px;
+  justify-content:flex-end;
+  margin-top:12px;
+}
+
+body.dark-mode .sheet,
 body.dark-mode .screen-meta {
   background:#141414;
   border-color:#444;
+  box-shadow:0 3px 18px rgba(0,0,0,.65);
 }
 
-body.dark-mode .screen-title-box {
-  background:#cfe7f6;
-  color:#111;
+body.dark-mode th,
+body.dark-mode td {
+  background:#171717;
+  color:#f4f1e8;
+  border-color:#555;
 }
 
-body.dark-mode .screen-line-input {
+body.dark-mode th,
+body.dark-mode .row-no {
+  background:#222;
+}
+
+body.dark-mode #sheetTable thead th {
+  box-shadow:0 1px 0 #555;
+}
+
+body.dark-mode .source-main { background:#2d2d2d !important; }
+body.dark-mode .group-anuri { background:#5f5010 !important; }
+body.dark-mode .group-qaki { background:#253d22 !important; }
+body.dark-mode .group-pad { background:#183247 !important; }
+body.dark-mode .group-kiki { background:#3e2530 !important; }
+
+body.dark-mode td.ore-cell:not(:empty),
+body.dark-mode tr.selected td.ore-cell:not(:empty),
+body.dark-mode tr.next-line td.ore-cell:not(:empty) {
+  background:#111 !important;
+}
+
+body.dark-mode .bucket-mark {
+  background:#fff5c2;
+}
+
+body.dark-mode .bucket-x {
+  color:#fff5c2;
+}
+
+body.dark-mode tr.selected td {
+  background:#3a3212 !important;
+}
+
+body.dark-mode tr.next-line td {
+  box-shadow:inset 0 0 0 2px rgba(255,204,36,.35);
+}
+
+body.dark-mode tfoot td,
+body.dark-mode .total-cell {
+  background:#1f2a30 !important;
+  color:#f4f1e8;
+  border-color:#777;
+}
+
+body.dark-mode .toolbar,
+body.dark-mode .menu-section,
+body.dark-mode .status,
+body.dark-mode .offline,
+body.dark-mode .installbox,
+body.dark-mode .menu-help-details,
+body.dark-mode .menu-note {
+  background:#151515;
+  color:#f4f1e8;
+  border-color:#3a3a3a;
+}
+
+body.dark-mode .menu-title,
+body.dark-mode .menu-help-details summary,
+body.dark-mode .menu-help-text,
+body.dark-mode .menu-swipe-hint {
+  color:#ffcd23;
+}
+
+body.dark-mode button {
+  background:#1f1f1f;
+  color:#f4f1e8;
+  border-color:#555;
+}
+
+body.dark-mode button.primary,
+body.dark-mode button.on,
+body.dark-mode button.active,
+body.dark-mode button.loader-switch-active {
+  background:#ffcd23 !important;
+  color:#111 !important;
+  border-color:#ffcd23 !important;
+}
+
+body.dark-mode button.danger {
+  background:#2a1110;
+  color:#ffb3aa;
+  border-color:#7d2c24;
+}
+
+body.dark-mode .line-input,
+body.dark-mode .screen-line-input,
+body.dark-mode .loader-plan-input,
+body.dark-mode .loader-done-tap,
+body.dark-mode .loader-notes-wrap textarea {
+  background:#111;
   color:#f4f1e8;
   -webkit-text-fill-color:#f4f1e8;
   border-color:#666;
 }
 
+body.dark-mode .screen-title-box,
+body.dark-mode .title-box {
+  background:#cfe7f6;
+  color:#111;
+  border-color:#8fb5cf;
+}
+
+body.dark-mode .truck-choice,
 body.dark-mode .screen-truck-choice {
   background:#1f1f1f;
   color:#f4f1e8;
   border-color:#555;
 }
 
+body.dark-mode .truck-choice.active,
 body.dark-mode .screen-truck-choice.active {
   background:#ffcd23;
   color:#111;
   border-color:#ffcd23;
 }
 
-@media screen {
-  #haulingSheetWrapper .top {
-    display:none !important;
+body.dark-mode .right-logo,
+body.dark-mode .left-logo,
+body.dark-mode .screen-left-logo,
+body.dark-mode .screen-right-logo {
+  filter:brightness(.9);
+}
+
+body.dark-mode .panel {
+  background:#151515;
+  color:#f4f1e8;
+}
+
+@media (min-width:820px) {
+  .toolbar-layout {
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+    align-items:start;
+  }
+
+  .menu-section.full-span,
+  .menu-section.menu-status {
+    grid-column:1 / -1;
   }
 }
 
 @media (max-width:767px) {
+  :root {
+    --app-header-height:64px;
+    --sheet-pad:6px;
+    --sheet-row-height:32px;
+    --sheet-head-row-height:30px;
+  }
+
+  .fixed-app-header {
+    padding:calc(5px + env(safe-area-inset-top)) 8px 5px;
+    grid-template-columns:44px minmax(0, 1fr) 32px;
+  }
+
+  .menu-toggle {
+    width:42px;
+    height:42px;
+    min-height:42px;
+    font-size:23px;
+  }
+
+  .kiewit-header-img {
+    max-width:min(300px, 70vw);
+    height:44px;
+  }
+
+  .app {
+    padding-left:4px;
+    padding-right:4px;
+  }
+
+  .toolbar {
+    top:calc(var(--app-header-height) + env(safe-area-inset-top) + 6px);
+    left:6px;
+    right:6px;
+    padding:10px;
+  }
+
+  .menu-grid,
+  .menu-grid.columns-3 {
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+  }
+
   .screen-meta {
     padding:6px;
   }
@@ -2269,8 +1209,8 @@ body.dark-mode .screen-truck-choice.active {
   }
 
   .screen-title-box {
-    font-size:17px;
     padding:3px 6px;
+    font-size:17px;
   }
 
   .screen-fields {
@@ -2279,8 +1219,13 @@ body.dark-mode .screen-truck-choice.active {
   }
 
   .screen-fields label {
-    font-size:12px;
     grid-template-columns:82px minmax(0,1fr);
+    font-size:12px;
+  }
+
+  .screen-line-input {
+    min-height:26px;
+    font-size:15px;
   }
 
   .screen-truck-row {
@@ -2289,16 +1234,455 @@ body.dark-mode .screen-truck-choice.active {
   }
 }
 
-@media print {
-  .screen-meta {
-    display:none !important;
-  }
-
-  #haulingSheetWrapper .top {
-    display:grid !important;
+@media (max-width:390px) {
+  .menu-grid,
+  .menu-grid.columns-3 {
+    grid-template-columns:1fr;
   }
 }
 
+@media (orientation:landscape) and (max-height:500px) {
+  :root {
+    --app-header-height:54px;
+    --sheet-pad:4px;
+    --sheet-row-height:29px;
+    --sheet-head-row-height:28px;
+  }
+
+  .fixed-app-header {
+    padding:calc(4px + env(safe-area-inset-top)) 8px 4px;
+    grid-template-columns:42px minmax(0, 1fr) 24px;
+  }
+
+  .menu-toggle {
+    width:40px;
+    height:40px;
+    min-height:40px;
+  }
+
+  .kiewit-header-img {
+    height:38px;
+    max-width:min(360px, 72vw);
+  }
+
+  .app {
+    padding-top:calc(var(--app-header-height) + 4px + env(safe-area-inset-top));
+    padding-bottom:calc(4px + env(safe-area-inset-bottom));
+  }
+
+  .screen-meta {
+    margin-bottom:4px;
+    padding:4px;
+  }
+
+  .screen-meta-top {
+    grid-template-columns:36px minmax(0,1fr) minmax(64px,94px);
+    gap:5px;
+  }
+
+  .screen-left-logo {
+    width:34px;
+    height:34px;
+  }
+
+  .screen-right-logo {
+    max-height:26px;
+  }
+
+  .screen-sheet-name {
+    font-size:11px;
+    margin-bottom:2px;
+  }
+
+  .screen-title-box {
+    font-size:15px;
+    padding:2px 5px;
+  }
+
+  .screen-fields {
+    grid-template-columns:repeat(4, minmax(0,1fr));
+    gap:5px;
+    margin-top:5px;
+  }
+
+  .screen-fields label {
+    grid-template-columns:auto minmax(0,1fr);
+    gap:4px;
+    font-size:11px;
+  }
+
+  .screen-line-input {
+    min-height:22px;
+    font-size:13px;
+  }
+
+  .screen-truck-row {
+    justify-content:flex-start;
+    gap:5px;
+    font-size:11px;
+  }
+
+  .screen-truck-choice {
+    min-height:28px;
+    padding:2px 8px;
+    font-size:14px;
+  }
+}
+
+@media print {
+  :root {
+    --sheet-min-width:0;
+    --sheet-row-height:10.8px;
+    --sheet-head-row-height:10.8px;
+  }
+
+  @page {
+    size:landscape;
+    margin:2mm;
+  }
+
+  html,
+  body {
+    width:100% !important;
+    height:auto !important;
+    min-height:0 !important;
+    overflow:visible !important;
+    position:static !important;
+    margin:0 !important;
+    padding:0 !important;
+    background:#fff !important;
+    color:#000 !important;
+  }
+
+  .fixed-app-header,
+  .toolbar,
+  .installbox,
+  .offline,
+  .modal,
+  .menu-toggle,
+  .screen-meta,
+  .menu-help-details {
+    display:none !important;
+  }
+
+  .app {
+    display:block !important;
+    width:100% !important;
+    max-width:none !important;
+    height:auto !important;
+    margin:0 !important;
+    padding:0 !important;
+    overflow:visible !important;
+    background:#fff !important;
+  }
+
+  body:not(.loader-plan-active) #haulingSheetWrapper {
+    display:block !important;
+  }
+
+  body:not(.loader-plan-active) #loaderPlanView {
+    display:none !important;
+  }
+
+  body.loader-plan-active #haulingSheetWrapper {
+    display:none !important;
+  }
+
+  body.loader-plan-active #loaderPlanView {
+    display:block !important;
+  }
+
+  .sheet,
+  #loaderPlanView.sheet {
+    display:block !important;
+    width:100% !important;
+    height:auto !important;
+    max-height:none !important;
+    min-height:0 !important;
+    margin:0 !important;
+    padding:0 !important;
+    overflow:visible !important;
+    border:0 !important;
+    box-shadow:none !important;
+    background:#fffdf8 !important;
+  }
+
+  .sheet-inner {
+    display:block !important;
+    width:100% !important;
+    max-width:100% !important;
+    height:auto !important;
+    margin:0 !important;
+    padding:0 !important;
+    overflow:visible !important;
+    transform:none !important;
+    background:#fffdf8 !important;
+  }
+
+  #haulingSheetWrapper .top,
+  .top {
+    display:grid !important;
+    grid-template-columns:1.65fr 1.15fr 1.1fr !important;
+    gap:2px !important;
+    min-width:0 !important;
+    width:100% !important;
+    max-width:100% !important;
+    margin-bottom:2px !important;
+    break-inside:avoid-page !important;
+    page-break-inside:avoid !important;
+    align-items:start !important;
+  }
+
+  .brand-left {
+    grid-template-columns:24px minmax(0,1fr) !important;
+    gap:2px !important;
+  }
+
+  .left-logo {
+    width:22px !important;
+    height:22px !important;
+  }
+
+  .right-logo {
+    height:20px !important;
+    max-width:110px !important;
+  }
+
+  .sheet-name,
+  .fields,
+  .truck,
+  .foot,
+  .note,
+  .page-print-label {
+    color:#000 !important;
+    -webkit-text-fill-color:#000 !important;
+    font-size:5.8px !important;
+  }
+
+  .title-box {
+    min-width:138px !important;
+    padding:1px 6px !important;
+    border:1px solid #777 !important;
+    background:#cfe7f6 !important;
+    color:#000 !important;
+    -webkit-text-fill-color:#000 !important;
+    font-size:9px !important;
+  }
+
+  .fields {
+    grid-template-columns:48px minmax(96px,1fr) !important;
+    gap:1px !important;
+    margin-top:1px !important;
+  }
+
+  .line-input,
+  .foot input,
+  .loader-plan-input,
+  .loader-done-tap,
+  #loaderPlanNotes,
+  #loaderPlanBlend,
+  #loaderPlanDate,
+  #loaderPlanName,
+  #loaderPlanShift,
+  #loaderPlanTarget {
+    min-height:10px !important;
+    padding:0 1px !important;
+    border-radius:0 !important;
+    border-bottom:1px solid #555 !important;
+    background:transparent !important;
+    color:#000 !important;
+    -webkit-text-fill-color:#000 !important;
+    font-size:6.8px !important;
+    font-weight:800 !important;
+    opacity:1 !important;
+    line-height:1 !important;
+  }
+
+  .truck {
+    margin-top:1px !important;
+    gap:5px !important;
+  }
+
+  .truck-choice {
+    min-width:20px !important;
+    padding:0 2px !important;
+    font-size:9px !important;
+  }
+
+  #sheetTable,
+  .loader-plan-table {
+    display:table !important;
+    visibility:visible !important;
+    width:100% !important;
+    min-width:0 !important;
+    max-width:100% !important;
+    border-collapse:collapse !important;
+    table-layout:fixed !important;
+    page-break-inside:avoid !important;
+    break-inside:avoid-page !important;
+    background:#fffdf8 !important;
+  }
+
+  #sheetTable thead,
+  #sheetTable tbody,
+  #sheetTable tfoot,
+  #sheetTable tr,
+  #sheetTable th,
+  #sheetTable td,
+  .loader-plan-table thead,
+  .loader-plan-table tbody,
+  .loader-plan-table tfoot,
+  .loader-plan-table tr,
+  .loader-plan-table th,
+  .loader-plan-table td {
+    visibility:visible !important;
+    position:static !important;
+    color:#000 !important;
+    -webkit-text-fill-color:#000 !important;
+  }
+
+  thead {
+    display:table-header-group;
+  }
+
+  tr {
+    page-break-inside:avoid;
+    break-inside:avoid;
+  }
+
+  #sheetTable th,
+  #sheetTable td {
+    height:10.2px !important;
+    min-height:0 !important;
+    padding:0 !important;
+    border:1px solid #aaa !important;
+    background:#fffdf8 !important;
+    color:#000 !important;
+    line-height:1 !important;
+    font-size:5.8px !important;
+  }
+
+  #sheetTable thead th,
+  th {
+    background:#f2f2f2 !important;
+  }
+
+  #sheetTable .source-main { background:#dedede !important; }
+  #sheetTable .group-anuri { background:var(--yellow) !important; }
+  #sheetTable .group-qaki { background:var(--green) !important; }
+  #sheetTable .group-pad { background:var(--blue) !important; }
+  #sheetTable .group-kiki { background:var(--pink) !important; }
+
+  td.ore-cell {
+    font-size:7px !important;
+    font-weight:900 !important;
+  }
+
+  .bucket-marks {
+    gap:2px !important;
+    min-width:12px !important;
+  }
+
+  .bucket-mark {
+    width:2px !important;
+    height:7px !important;
+    background:#111 !important;
+    border-radius:0 !important;
+  }
+
+  .bucket-x {
+    color:#111 !important;
+    font-size:7px !important;
+  }
+
+  tr.selected td,
+  tr.next-line td {
+    background:#fffdf8 !important;
+    box-shadow:none !important;
+  }
+
+  tr.selected td.ore-cell:not(:empty),
+  tr.next-line td.ore-cell:not(:empty),
+  td.ore-cell:not(:empty) {
+    background:#fff !important;
+  }
+
+  td.time-cell,
+  td.loader-cell,
+  td.dest-cell,
+  tfoot td,
+  .total-number,
+  .total-label {
+    font-size:6px !important;
+  }
+
+  tfoot td,
+  .total-cell {
+    background:#eef7ff !important;
+    color:#000 !important;
+    -webkit-text-fill-color:#000 !important;
+  }
+
+  .small-h {
+    font-size:4px !important;
+  }
+
+  .foot,
+  .page-print-label,
+  .note,
+  .loader-plan-extra,
+  .loader-notes-wrap {
+    min-width:0 !important;
+    max-width:100% !important;
+  }
+
+  .foot {
+    gap:34px !important;
+    margin-top:1px !important;
+  }
+
+  .foot input {
+    min-width:88px !important;
+  }
+
+  .note,
+  .page-print-label {
+    margin-top:1px !important;
+    line-height:1 !important;
+  }
+
+  #weightNote {
+    white-space:nowrap;
+  }
+
+  .loader-plan-table {
+    font-size:8px !important;
+  }
+
+  .loader-plan-table th,
+  .loader-plan-table td {
+    height:auto !important;
+    padding:2px 4px !important;
+  }
+
+  body.dark-mode,
+  body.dark-mode .sheet,
+  body.dark-mode th,
+  body.dark-mode td,
+  body.dark-mode .row-no,
+  body.dark-mode .source-main,
+  body.dark-mode .group-anuri,
+  body.dark-mode .group-qaki,
+  body.dark-mode .group-pad,
+  body.dark-mode .group-kiki,
+  body.dark-mode tfoot td,
+  body.dark-mode .total-cell {
+    background:#fffdf8 !important;
+    color:#000 !important;
+    -webkit-text-fill-color:#000 !important;
+    border-color:#aaa !important;
+  }
+}
 </style>
 </head>
 <body>
@@ -2306,7 +1690,6 @@ body.dark-mode .screen-truck-choice.active {
   <button id="menuToggle" class="menu-toggle" aria-label="Menu">☰</button>
   <img class="kiewit-header-img" src="./kiewit-header.png" alt="Kiewit">
 </header>
-<button id="btnExitSheetFullscreen" class="exit-fullscreen-btn">Quitter plein écran</button>
 <div class="app">
   <div class="toolbar">
     <div class="toolbar-layout">
@@ -2322,12 +1705,9 @@ body.dark-mode .screen-truck-choice.active {
       </section>
 
       <section class="menu-section">
-        <h3 class="menu-title" id="menuSectionViews">Vues et feuilles</h3>
+        <h3 class="menu-title" id="menuSectionViews">Feuille</h3>
         <div class="menu-grid">
           <button id="btnLoaderPlan">Feuille loader</button>
-          <button id="btnFitPage">Vue complète</button>
-          <button id="btnInputView">Vue saisie</button>
-          <button id="btnSheetFullscreen">Plein écran feuille</button>
           <button id="btnPrint">Imprimer/PDF</button>
         </div>
       </section>
@@ -2346,7 +1726,7 @@ body.dark-mode .screen-truck-choice.active {
 
       <section class="menu-section menu-status full-span">
         <h3 class="menu-title" id="menuSectionStatus">Statut</h3>
-        <div class="status" id="status">App prête. Les données restent sur ce téléphone. Version 5.6.</div>
+        <div class="status" id="status">App prête. Les données restent sur ce téléphone. Version 5.7.</div>
         <div class="menu-note" id="menuNote">Astuce: ouvre le menu pour les actions et ferme-le pour voir plus de feuille.</div>
         <details class="menu-help-details" id="menuHelpDetails">
           <summary id="menuHelpSummary">Aide rapide</summary>
@@ -2636,10 +2016,6 @@ body.dark-mode .screen-truck-choice.active {
       maxOff:"Max 3 buckets/voyage: OFF",
       pageMinus:"Page -",
       pagePlus:"Page +",
-      fit:"Vue complète",
-      input:"Vue saisie",
-      sheetFullscreen:"Plein écran feuille",
-      exitFullscreen:"Quitter plein écran",
       helpSummary:"Aide rapide",
       addPage:"+ Nouvelle page",
       deletePage:"Supprimer page",
@@ -2653,7 +2029,7 @@ body.dark-mode .screen-truck-choice.active {
       menuSectionDanger:"Réinitialisation",
       menuNote:"Astuce: ouvre le menu pour les actions et ferme-le pour voir plus de feuille.",
       menuSwipeHint:"Glisse vers le haut en bas du menu pour le fermer.",
-      statusReady:"App prête. Les données restent sur ce téléphone. Version 5.6.",
+      statusReady:"App prête. Les données restent sur ce téléphone. Version 5.7.",
       sheetName:"Feuille de transport / Hauling Sheet",
       sheetTitle:"Recette",
       voyageHeader:"Voyage",
@@ -2662,7 +2038,7 @@ body.dark-mode .screen-truck-choice.active {
       destination:"DESTINATION",
       loaderHeader:"Numéro<br>Loader",
       install:'<b>Installation iPhone :</b> ouvrir cette page dans Safari, bouton Partager, puis <b>Ajouter à l’écran d’accueil</b>. Après cette étape, l’application fonctionne hors ligne.',
-      help:'<b>Feuille Recette Touch.</b> Toucher une case heure inscrit l’heure actuelle. Toucher A1, B2, etc. ajoute 1 trait vertical par bucket. Destination: toucher Silo ou Cr-Pad. Loader: toucher une fois pour entrer le numéro, double toucher pour répéter le dernier loader. + Nouvelle page crée une page 2, 3, etc. Utilise Vue complète pour voir toute la feuille, Vue saisie pour écrire plus gros, et pince avec deux doigts pour ajuster. Le bas du tableau affiche les totaux par colonne. Poids et # de voyage se calculent automatiquement. Le bouton Feuille loader ouvre une feuille de recette imprimable pour le loader avec buckets estimés selon le tonnage cible. Cacher menu masque les boutons du haut. Appui long sur une case minerai: efface cette case.',
+      help:'<b>Feuille Recette Touch.</b> Toucher une case heure inscrit l’heure actuelle. Toucher A1, B2, etc. ajoute 1 trait vertical par bucket. Destination: toucher Silo ou Cr-Pad. Loader: toucher une fois pour entrer le numéro, double toucher pour répéter le dernier loader. + Nouvelle page crée une page 2, 3, etc. Fais défiler la feuille horizontalement et verticalement pour garder les en-têtes visibles pendant la saisie. Le bas du tableau affiche les totaux par colonne. Poids et # de voyage se calculent automatiquement. Le bouton Feuille loader ouvre une feuille de recette imprimable pour le loader avec buckets estimés selon le tonnage cible. Appui long sur une case minerai: efface cette case.',
       loaderPlanSheetName:"Feuille loader / Loader sheet",
       loaderSheetTitle:"Feuille recette loader",
       loaderPlanDate:"Date:",
@@ -2716,8 +2092,6 @@ body.dark-mode .screen-truck-choice.active {
       offlineFail:"Impossible de sauvegarder automatiquement. Espace du navigateur possiblement plein.",
       cacheOk:"Mode hors ligne installé dans le navigateur.",
       cacheFail:"App utilisable, mais le cache hors ligne n’a pas pu être installé.",
-      fitStatus:"Vue complète activée. Toute la feuille est visible, mais les cases sont plus petites.",
-      inputStatus:"Vue saisie activée. Utilise le défilement horizontal/vertical pour remplir la feuille.",
       limit3:"Limite 3 buckets atteinte pour ce voyage. Désactive Max 3 pour dépasser.",
       noPrevLoader:"Aucun loader précédent à répéter.",
       loaderRepeated:"Loader {value} répété sur la ligne {line}.",
@@ -2761,10 +2135,6 @@ body.dark-mode .screen-truck-choice.active {
       maxOff:"Max 3 buckets/trip: OFF",
       pageMinus:"Page -",
       pagePlus:"Page +",
-      fit:"Full view",
-      input:"Entry view",
-      sheetFullscreen:"Sheet fullscreen",
-      exitFullscreen:"Exit fullscreen",
       helpSummary:"Quick help",
       addPage:"+ New page",
       deletePage:"Delete page",
@@ -2778,7 +2148,7 @@ body.dark-mode .screen-truck-choice.active {
       menuSectionDanger:"Reset",
       menuNote:"Tip: open the menu for actions, then close it to see more of the sheet.",
       menuSwipeHint:"Swipe up at the bottom of the menu to close it.",
-      statusReady:"App ready. Data stays on this phone. Version 5.6.",
+      statusReady:"App ready. Data stays on this phone. Version 5.7.",
       sheetName:"Hauling Sheet",
       sheetTitle:"Receipt",
       voyageHeader:"Trip",
@@ -2787,7 +2157,7 @@ body.dark-mode .screen-truck-choice.active {
       destination:"DESTINATION",
       loaderHeader:"Loader<br>Number",
       install:'<b>iPhone installation:</b> open this page in Safari, tap Share, then <b>Add to Home Screen</b>. After that, the app works offline.',
-      help:'<b>Recipe Touch Sheet.</b> Tap a time cell to enter the current time. Tap A1, B2, etc. to add 1 vertical mark per bucket. Destination: tap Silo or Cr-Pad. Loader: tap once to enter the number, double tap to repeat the last loader. + New page creates page 2, 3, etc. Use Full view to see the whole sheet, Entry view to write larger, and pinch with two fingers to adjust. The bottom of the table shows column totals. Weight and # of trips are calculated automatically. The Loader sheet button opens a printable recipe sheet for the loader with estimated buckets based on target tonnage. Hide menu hides the top buttons. Long press an ore cell to erase it.',
+      help:'<b>Recipe Touch Sheet.</b> Tap a time cell to enter the current time. Tap A1, B2, etc. to add 1 vertical mark per bucket. Destination: tap Silo or Cr-Pad. Loader: tap once to enter the number, double tap to repeat the last loader. + New page creates page 2, 3, etc. Scroll the sheet horizontally and vertically to keep the headers visible while entering data. The bottom of the table shows column totals. Weight and # of trips are calculated automatically. The Loader sheet button opens a printable recipe sheet for the loader with estimated buckets based on target tonnage. Long press an ore cell to erase it.',
       loaderPlanSheetName:"Loader sheet / Feuille loader",
       loaderSheetTitle:"Loader recipe sheet",
       loaderPlanDate:"Date:",
@@ -2841,8 +2211,6 @@ body.dark-mode .screen-truck-choice.active {
       offlineFail:"Unable to auto-save. Browser storage may be full.",
       cacheOk:"Offline mode installed in the browser.",
       cacheFail:"App usable, but offline cache could not be installed.",
-      fitStatus:"Full view enabled. The whole sheet is visible, but cells are smaller.",
-      inputStatus:"Entry view enabled. Use horizontal/vertical scrolling to fill the sheet.",
       limit3:"3-bucket limit reached for this trip. Disable Max 3 to exceed it.",
       noPrevLoader:"No previous loader to repeat.",
       loaderRepeated:"Loader {value} repeated on line {line}.",
@@ -2875,13 +2243,12 @@ body.dark-mode .screen-truck-choice.active {
   let loaderLastTap = { row:null, time:0 };
   let currentPage = Number(localStorage.getItem("recette_touch_current_page") || "0");
   if (!Number.isFinite(currentPage) || currentPage < 0) currentPage = 0;
-  let viewMode = localStorage.getItem("recette_touch_view_mode") || "input";
   let activeView = localStorage.getItem("recette_touch_active_view") || "hauling";
   let darkModeSetting = localStorage.getItem("recette_touch_dark_mode") || "auto";
 
 
-  function resetLegacyLayoutStateForV5(){
-    const version = "v5.5-stable-full-width";
+  function resetLegacyLayoutState(){
+    const version = "v5.7-responsive-sheet-layout";
     try {
       if (localStorage.getItem("recette_touch_layout_version") !== version) {
         [
@@ -2889,7 +2256,10 @@ body.dark-mode .screen-truck-choice.active {
           "recette_touch_view_mode",
           "recette_touch_menu_open",
           "recette_touch_zoom",
-          "recette_touch_current_scale"
+          "recette_touch_current_scale",
+          "recette_touch_fit_width",
+          "recette_touch_fit_mode",
+          "recette_touch_fullscreen_scale"
         ].forEach(key => localStorage.removeItem(key));
         localStorage.setItem("recette_touch_layout_version", version);
       }
@@ -2897,7 +2267,6 @@ body.dark-mode .screen-truck-choice.active {
     document.body.classList.remove("sheet-fullscreen", "fit-mode", "fit-width-active", "menu-open", "menu-scroll-locked");
     document.documentElement.style.setProperty("--sheet-fullscreen-scale", "1");
     document.documentElement.style.setProperty("--sheet-auto-scale", "1");
-    document.documentElement.style.setProperty("--view-scale", "1");
   }
 
   const tbody = document.getElementById("tbody");
@@ -3180,25 +2549,12 @@ body.dark-mode .screen-truck-choice.active {
     }
   }
 
-  function updateMenuButtonStates(){
-    const fitBtn = document.getElementById('btnFitPage');
-    const inputBtn = document.getElementById('btnInputView');
-    if (fitBtn) fitBtn.classList.toggle('active', activeView === 'hauling' && viewMode === 'fit');
-    if (inputBtn) inputBtn.classList.toggle('active', activeView === 'hauling' && viewMode === 'input');
-  }
-
   function setActiveView(view, silent = false){
     activeView = view === 'loader' ? 'loader' : 'hauling';
     document.body.classList.toggle('loader-plan-active', activeView === 'loader');
-    if (activeView === 'loader') {
-      document.body.classList.remove('fit-mode');
-      applyViewScale(1);
-    }
     try { localStorage.setItem('recette_touch_active_view', activeView); } catch(e) {}
     updateLoaderPlanButton();
-    updateMenuButtonStates();
     if (!silent) setStatus(activeView === 'loader' ? t('loaderViewStatus') : t('haulingViewStatus'));
-    if (activeView === 'hauling' && viewMode === 'fit') setTimeout(fitFullPage, 80);
   }
 
   function applyLanguage(){
@@ -3213,10 +2569,6 @@ body.dark-mode .screen-truck-choice.active {
     setText("btnMax3", max3 ? i.maxOn : i.maxOff);
     setText("btnPrevPage", i.pageMinus);
     setText("btnNextPage", i.pagePlus);
-    setText("btnFitPage", i.fit);
-    setText("btnInputView", i.input);
-    setText("btnSheetFullscreen", i.sheetFullscreen);
-    setText("btnExitSheetFullscreen", i.exitFullscreen);
     setText("menuHelpSummary", i.helpSummary);
     setText("btnAddPage", i.addPage);
     setText("btnDeletePage", i.deletePage);
@@ -3313,72 +2665,8 @@ body.dark-mode .screen-truck-choice.active {
       unlockBackgroundScroll();
     }
 
-    try { localStorage.setItem("recette_touch_menu_open", open ? "1" : "0"); } catch(e) {}
     const toggle = document.getElementById("menuToggle");
     if (toggle) toggle.textContent = open ? t("menuClose") : t("menu");
-    if (viewMode === "fit" && activeView === "hauling") setTimeout(fitFullPage, 90);
-  }
-
-
-  function setSheetFullscreen(active){
-    document.body.classList.remove("sheet-fullscreen", "fit-mode", "fit-width-active");
-    document.documentElement.style.setProperty("--view-scale", "1");
-    try { localStorage.removeItem("recette_touch_sheet_fullscreen"); } catch(e) {}
-  }
-
-  function restoreSheetFullscreen(){
-    const active = localStorage.getItem("recette_touch_sheet_fullscreen") === "1";
-    setSheetFullscreen(active);
-  }
-
-  function restoreMenuState(){
-    const open = localStorage.getItem("recette_touch_menu_open") === "1";
-    setMenuOpen(open);
-  }
-
-  function applyViewScale(scale){
-    const fixed = Math.max(0.22, Math.min(1, Number(scale) || 1));
-    document.documentElement.style.setProperty("--view-scale", String(fixed));
-    const sheetInner = document.querySelector(".sheet-inner");
-    const sheet = document.querySelector(".sheet");
-    if (sheetInner && sheet) {
-      sheet.style.minHeight = Math.ceil(sheetInner.scrollHeight * fixed + 12) + "px";
-    }
-  }
-
-  function fitFullPage(){
-    document.body.classList.add("fit-mode");
-    const sheet = document.querySelector(".sheet");
-    const sheetInner = document.querySelector(".sheet-inner");
-    if (!sheet || !sheetInner) return;
-
-    applyViewScale(1);
-    const availableWidth = Math.max(320, sheet.clientWidth - 6);
-    const headerBottom = document.querySelector(".fixed-app-header")?.getBoundingClientRect().bottom || 0;
-    const toolbar = document.querySelector(".toolbar");
-    const toolbarBottom = document.body.classList.contains("sheet-fullscreen") ? 0 : (document.body.classList.contains("menu-open") && toolbar ? toolbar.getBoundingClientRect().bottom : headerBottom);
-    const availableHeight = Math.max(360, window.innerHeight - toolbarBottom - 8);
-    const contentWidth = Math.max(1280, sheetInner.scrollWidth);
-    const contentHeight = Math.max(900, sheetInner.scrollHeight);
-
-    const scaleWidth = availableWidth / contentWidth;
-    const scaleHeight = availableHeight / contentHeight;
-    const scale = Math.min(scaleWidth, scaleHeight, 1);
-
-    applyViewScale(scale);
-    setStatus(t("fitStatus"));
-  }
-
-  function inputView(){
-    document.body.classList.remove("fit-mode");
-    applyViewScale(1);
-    setStatus(t("inputStatus"));
-  }
-
-  function applySavedViewMode(){
-    document.body.classList.remove("fit-mode");
-    document.documentElement.style.setProperty("--view-scale", "1");
-    try { localStorage.setItem("recette_touch_view_mode", "input"); } catch(e) {}
   }
 
 
@@ -4049,7 +3337,6 @@ body.dark-mode .screen-truck-choice.active {
       selected = { row:null, type:null, key:null };
       save();
       render();
-      if (viewMode === "fit") setTimeout(fitFullPage, 80);
       setStatus(t("pageStatus", { current: currentPage + 1, total: state.pages.length }));
     }
   });
@@ -4059,35 +3346,8 @@ body.dark-mode .screen-truck-choice.active {
       selected = { row:null, type:null, key:null };
       save();
       render();
-      if (viewMode === "fit") setTimeout(fitFullPage, 80);
       setStatus(t("pageStatus", { current: currentPage + 1, total: state.pages.length }));
     }
-  });
-
-  document.getElementById("btnFitPage").addEventListener("click", () => {
-    if (activeView === "loader") {
-      setStatus(t("loaderViewStatus"));
-      return;
-    }
-    viewMode = "fit";
-    localStorage.setItem("recette_touch_view_mode", viewMode);
-    updateMenuButtonStates();
-    fitFullPage();
-  });
-
-  if (document.getElementById("btnSheetFullscreen")) document.getElementById("btnSheetFullscreen").addEventListener("click", () => setSheetFullscreen(true));
-
-  if (document.getElementById("btnExitSheetFullscreen")) document.getElementById("btnExitSheetFullscreen").addEventListener("click", () => setSheetFullscreen(false));
-
-  document.getElementById("btnInputView").addEventListener("click", () => {
-    if (activeView === "loader") {
-      setStatus(t("loaderViewStatus"));
-      return;
-    }
-    viewMode = "input";
-    localStorage.setItem("recette_touch_view_mode", viewMode);
-    updateMenuButtonStates();
-    inputView();
   });
 
   document.getElementById("btnDarkMode").addEventListener("click", cycleDarkMode);
@@ -4132,17 +3392,12 @@ body.dark-mode .screen-truck-choice.active {
     }, { passive:true });
   }
 
-  window.addEventListener("resize", () => {
-    if (viewMode === "fit") setTimeout(fitFullPage, 120);
-  });
-
   document.getElementById("btnAddPage").addEventListener("click", () => {
     state.pages.push(blankPage());
     currentPage = state.pages.length - 1;
     selected = { row:null, type:null, key:null };
     save();
     render();
-    if (viewMode === "fit") setTimeout(fitFullPage, 80);
     setStatus(t("newPage", { current: currentPage + 1, total: state.pages.length }));
   });
   document.getElementById("btnDeletePage").addEventListener("click", () => {
@@ -4157,7 +3412,6 @@ body.dark-mode .screen-truck-choice.active {
     selected = { row:null, type:null, key:null };
     save();
     render();
-    if (viewMode === "fit") setTimeout(fitFullPage, 80);
     setStatus(t("deletedPage", { current: currentPage + 1, total: state.pages.length }));
   });
 
@@ -4296,15 +3550,13 @@ body.dark-mode .screen-truck-choice.active {
     }
   });
 
-  resetLegacyLayoutStateForV5();
+  resetLegacyLayoutState();
   page();
   ensureDateAuto();
   render();
   applyDarkMode();
-  restoreMenuState();
   setActiveView(activeView, true);
   applyLanguage();
-  applySavedViewMode();
   setInterval(() => { if (darkModeSetting === "auto") applyDarkMode(); }, 60000);
 })();
 </script>
