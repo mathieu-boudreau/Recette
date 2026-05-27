@@ -104,7 +104,7 @@ body.dark-mode .menu-section {
   border-color:#3a3a3a;
 }
 body.dark-mode .menu-title {
-  color:#ffcc24;
+  color:#ffcd23;
 }
 body.dark-mode button {
   background:#1f1f1f;
@@ -112,16 +112,16 @@ body.dark-mode button {
   border-color:#555;
 }
 body.dark-mode button.primary {
-  background:#ffcc24;
+  background:#ffcd23;
   color:#111;
-  border-color:#ffcc24;
+  border-color:#ffcd23;
 }
 body.dark-mode button.on,
 body.dark-mode button.active,
 body.dark-mode button.loader-switch-active {
-  background:#ffcc24 !important;
+  background:#ffcd23 !important;
   color:#111 !important;
-  border-color:#ffcc24 !important;
+  border-color:#ffcd23 !important;
 }
 body.dark-mode button.danger {
   background:#2a1110;
@@ -154,6 +154,115 @@ body.dark-mode .loader-status {
 body.dark-mode .right-logo,
 body.dark-mode .left-logo {
   filter:brightness(.9);
+}
+
+
+:root {
+  --kiewit-yellow:#ffcd23;
+}
+
+.fixed-app-header {
+  background:var(--kiewit-yellow) !important;
+}
+
+.kiewit-header-img {
+  background:var(--kiewit-yellow);
+  border-radius:6px;
+}
+
+.menu-help-details {
+  margin-top:10px;
+  background:#fffdf4;
+  border:1px solid #ddd4bf;
+  border-radius:12px;
+  padding:8px 10px;
+}
+
+.menu-help-details summary {
+  cursor:pointer;
+  font-weight:900;
+  color:#6a5b1a;
+}
+
+.menu-help-text {
+  margin-top:8px;
+  font-size:13px;
+  line-height:1.35;
+  color:#222;
+}
+
+body.dark-mode .menu-help-details {
+  background:#151515;
+  border-color:#3a3a3a;
+}
+
+body.dark-mode .menu-help-details summary,
+body.dark-mode .menu-help-text {
+  color:#f4f1e8;
+}
+
+.exit-fullscreen-btn {
+  display:none;
+  position:fixed;
+  top:calc(8px + env(safe-area-inset-top));
+  right:8px;
+  z-index:120;
+  min-height:38px;
+  padding:8px 12px;
+  border-radius:12px;
+  background:#111;
+  color:var(--kiewit-yellow);
+  border:1px solid #111;
+}
+
+body.sheet-fullscreen .fixed-app-header,
+body.sheet-fullscreen .toolbar,
+body.sheet-fullscreen .installbox {
+  display:none !important;
+}
+
+body.sheet-fullscreen .exit-fullscreen-btn {
+  display:block;
+}
+
+body.sheet-fullscreen .app {
+  max-width:none;
+  padding:calc(8px + env(safe-area-inset-top)) 0 calc(20px + env(safe-area-inset-bottom));
+}
+
+body.sheet-fullscreen .sheet {
+  border-left:0;
+  border-right:0;
+  box-shadow:none;
+  padding:4px;
+}
+
+body.sheet-fullscreen .sheet-inner {
+  transform:none !important;
+  width:100% !important;
+}
+
+body.sheet-fullscreen #loaderPlanView {
+  margin-top:0;
+}
+
+body.sheet-fullscreen #haulingSheetWrapper {
+  margin-top:0;
+}
+
+body.sheet-fullscreen #btnExitSheetFullscreen {
+  display:block;
+}
+
+body.sheet-fullscreen.menu-open {
+  position:static !important;
+}
+
+@media print {
+  .exit-fullscreen-btn,
+  .menu-help-details {
+    display:none !important;
+  }
 }
 
 * { box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
@@ -191,6 +300,42 @@ html,body {
 body.menu-open .toolbar {
   display:block;
 }
+
+body.menu-open {
+  overscroll-behavior:none;
+}
+body.menu-open.menu-scroll-locked {
+  position:fixed;
+  left:0;
+  right:0;
+  width:100%;
+}
+body.menu-open .toolbar {
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+  touch-action:pan-y;
+}
+body.menu-open .sheet,
+body.menu-open .sheet-inner,
+body.menu-open #haulingSheetWrapper,
+body.menu-open #loaderPlanView {
+  touch-action:none;
+}
+.menu-swipe-hint {
+  display:none;
+  margin-top:10px;
+  text-align:center;
+  color:#6a5b1a;
+  font-size:12px;
+  font-weight:800;
+}
+body.menu-open .menu-swipe-hint {
+  display:block;
+}
+body.dark-mode .menu-swipe-hint {
+  color:#ffcd23;
+}
+
 .toolbar-layout {
   display:grid;
   gap:14px;
@@ -233,7 +378,7 @@ button {
 }
 button.primary {
   background:#111;
-  color:#ffcc24;
+  color:#ffcd23;
   border-color:#111;
 }
 button.danger {
@@ -244,9 +389,9 @@ button.danger {
 button.on,
 button.active,
 button.loader-switch-active {
-  background:#ffcc24 !important;
+  background:#ffcd23 !important;
   color:#111 !important;
-  border-color:#c79d00 !important;
+  border-color:#9b7a00 !important;
 }
 #btnPageLabel {
   pointer-events:none;
@@ -266,7 +411,7 @@ button.loader-switch-active {
   grid-template-columns:48px 1fr 48px;
   align-items:center;
   gap:8px;
-  background:#ffcb1f;
+  background:#ffcd23;
   border-bottom:1px solid rgba(0,0,0,.25);
   box-shadow:0 2px 12px rgba(0,0,0,.18);
 }
@@ -1003,6 +1148,7 @@ body.loader-plan-active #loaderPlanView { display:block; }
   <button id="menuToggle" class="menu-toggle" aria-label="Menu">☰</button>
   <img class="kiewit-header-img" src="./kiewit-header.png" alt="Kiewit">
 </header>
+<button id="btnExitSheetFullscreen" class="exit-fullscreen-btn">Quitter plein écran</button>
 <div class="app">
   <div class="toolbar">
     <div class="toolbar-layout">
@@ -1023,6 +1169,7 @@ body.loader-plan-active #loaderPlanView { display:block; }
           <button id="btnLoaderPlan">Feuille loader</button>
           <button id="btnFitPage">Vue complète</button>
           <button id="btnInputView">Vue saisie</button>
+          <button id="btnSheetFullscreen">Plein écran feuille</button>
           <button id="btnPrint">Imprimer/PDF</button>
         </div>
       </section>
@@ -1041,8 +1188,13 @@ body.loader-plan-active #loaderPlanView { display:block; }
 
       <section class="menu-section menu-status full-span">
         <h3 class="menu-title" id="menuSectionStatus">Statut</h3>
-        <div class="status" id="status">App prête. Les données restent sur ce téléphone. Version 3.6.</div>
+        <div class="status" id="status">App prête. Les données restent sur ce téléphone. Version 3.8.</div>
         <div class="menu-note" id="menuNote">Astuce: ouvre le menu pour les actions et ferme-le pour voir plus de feuille.</div>
+        <details class="menu-help-details" id="menuHelpDetails">
+          <summary id="menuHelpSummary">Aide rapide</summary>
+          <div id="helpText" class="menu-help-text"></div>
+        </details>
+        <div class="menu-swipe-hint" id="menuSwipeHint">Glisse vers le haut en bas du menu pour le fermer.</div>
       </section>
 
       <section class="menu-section full-span">
@@ -1058,9 +1210,6 @@ body.loader-plan-active #loaderPlanView { display:block; }
     <span id="installText"><b>Installation iPhone :</b> ouvrir cette page dans Safari, bouton Partager, puis <b>Ajouter à l’écran d’accueil</b>. Après cette étape, l’application fonctionne hors ligne.</span>
   </div>
 
-  <div class="offline">
-    <span id="helpText"><b>Feuille Recette Touch.</b> Toucher une case heure inscrit l’heure actuelle. Toucher A1, B2, etc. ajoute 1 trait vertical par bucket. Destination: toucher Silo ou Cr-Pad. Loader: toucher une fois pour entrer le numéro, double toucher pour répéter le dernier loader. + Nouvelle page crée une page 2, 3, etc. Utilise Vue complète pour voir toute la feuille, Vue saisie pour écrire plus gros, et pince avec deux doigts pour ajuster. Le bas du tableau affiche les totaux par colonne. Poids et # de voyage se calculent automatiquement. Les traits des buckets sont plus propres et moins collés. 1 tap = une petite ligne, 2 taps = deux petites lignes, 3 taps = X. Les lignes doivent être remplies en ordre: impossible de passer plus bas avant d’avoir l’heure de chargement et 3 buckets sur la ligne actuelle. L’impression est optimisée pour sortir 1 page complète par feuille. Cacher menu masque les boutons du haut. Appui long sur une case minerai: efface cette case.</span>
-  </div>
 
   <div id="haulingSheetWrapper">
   <div class="sheet">
@@ -1285,6 +1434,9 @@ body.loader-plan-active #loaderPlanView { display:block; }
       pagePlus:"Page +",
       fit:"Vue complète",
       input:"Vue saisie",
+      sheetFullscreen:"Plein écran feuille",
+      exitFullscreen:"Quitter plein écran",
+      helpSummary:"Aide rapide",
       addPage:"+ Nouvelle page",
       deletePage:"Supprimer page",
       exportCsv:"Exporter CSV",
@@ -1296,7 +1448,8 @@ body.loader-plan-active #loaderPlanView { display:block; }
       menuSectionStatus:"Statut",
       menuSectionDanger:"Réinitialisation",
       menuNote:"Astuce: ouvre le menu pour les actions et ferme-le pour voir plus de feuille.",
-      statusReady:"App prête. Les données restent sur ce téléphone. Version 3.6.",
+      menuSwipeHint:"Glisse vers le haut en bas du menu pour le fermer.",
+      statusReady:"App prête. Les données restent sur ce téléphone. Version 3.8.",
       sheetName:"Feuille de transport / Hauling Sheet",
       sheetTitle:"Recette",
       voyageHeader:"Voyage",
@@ -1398,6 +1551,9 @@ body.loader-plan-active #loaderPlanView { display:block; }
       pagePlus:"Page +",
       fit:"Full view",
       input:"Entry view",
+      sheetFullscreen:"Sheet fullscreen",
+      exitFullscreen:"Exit fullscreen",
+      helpSummary:"Quick help",
       addPage:"+ New page",
       deletePage:"Delete page",
       exportCsv:"Export CSV",
@@ -1409,7 +1565,8 @@ body.loader-plan-active #loaderPlanView { display:block; }
       menuSectionStatus:"Status",
       menuSectionDanger:"Reset",
       menuNote:"Tip: open the menu for actions, then close it to see more of the sheet.",
-      statusReady:"App ready. Data stays on this phone. Version 3.6.",
+      menuSwipeHint:"Swipe up at the bottom of the menu to close it.",
+      statusReady:"App ready. Data stays on this phone. Version 3.8.",
       sheetName:"Hauling Sheet",
       sheetTitle:"Receipt",
       voyageHeader:"Trip",
@@ -1816,6 +1973,9 @@ body.loader-plan-active #loaderPlanView { display:block; }
     setText("btnNextPage", i.pagePlus);
     setText("btnFitPage", i.fit);
     setText("btnInputView", i.input);
+    setText("btnSheetFullscreen", i.sheetFullscreen);
+    setText("btnExitSheetFullscreen", i.exitFullscreen);
+    setText("menuHelpSummary", i.helpSummary);
     setText("btnAddPage", i.addPage);
     setText("btnDeletePage", i.deletePage);
     setText("btnExport", i.exportCsv);
@@ -1827,6 +1987,7 @@ body.loader-plan-active #loaderPlanView { display:block; }
     setText("menuSectionStatus", i.menuSectionStatus);
     setText("menuSectionDanger", i.menuSectionDanger);
     setText("menuNote", i.menuNote);
+    setText("menuSwipeHint", i.menuSwipeHint);
     setText("menuToggle", document.body.classList.contains("menu-open") ? i.menuClose : i.menu);
 
     setHtml("installText", i.install);
@@ -1872,12 +2033,52 @@ body.loader-plan-active #loaderPlanView { display:block; }
     renderLoaderPlan();
   }
 
+  let menuScrollY = 0;
+
+  function lockBackgroundScroll(){
+    menuScrollY = window.scrollY || document.documentElement.scrollTop || 0;
+    document.body.style.top = "-" + menuScrollY + "px";
+    document.body.classList.add("menu-scroll-locked");
+  }
+
+  function unlockBackgroundScroll(){
+    document.body.classList.remove("menu-scroll-locked");
+    document.body.style.top = "";
+    window.scrollTo(0, menuScrollY || 0);
+  }
+
   function setMenuOpen(open){
+    const wasOpen = document.body.classList.contains("menu-open");
     document.body.classList.toggle("menu-open", open);
+
+    if (open && !wasOpen) {
+      lockBackgroundScroll();
+      const toolbar = document.querySelector(".toolbar");
+      if (toolbar) toolbar.scrollTop = 0;
+    }
+    if (!open && wasOpen) {
+      unlockBackgroundScroll();
+    }
+
     try { localStorage.setItem("recette_touch_menu_open", open ? "1" : "0"); } catch(e) {}
     const toggle = document.getElementById("menuToggle");
     if (toggle) toggle.textContent = open ? t("menuClose") : t("menu");
     if (viewMode === "fit" && activeView === "hauling") setTimeout(fitFullPage, 90);
+  }
+
+
+  function setSheetFullscreen(active){
+    document.body.classList.toggle("sheet-fullscreen", active);
+    if (active) {
+      setMenuOpen(false);
+      if (viewMode === "fit" && activeView === "hauling") setTimeout(fitFullPage, 80);
+    }
+    try { localStorage.setItem("recette_touch_sheet_fullscreen", active ? "1" : "0"); } catch(e) {}
+  }
+
+  function restoreSheetFullscreen(){
+    const active = localStorage.getItem("recette_touch_sheet_fullscreen") === "1";
+    setSheetFullscreen(active);
   }
 
   function restoreMenuState(){
@@ -1905,7 +2106,7 @@ body.loader-plan-active #loaderPlanView { display:block; }
     const availableWidth = Math.max(320, sheet.clientWidth - 6);
     const headerBottom = document.querySelector(".fixed-app-header")?.getBoundingClientRect().bottom || 0;
     const toolbar = document.querySelector(".toolbar");
-    const toolbarBottom = document.body.classList.contains("menu-open") && toolbar ? toolbar.getBoundingClientRect().bottom : headerBottom;
+    const toolbarBottom = document.body.classList.contains("sheet-fullscreen") ? 0 : (document.body.classList.contains("menu-open") && toolbar ? toolbar.getBoundingClientRect().bottom : headerBottom);
     const availableHeight = Math.max(360, window.innerHeight - toolbarBottom - 8);
     const contentWidth = Math.max(1280, sheetInner.scrollWidth);
     const contentHeight = Math.max(900, sheetInner.scrollHeight);
@@ -2592,6 +2793,10 @@ body.loader-plan-active #loaderPlanView { display:block; }
     fitFullPage();
   });
 
+  document.getElementById("btnSheetFullscreen").addEventListener("click", () => setSheetFullscreen(true));
+
+  document.getElementById("btnExitSheetFullscreen").addEventListener("click", () => setSheetFullscreen(false));
+
   document.getElementById("btnInputView").addEventListener("click", () => {
     if (activeView === "loader") {
       setStatus(t("loaderViewStatus"));
@@ -2620,6 +2825,30 @@ body.loader-plan-active #loaderPlanView { display:block; }
     const open = document.body.classList.contains("menu-open");
     setMenuOpen(!open);
   });
+
+  
+  let menuTouchStartY = 0;
+  let menuTouchStartedAtBottom = false;
+
+  const toolbarForSwipe = document.querySelector(".toolbar");
+  if (toolbarForSwipe) {
+    toolbarForSwipe.addEventListener("touchstart", (event) => {
+      const touch = event.touches && event.touches[0];
+      if (!touch) return;
+      menuTouchStartY = touch.clientY;
+      menuTouchStartedAtBottom = (toolbarForSwipe.scrollTop + toolbarForSwipe.clientHeight) >= (toolbarForSwipe.scrollHeight - 8);
+    }, { passive:true });
+
+    toolbarForSwipe.addEventListener("touchend", (event) => {
+      const touch = event.changedTouches && event.changedTouches[0];
+      if (!touch) return;
+      const deltaY = menuTouchStartY - touch.clientY;
+      const nowAtBottom = (toolbarForSwipe.scrollTop + toolbarForSwipe.clientHeight) >= (toolbarForSwipe.scrollHeight - 8);
+      if (menuTouchStartedAtBottom && nowAtBottom && deltaY > 55) {
+        setMenuOpen(false);
+      }
+    }, { passive:true });
+  }
 
   window.addEventListener("resize", () => {
     if (viewMode === "fit") setTimeout(fitFullPage, 120);

@@ -201,3 +201,17 @@ CORRECTIFS v3.6
 - Impression/PDF ajustée pour que la grille remplisse beaucoup plus la page.
 - Suppression de l’échelle trop petite qui donnait une grille à environ 3/4 de page.
 - La feuille reste optimisée pour une seule page imprimée en mode paysage.
+
+
+CORRECTIFS v3.7
+- Correction du bug où la feuille derrière bougeait parfois quand le menu était ouvert.
+- Le scroll de fond est maintenant verrouillé pendant que le menu est ouvert.
+- Le menu reste scrollable normalement.
+- Ajout d’un geste: rendu en bas du menu, glisser vers le haut ferme le menu.
+
+
+CORRECTIFS v3.8
+- Jaune du header ajusté pour matcher le jaune Kiewit (#ffcd23).
+- Texte d’aide déplacé dans le menu, sous Aide rapide.
+- Ajout d’une option Plein écran feuille.
+- En plein écran, le header et le menu sont cachés pour donner toute la place à la feuille.
