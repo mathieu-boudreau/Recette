@@ -1,4 +1,4 @@
-const CACHE_NAME = "recette-touch-v5.12.1-print-truck-type";
+const CACHE_NAME = "recette-touch-v5.12.2-loader-header-longpress";
 const ASSETS = [
   "./",
   "./index.html",

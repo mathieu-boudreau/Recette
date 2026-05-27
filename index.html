@@ -593,6 +593,32 @@ body.loader-plan-active #loaderPlanView {
   font-weight:600;
 }
 
+#loaderPlanView .loader-plan-top {
+  grid-template-columns:minmax(290px, 1.12fr) minmax(280px, 1fr) minmax(132px, .55fr);
+  gap:10px;
+}
+
+#loaderPlanView .brand-left {
+  grid-template-columns:60px minmax(0,1fr);
+}
+
+#loaderPlanView .loader-plan-main-fields,
+#loaderPlanView .loader-plan-title-fields {
+  width:100%;
+}
+
+#loaderPlanView .loader-plan-main-fields {
+  grid-template-columns:minmax(78px, max-content) minmax(170px, 1fr);
+  gap:5px 8px;
+}
+
+#loaderPlanView .loader-plan-title-fields {
+  grid-template-columns:minmax(92px, max-content) minmax(180px, 1fr);
+  max-width:430px;
+  margin:8px auto 0;
+  gap:5px 8px;
+}
+
 .truck {
   display:flex;
   align-items:center;
@@ -1591,6 +1617,26 @@ body.dark-mode .panel {
   #haulingSheetWrapper .note {
     min-width:0;
   }
+
+  #loaderPlanView .loader-plan-top {
+    grid-template-columns:minmax(280px, 1.16fr) minmax(266px, 1fr) minmax(112px, .48fr);
+    gap:8px;
+  }
+
+  #loaderPlanView .brand-left {
+    grid-template-columns:56px minmax(0,1fr);
+  }
+
+  #loaderPlanView .loader-plan-main-fields {
+    grid-template-columns:minmax(70px, max-content) minmax(168px, 1fr);
+    gap:4px 6px;
+  }
+
+  #loaderPlanView .loader-plan-title-fields {
+    grid-template-columns:minmax(82px, max-content) minmax(168px, 1fr);
+    margin-top:6px;
+    gap:4px 6px;
+  }
 }
 
 @media (orientation:landscape) and (min-width:900px) {
@@ -2300,12 +2346,12 @@ body.dark-mode .panel {
 
   <div class="sheet" id="loaderPlanView">
     <div class="sheet-inner">
-      <div class="top">
+      <div class="top loader-plan-top">
         <div class="brand-left">
           <img class="left-logo" src="./logo.png" alt="Logo">
           <div>
             <div class="sheet-name" id="loaderPlanSheetName">Feuille loader / Loader sheet</div>
-            <div class="fields">
+            <div class="fields loader-plan-main-fields">
               <label id="labelLoaderPlanDate">Date:</label><input class="line-input" id="loaderPlanDate" autocomplete="off">
               <label id="labelLoaderPlanName">No Loader:</label><input class="line-input" id="loaderPlanName" autocomplete="off">
               <label id="labelLoaderPlanOperator">Opérateur:</label><input class="line-input" id="loaderPlanOperator" autocomplete="off">
@@ -2315,7 +2361,7 @@ body.dark-mode .panel {
 
         <div class="title">
           <div class="title-box" id="loaderSheetTitle">Feuille recette loader</div>
-          <div class="fields" style="grid-template-columns:98px 1fr; max-width:430px; margin:10px auto 0;">
+          <div class="fields loader-plan-title-fields">
             <label id="labelLoaderPlanShift">Quart :</label><input class="line-input" id="loaderPlanShift" autocomplete="off">
             <label id="labelLoaderPlanTarget">Tonnage cible :</label><input class="line-input" id="loaderPlanTarget" autocomplete="off" placeholder="Ex: 2800 t">
           </div>
@@ -2495,7 +2541,7 @@ body.dark-mode .panel {
       destination:"DESTINATION",
       loaderHeader:"Numéro<br>Loader",
       install:'<b>Installation iPhone :</b> ouvrir cette page dans Safari, bouton Partager, puis <b>Ajouter à l’écran d’accueil</b>. Après cette étape, l’application fonctionne hors ligne.',
-      help:'<b>Feuille Recette Touch.</b> Toucher une case heure inscrit l’heure actuelle. Toucher A1, B2, etc. ajoute 1 trait vertical par bucket. Destination: toucher Silo ou Cr-Pad. Loader: toucher une fois pour entrer le numéro, double toucher pour répéter le dernier loader. + Nouvelle page crée une page 2, 3, etc. Fais défiler la feuille horizontalement et verticalement pour garder les en-têtes visibles pendant la saisie. Le bas du tableau affiche les totaux par colonne. Poids et # de voyage se calculent automatiquement. Le bouton Feuille loader ouvre une feuille de recette imprimable pour le loader avec buckets estimés selon le tonnage cible. Appui long sur une case minerai: efface cette case.',
+      help:'<b>Feuille Recette Touch.</b> Toucher une case heure inscrit l’heure actuelle. Toucher A1, B2, etc. ajoute 1 trait vertical par bucket. Destination: toucher Silo ou Cr-Pad. Loader: toucher une fois pour entrer le numéro, double toucher pour répéter le dernier loader. + Nouvelle page crée une page 2, 3, etc. Fais défiler la feuille horizontalement et verticalement pour garder les en-têtes visibles pendant la saisie. Le bas du tableau affiche les totaux par colonne. Poids et # de voyage se calculent automatiquement. Le bouton Feuille loader ouvre une feuille de recette imprimable pour le loader avec buckets estimés selon le tonnage cible. Appui long sur une barre minerai: retire 1 bucket.',
       loaderPlanSheetName:"Feuille loader / Loader sheet",
       loaderSheetTitle:"Feuille recette loader",
       loaderPlanDate:"Date:",
@@ -2564,6 +2610,8 @@ body.dark-mode .panel {
       cacheOk:"Mode hors ligne installé dans le navigateur.",
       cacheFail:"App utilisable, mais le cache hors ligne n’a pas pu être installé.",
       limit3:"Limite 3 buckets atteinte pour ce voyage. Désactive Max 3 pour dépasser.",
+      oreMarkRemoved:"Bucket retiré par appui long.",
+      orePressEmpty:"Aucune barre à retirer dans cette case.",
       noPrevLoader:"Aucun loader précédent à répéter.",
       loaderRepeated:"Loader {value} répété sur la ligne {line}.",
       selectErase:"Sélectionne une case à effacer.",
@@ -2629,7 +2677,7 @@ body.dark-mode .panel {
       destination:"DESTINATION",
       loaderHeader:"Loader<br>Number",
       install:'<b>iPhone installation:</b> open this page in Safari, tap Share, then <b>Add to Home Screen</b>. After that, the app works offline.',
-      help:'<b>Recipe Touch Sheet.</b> Tap a time cell to enter the current time. Tap A1, B2, etc. to add 1 vertical mark per bucket. Destination: tap Silo or Cr-Pad. Loader: tap once to enter the number, double tap to repeat the last loader. + New page creates page 2, 3, etc. Scroll the sheet horizontally and vertically to keep the headers visible while entering data. The bottom of the table shows column totals. Weight and # of trips are calculated automatically. The Loader sheet button opens a printable recipe sheet for the loader with estimated buckets based on target tonnage. Long press an ore cell to erase it.',
+      help:'<b>Recipe Touch Sheet.</b> Tap a time cell to enter the current time. Tap A1, B2, etc. to add 1 vertical mark per bucket. Destination: tap Silo or Cr-Pad. Loader: tap once to enter the number, double tap to repeat the last loader. + New page creates page 2, 3, etc. Scroll the sheet horizontally and vertically to keep the headers visible while entering data. The bottom of the table shows column totals. Weight and # of trips are calculated automatically. The Loader sheet button opens a printable recipe sheet for the loader with estimated buckets based on target tonnage. Long press an ore mark to remove 1 bucket.',
       loaderPlanSheetName:"Loader sheet / Feuille loader",
       loaderSheetTitle:"Loader recipe sheet",
       loaderPlanDate:"Date:",
@@ -2698,6 +2746,8 @@ body.dark-mode .panel {
       cacheOk:"Offline mode installed in the browser.",
       cacheFail:"App usable, but offline cache could not be installed.",
       limit3:"3-bucket limit reached for this trip. Disable Max 3 to exceed it.",
+      oreMarkRemoved:"Bucket removed by long press.",
+      orePressEmpty:"No bucket mark to remove in this cell.",
       noPrevLoader:"No previous loader to repeat.",
       loaderRepeated:"Loader {value} repeated on line {line}.",
       selectErase:"Select a cell to erase.",
@@ -3720,6 +3770,52 @@ body.dark-mode .panel {
     ev.preventDefault();
   }, { passive:false });
 
+  const ORE_LONG_PRESS_MS = 650;
+  const ORE_LONG_PRESS_MOVE_LIMIT = 12;
+  let orePress = null;
+  let suppressedOreClick = { row:null, ore:null, until:0 };
+
+  function suppressNextOreClick(row, ore){
+    suppressedOreClick = { row, ore, until:Date.now() + 900 };
+  }
+
+  function shouldSuppressOreClick(row, ore){
+    const match = suppressedOreClick.row === row && suppressedOreClick.ore === ore && Date.now() < suppressedOreClick.until;
+    if (match) suppressedOreClick = { row:null, ore:null, until:0 };
+    return match;
+  }
+
+  function clearOrePressTimer(){
+    if (orePress && orePress.timer) clearTimeout(orePress.timer);
+    if (orePress) orePress.timer = null;
+  }
+
+  function resetOrePress(){
+    clearOrePressTimer();
+    orePress = null;
+  }
+
+  function commitOreLongPressErase(rowIndex, ore){
+    const rows = page().rows;
+    const row = rows[rowIndex];
+    if (!row || !row.ores || !ORES.includes(ore)) return;
+
+    suppressNextOreClick(rowIndex, ore);
+    if (!requireSequentialRow(rowIndex)) return;
+    setSelected(rowIndex, "ore", ore);
+
+    const current = Number(row.ores[ore] || 0) || 0;
+    if (current <= 0) {
+      setStatus(t("orePressEmpty"));
+      return;
+    }
+
+    row.ores[ore] = Math.max(0, current - 1);
+    save();
+    render();
+    setStatus(t("oreMarkRemoved"));
+  }
+
   tbody.addEventListener("click", (ev) => {
     const td = ev.target.closest("td");
     if (!td) return;
@@ -3727,6 +3823,12 @@ body.dark-mode .panel {
     const r = Number(tr.dataset.row);
     const type = td.dataset.type;
     const rows = page().rows;
+
+    if (type === "ore" && shouldSuppressOreClick(r, td.dataset.ore)) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      return;
+    }
 
     if (!requireSequentialRow(r)) return;
     if (!requireTimeBeforeEntry(r, type)) return;
@@ -3789,25 +3891,52 @@ body.dark-mode .panel {
     }
   });
 
-  let pressTimer = null;
   tbody.addEventListener("pointerdown", (ev) => {
     const td = ev.target.closest("td.ore-cell");
     if (!td) return;
-    pressTimer = setTimeout(() => {
-      const r = Number(td.closest("tr").dataset.row);
-      if (!requireSequentialRow(r)) return;
-      const ore = td.dataset.ore;
-      page().rows[r].ores[ore] = 0;
-      setSelected(r, "ore", ore);
-      save();
-      render();
-      setStatus("Case minerai effacée.");
-    }, 650);
+    if (ev.pointerType === "mouse" && ev.button !== 0) return;
+    if (ev.isPrimary === false) return;
+
+    const tr = td.closest("tr");
+    const row = tr ? Number(tr.dataset.row) : NaN;
+    const ore = td.dataset.ore;
+    if (!Number.isFinite(row) || !ore) return;
+
+    resetOrePress();
+    orePress = {
+      timer:null,
+      pointerId:ev.pointerId,
+      row,
+      ore,
+      startX:ev.clientX,
+      startY:ev.clientY,
+      handled:false
+    };
+
+    try { td.setPointerCapture(ev.pointerId); } catch(e) {}
+
+    orePress.timer = setTimeout(() => {
+      if (!orePress || orePress.pointerId !== ev.pointerId) return;
+      orePress.handled = true;
+      commitOreLongPressErase(row, ore);
+    }, ORE_LONG_PRESS_MS);
   });
+
+  tbody.addEventListener("pointermove", (ev) => {
+    if (!orePress || orePress.pointerId !== ev.pointerId || orePress.handled) return;
+    const dx = Math.abs(ev.clientX - orePress.startX);
+    const dy = Math.abs(ev.clientY - orePress.startY);
+    if (dx > ORE_LONG_PRESS_MOVE_LIMIT || dy > ORE_LONG_PRESS_MOVE_LIMIT) resetOrePress();
+  });
+
   ["pointerup","pointercancel","pointerleave"].forEach(evt => {
-    tbody.addEventListener(evt, () => {
-      if (pressTimer) clearTimeout(pressTimer);
-      pressTimer = null;
+    tbody.addEventListener(evt, (ev) => {
+      if (!orePress || orePress.pointerId !== ev.pointerId) return;
+      if (orePress.handled) {
+        ev.preventDefault();
+        ev.stopPropagation();
+      }
+      resetOrePress();
     });
   });
 
