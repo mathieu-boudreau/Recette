@@ -248,16 +248,9 @@ CORRECTIFS v5.0
 - Impression/PDF conservée en mode clair original.
 
 
-CORRECTIFS v5.1
-- Remet le bouton Plein écran feuille en version stable.
-- Ajoute un vrai choix Feuille recette / Feuille loader.
-- Ajoute un bouton Aide rapide dans le menu.
-- Ajoute un bouton Fermer menu.
-- Garde la base stable de v5.0 sans réintroduire Vue complète / Vue saisie.
-
-
-CORRECTIFS v5.2
-- Correction du plein écran en mode paysage iPhone.
-- Ajout de safe-area à droite/gauche pour ne plus cacher les colonnes sous la zone noire iPhone.
-- Bouton Quitter remplacé par un petit × à gauche pour ne plus cacher les colonnes de droite.
-- Ajout d’un espace de scroll à droite pour pouvoir voir les dernières colonnes.
+CORRECTIFS v5.3
+- Refonte simple du plein écran.
+- La feuille utilise maintenant 100% de la largeur et hauteur du viewport.
+- Le tableau est mis à l’échelle pour voir toutes les colonnes sans glisser horizontalement.
+- Le header et le menu sont cachés en plein écran.
+- Bouton × compact pour quitter le plein écran.

@@ -1506,15 +1506,21 @@ body.loader-plan-active #loaderPlanView { display:block; }
 }
 
 
-/* v5.0 clean restore: stable iPhone/iPad layout */
+
+/* v5.3 true fullscreen stable
+   Fullscreen means: no header, no menu, no margins, sheet uses 100vw x 100dvh.
+   Only the sheet is scaled to fit screen width. */
 :root {
-  --stable-header-height:74px;
+  --true-fs-scale: 1;
 }
 
-html,
-body {
-  overflow-x:hidden;
-  overscroll-behavior:none;
+#btnFitPage,
+#btnInputView {
+  display:none !important;
+}
+
+#btnSheetFullscreen {
+  display:block !important;
 }
 
 .fixed-app-header,
@@ -1524,320 +1530,160 @@ body {
   zoom:1 !important;
 }
 
-.app {
-  padding-top:calc(var(--stable-header-height) + 12px + env(safe-area-inset-top)) !important;
+.exit-fullscreen-btn {
+  display:none;
 }
 
-/* Hide unstable legacy view controls. The app now uses one stable sheet view. */
-#btnFitPage,
-#btnInputView,
-#btnSheetFullscreen,
-.exit-fullscreen-btn,
-.fullscreen-topbar {
-  display:none !important;
-}
-
-/* Prevent old fullscreen classes from affecting layout if Safari restores them. */
-body.sheet-fullscreen .fixed-app-header,
-body.sheet-fullscreen .toolbar,
-body.sheet-fullscreen .installbox {
-  display:initial;
-}
-
-body.sheet-fullscreen .fixed-app-header {
-  display:grid !important;
-}
-
-body.sheet-fullscreen .toolbar {
-  display:none !important;
-}
-
-body.sheet-fullscreen .app,
-body.fit-mode .app {
-  padding-top:calc(var(--stable-header-height) + 12px + env(safe-area-inset-top)) !important;
-}
-
-/* Make the sheet itself the scroll container so the table header can stick. */
-.sheet,
-body.sheet-fullscreen .sheet,
-body.fit-mode .sheet {
-  height:calc(100dvh - var(--stable-header-height) - 22px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
-  max-height:calc(100dvh - var(--stable-header-height) - 22px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
-  overflow:auto !important;
-  -webkit-overflow-scrolling:touch;
-  overscroll-behavior:contain;
-  padding:8px !important;
-}
-
-.sheet-inner,
-body.sheet-fullscreen .sheet-inner,
-body.fit-mode .sheet-inner {
-  transform:none !important;
-  width:100% !important;
-  max-width:none !important;
-}
-
-#sheetTable {
-  min-width:1280px;
-  border-collapse:separate !important;
-  border-spacing:0 !important;
-}
-
-#sheetTable thead {
-  position:sticky;
-  top:0;
-  z-index:100;
-}
-
-#sheetTable thead th {
-  position:sticky;
-  background-clip:padding-box;
-  z-index:101;
-  box-shadow:0 1px 0 var(--thin);
-}
-
-#sheetTable thead tr:nth-child(1) th {
-  top:0;
-  z-index:104;
-}
-
-#sheetTable thead tr:nth-child(2) th {
-  top:30px;
-  z-index:103;
-}
-
-#sheetTable thead tr:nth-child(3) th {
-  top:60px;
-  z-index:102;
-}
-
-body.dark-mode #sheetTable thead th {
-  box-shadow:0 1px 0 #555;
-}
-
-@media (max-width: 767px) {
-  :root {
-    --stable-header-height:64px;
-  }
-
-  .fixed-app-header {
-    height:calc(var(--stable-header-height) + env(safe-area-inset-top)) !important;
-    padding:calc(5px + env(safe-area-inset-top)) 8px 5px !important;
-    grid-template-columns:44px 1fr 32px !important;
-  }
-
-  .kiewit-header-img {
-    height:46px !important;
-    max-width:min(300px, 70vw) !important;
-  }
-
-  .menu-toggle {
-    width:42px !important;
-    height:42px !important;
-    min-height:42px !important;
-  }
-
-  .toolbar {
-    top:calc(var(--stable-header-height) + env(safe-area-inset-top) + 6px) !important;
-    left:6px !important;
-    right:6px !important;
-    max-width:none !important;
-    transform:none !important;
-    max-height:calc(100dvh - var(--stable-header-height) - env(safe-area-inset-top) - 18px) !important;
-  }
-
-  .menu-grid,
-  .menu-grid.columns-3 {
-    grid-template-columns:repeat(2, minmax(0, 1fr)) !important;
-  }
-}
-
-@media (max-width:390px) {
-  .menu-grid,
-  .menu-grid.columns-3 {
-    grid-template-columns:1fr !important;
-  }
-}
-
-@media (min-width:768px) {
-  :root {
-    --stable-header-height:82px;
-  }
-
-  .fixed-app-header {
-    height:calc(var(--stable-header-height) + env(safe-area-inset-top)) !important;
-  }
-
-  .toolbar {
-    top:calc(var(--stable-header-height) + env(safe-area-inset-top) + 10px) !important;
-  }
-}
-
-/* Printing always uses normal light printable layout. */
-@media print {
-  html,
-  body {
-    background:#fff !important;
-    color:#000 !important;
-    height:auto !important;
-    overflow:visible !important;
-    position:static !important;
-  }
-
-  .fixed-app-header,
-  .toolbar,
-  .offline,
-  .installbox,
-  .modal,
-  .menu-toggle,
-  .exit-fullscreen-btn,
-  .fullscreen-topbar {
-    display:none !important;
-  }
-
-  .app {
-    max-width:none !important;
-    margin:0 !important;
-    padding:0 !important;
-    overflow:visible !important;
-    background:#fff !important;
-  }
-
-  .sheet,
-  body.sheet-fullscreen .sheet,
-  body.fit-mode .sheet {
-    height:auto !important;
-    max-height:none !important;
-    overflow:visible !important;
-    padding:0 !important;
-    border:0 !important;
-    box-shadow:none !important;
-    background:#fffdf8 !important;
-  }
-
-  .sheet-inner,
-  body.sheet-fullscreen .sheet-inner,
-  body.fit-mode .sheet-inner {
-    transform:none !important;
-    width:100% !important;
-    max-width:100% !important;
-    overflow:visible !important;
-    background:#fffdf8 !important;
-  }
-
-  #sheetTable {
-    width:100% !important;
-    max-width:100% !important;
-    table-layout:fixed !important;
-    border-collapse:collapse !important;
-  }
-
-  #sheetTable thead,
-  #sheetTable thead th,
-  #sheetTable tr,
-  #sheetTable th,
-  #sheetTable td {
-    position:static !important;
-    color:#000 !important;
-    -webkit-text-fill-color:#000 !important;
-  }
-
-  @page {
-    size:landscape;
-    margin:2mm;
-  }
-}
-
-
-/* v5.1 stable menu + safe fullscreen */
-#btnSheetFullscreen {
-  display:block !important;
-}
-
-#btnFitPage,
-#btnInputView {
-  display:none !important;
-}
-
-#btnHaulingPlan.active,
-#btnLoaderPlan.active,
-#btnSheetFullscreen.active {
-  background:#ffcd23 !important;
-  color:#111 !important;
-  border-color:#9b7a00 !important;
+body.sheet-fullscreen {
+  overflow:hidden !important;
+  background:#fffdf8 !important;
 }
 
 body.sheet-fullscreen .fixed-app-header,
 body.sheet-fullscreen .toolbar,
-body.sheet-fullscreen .installbox {
+body.sheet-fullscreen .installbox,
+body.sheet-fullscreen .offline {
   display:none !important;
 }
 
 body.sheet-fullscreen .exit-fullscreen-btn {
-  display:block !important;
+  display:grid !important;
+  place-items:center !important;
   position:fixed !important;
-  top:calc(8px + env(safe-area-inset-top));
-  right:8px;
-  z-index:140;
-  min-height:38px;
-  padding:8px 12px;
-  border-radius:12px;
-  background:#111;
-  color:#ffcd23;
-  border:1px solid #111;
+  top:8px !important;
+  left:8px !important;
+  right:auto !important;
+  z-index:999 !important;
+  width:46px !important;
+  height:46px !important;
+  min-width:46px !important;
+  min-height:46px !important;
+  padding:0 !important;
+  border-radius:14px !important;
+  background:#111 !important;
+  color:#ffcd23 !important;
+  border:1px solid #111 !important;
+  font-size:0 !important;
+  line-height:1 !important;
+}
+body.sheet-fullscreen .exit-fullscreen-btn::after {
+  content:"×";
+  font-size:34px;
+  font-weight:900;
+  line-height:1;
 }
 
 body.sheet-fullscreen .app {
+  position:fixed !important;
+  inset:0 !important;
+  width:100vw !important;
+  height:100dvh !important;
   max-width:none !important;
-  padding:calc(8px + env(safe-area-inset-top)) 0 calc(12px + env(safe-area-inset-bottom)) !important;
+  margin:0 !important;
+  padding:0 !important;
+  overflow:hidden !important;
+  background:#fffdf8 !important;
+}
+
+body.sheet-fullscreen #haulingSheetWrapper {
+  display:block !important;
+  position:fixed !important;
+  inset:0 !important;
+  width:100vw !important;
+  height:100dvh !important;
+  margin:0 !important;
+  padding:0 !important;
+  overflow:hidden !important;
+}
+
+body.sheet-fullscreen.loader-plan-active #haulingSheetWrapper {
+  display:none !important;
+}
+
+body.sheet-fullscreen #loaderPlanView {
+  position:fixed !important;
+  inset:0 !important;
+  width:100vw !important;
+  height:100dvh !important;
+  margin:0 !important;
+  padding:0 !important;
+  overflow:auto !important;
+}
+
+body.sheet-fullscreen:not(.loader-plan-active) #loaderPlanView {
+  display:none !important;
 }
 
 body.sheet-fullscreen .sheet {
-  height:calc(100dvh - 8px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
-  max-height:calc(100dvh - 8px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
+  position:fixed !important;
+  inset:0 !important;
+  width:100vw !important;
+  height:100dvh !important;
+  max-width:100vw !important;
+  max-height:100dvh !important;
+  margin:0 !important;
+  padding:0 !important;
+  border:0 !important;
+  box-shadow:none !important;
   overflow:auto !important;
   -webkit-overflow-scrolling:touch;
   overscroll-behavior:contain;
-  padding:6px !important;
-  border-left:0;
-  border-right:0;
+  background:#fffdf8 !important;
 }
 
 body.sheet-fullscreen .sheet-inner {
-  transform:none !important;
-  width:100% !important;
+  width:1280px !important;
+  max-width:none !important;
+  transform:scale(var(--true-fs-scale)) !important;
+  transform-origin:top left !important;
+  margin:0 !important;
+  padding:0 !important;
+}
+
+body.sheet-fullscreen #sheetTable {
+  min-width:1280px !important;
+  width:1280px !important;
   max-width:none !important;
 }
 
 body.sheet-fullscreen #sheetTable {
-  min-width:1280px;
+  border-collapse:separate !important;
+  border-spacing:0 !important;
 }
 
 body.sheet-fullscreen #sheetTable thead {
-  position:sticky;
-  top:0;
-  z-index:120;
+  position:sticky !important;
+  top:0 !important;
+  z-index:200 !important;
 }
 
 body.sheet-fullscreen #sheetTable thead th {
-  position:sticky;
+  position:sticky !important;
   background-clip:padding-box;
   box-shadow:0 1px 0 var(--thin);
 }
 
 body.sheet-fullscreen #sheetTable thead tr:nth-child(1) th {
-  top:0;
-  z-index:123;
+  top:0 !important;
+  z-index:203 !important;
 }
 
 body.sheet-fullscreen #sheetTable thead tr:nth-child(2) th {
-  top:30px;
-  z-index:122;
+  top:30px !important;
+  z-index:202 !important;
 }
 
 body.sheet-fullscreen #sheetTable thead tr:nth-child(3) th {
-  top:60px;
-  z-index:121;
+  top:60px !important;
+  z-index:201 !important;
+}
+
+body.dark-mode.sheet-fullscreen {
+  background:#090909 !important;
+}
+
+body.dark-mode.sheet-fullscreen .sheet {
+  background:#141414 !important;
 }
 
 @media print {
@@ -1846,96 +1692,30 @@ body.sheet-fullscreen #sheetTable thead tr:nth-child(3) th {
     display:none !important;
   }
 
-  body.sheet-fullscreen .sheet {
+  body.sheet-fullscreen,
+  body.sheet-fullscreen .app,
+  body.sheet-fullscreen .sheet,
+  body.sheet-fullscreen .sheet-inner {
+    position:static !important;
+    inset:auto !important;
+    width:100% !important;
     height:auto !important;
+    max-width:100% !important;
     max-height:none !important;
     overflow:visible !important;
+    transform:none !important;
   }
 
-  body.sheet-fullscreen .sheet-inner {
-    transform:none !important;
+  body.sheet-fullscreen #sheetTable {
     width:100% !important;
+    max-width:100% !important;
+    min-width:0 !important;
+    border-collapse:collapse !important;
   }
 
   body.sheet-fullscreen #sheetTable thead,
   body.sheet-fullscreen #sheetTable thead th {
     position:static !important;
-  }
-}
-
-
-/* v5.2 fullscreen safe-area fix for iPhone landscape */
-body.sheet-fullscreen .exit-fullscreen-btn {
-  left:calc(8px + env(safe-area-inset-left)) !important;
-  right:auto !important;
-  top:calc(8px + env(safe-area-inset-top)) !important;
-  width:44px !important;
-  min-width:44px !important;
-  height:44px !important;
-  min-height:44px !important;
-  padding:0 !important;
-  border-radius:14px !important;
-  font-size:0 !important;
-  display:grid !important;
-  place-items:center !important;
-  z-index:140 !important;
-}
-body.sheet-fullscreen .exit-fullscreen-btn::after {
-  content:"×";
-  font-size:30px;
-  line-height:1;
-  font-weight:900;
-}
-
-body.sheet-fullscreen .app {
-  padding-left:env(safe-area-inset-left) !important;
-  padding-right:env(safe-area-inset-right) !important;
-}
-
-body.sheet-fullscreen .sheet {
-  width:calc(100vw - env(safe-area-inset-left) - env(safe-area-inset-right)) !important;
-  max-width:calc(100vw - env(safe-area-inset-left) - env(safe-area-inset-right)) !important;
-  margin-left:0 !important;
-  margin-right:0 !important;
-  padding-left:calc(6px + env(safe-area-inset-left)) !important;
-  padding-right:calc(6px + env(safe-area-inset-right)) !important;
-  overflow:auto !important;
-  scrollbar-gutter:stable both-edges;
-}
-
-body.sheet-fullscreen .sheet-inner {
-  padding-right:calc(72px + env(safe-area-inset-right)) !important;
-  box-sizing:content-box !important;
-}
-
-body.sheet-fullscreen #sheetTable {
-  min-width:1280px !important;
-}
-
-/* Make sure the far-right columns can scroll past the iPhone camera/safe-area. */
-body.sheet-fullscreen #haulingSheetWrapper .sheet-inner::after {
-  content:"";
-  display:block;
-  width:calc(96px + env(safe-area-inset-right));
-  height:1px;
-  flex:0 0 auto;
-}
-
-@media print {
-  body.sheet-fullscreen .exit-fullscreen-btn {
-    display:none !important;
-  }
-  body.sheet-fullscreen .app,
-  body.sheet-fullscreen .sheet,
-  body.sheet-fullscreen .sheet-inner {
-    padding-left:0 !important;
-    padding-right:0 !important;
-    width:100% !important;
-    max-width:100% !important;
-    box-sizing:border-box !important;
-  }
-  body.sheet-fullscreen #haulingSheetWrapper .sheet-inner::after {
-    display:none !important;
   }
 }
 
@@ -1946,7 +1726,7 @@ body.sheet-fullscreen #haulingSheetWrapper .sheet-inner::after {
   <button id="menuToggle" class="menu-toggle" aria-label="Menu">☰</button>
   <img class="kiewit-header-img" src="./kiewit-header.png" alt="Kiewit">
 </header>
-<button id="btnExitSheetFullscreen" class="exit-fullscreen-btn">×</button>
+<button id="btnExitSheetFullscreen" class="exit-fullscreen-btn">Quitter plein écran</button>
 <div class="app">
   <div class="toolbar">
     <div class="toolbar-layout">
@@ -1964,11 +1744,10 @@ body.sheet-fullscreen #haulingSheetWrapper .sheet-inner::after {
       <section class="menu-section">
         <h3 class="menu-title" id="menuSectionViews">Vues et feuilles</h3>
         <div class="menu-grid">
-          <button id="btnHaulingPlan">Feuille recette</button>
           <button id="btnLoaderPlan">Feuille loader</button>
           <button id="btnFitPage">Vue complète</button>
           <button id="btnInputView">Vue saisie</button>
-          <button id="btnSheetFullscreen">Plein écran feuille</button>
+          <button id="btnSheetFullscreen">Plein écran</button>
           <button id="btnPrint">Imprimer/PDF</button>
         </div>
       </section>
@@ -1987,12 +1766,8 @@ body.sheet-fullscreen #haulingSheetWrapper .sheet-inner::after {
 
       <section class="menu-section menu-status full-span">
         <h3 class="menu-title" id="menuSectionStatus">Statut</h3>
-        <div class="status" id="status">App prête. Les données restent sur ce téléphone. Version 5.2.</div>
+        <div class="status" id="status">App prête. Les données restent sur ce téléphone. Version 5.3.</div>
         <div class="menu-note" id="menuNote">Astuce: ouvre le menu pour les actions et ferme-le pour voir plus de feuille.</div>
-        <div class="menu-grid">
-          <button id="btnQuickHelp">Aide rapide</button>
-          <button id="btnCloseMenu">Fermer menu</button>
-        </div>
         <details class="menu-help-details" id="menuHelpDetails">
           <summary id="menuHelpSummary">Aide rapide</summary>
           <div id="helpText" class="menu-help-text"></div>
@@ -2235,7 +2010,6 @@ body.sheet-fullscreen #haulingSheetWrapper .sheet-inner::after {
       darkAutoStatus:"Mode nuit automatique activé.",
       darkOnStatus:"Mode nuit activé.",
       darkOffStatus:"Mode nuit désactivé.",
-      haulingSheetBtn:"Feuille recette",
       loaderPlanBtn:"Feuille loader",
       haulingPlanBtn:"Feuille transport",
       loaderViewStatus:"Vue feuille loader.",
@@ -2252,11 +2026,9 @@ body.sheet-fullscreen #haulingSheetWrapper .sheet-inner::after {
       pagePlus:"Page +",
       fit:"Vue complète",
       input:"Vue saisie",
-      sheetFullscreen:"Plein écran feuille",
+      sheetFullscreen:"Plein écran",
       exitFullscreen:"×",
       helpSummary:"Aide rapide",
-      quickHelp:"Aide rapide",
-      closeMenu:"Fermer menu",
       addPage:"+ Nouvelle page",
       deletePage:"Supprimer page",
       exportCsv:"Exporter CSV",
@@ -2269,7 +2041,7 @@ body.sheet-fullscreen #haulingSheetWrapper .sheet-inner::after {
       menuSectionDanger:"Réinitialisation",
       menuNote:"Astuce: ouvre le menu pour les actions et ferme-le pour voir plus de feuille.",
       menuSwipeHint:"Glisse vers le haut en bas du menu pour le fermer.",
-      statusReady:"App prête. Les données restent sur ce téléphone. Version 5.2.",
+      statusReady:"App prête. Les données restent sur ce téléphone. Version 5.3.",
       sheetName:"Feuille de transport / Hauling Sheet",
       sheetTitle:"Recette",
       voyageHeader:"Voyage",
@@ -2363,7 +2135,6 @@ body.sheet-fullscreen #haulingSheetWrapper .sheet-inner::after {
       darkAutoStatus:"Automatic night mode enabled.",
       darkOnStatus:"Night mode enabled.",
       darkOffStatus:"Night mode disabled.",
-      haulingSheetBtn:"Hauling sheet",
       loaderPlanBtn:"Loader sheet",
       haulingPlanBtn:"Hauling sheet",
       loaderViewStatus:"Loader sheet view.",
@@ -2380,11 +2151,9 @@ body.sheet-fullscreen #haulingSheetWrapper .sheet-inner::after {
       pagePlus:"Page +",
       fit:"Full view",
       input:"Entry view",
-      sheetFullscreen:"Sheet fullscreen",
+      sheetFullscreen:"Fullscreen",
       exitFullscreen:"×",
       helpSummary:"Quick help",
-      quickHelp:"Quick help",
-      closeMenu:"Close menu",
       addPage:"+ New page",
       deletePage:"Delete page",
       exportCsv:"Export CSV",
@@ -2397,7 +2166,7 @@ body.sheet-fullscreen #haulingSheetWrapper .sheet-inner::after {
       menuSectionDanger:"Reset",
       menuNote:"Tip: open the menu for actions, then close it to see more of the sheet.",
       menuSwipeHint:"Swipe up at the bottom of the menu to close it.",
-      statusReady:"App ready. Data stays on this phone. Version 5.2.",
+      statusReady:"App ready. Data stays on this phone. Version 5.3.",
       sheetName:"Hauling Sheet",
       sheetTitle:"Receipt",
       voyageHeader:"Trip",
@@ -2500,11 +2269,10 @@ body.sheet-fullscreen #haulingSheetWrapper .sheet-inner::after {
 
 
   function resetLegacyLayoutStateForV5(){
-    const version = "v5.2-fullscreen-safe-area";
+    const version = "v5.3-true-fullscreen-stable";
     try {
       if (localStorage.getItem("recette_touch_layout_version") !== version) {
         [
-          "recette_touch_sheet_fullscreen",
           "recette_touch_view_mode",
           "recette_touch_menu_open",
           "recette_touch_zoom",
@@ -2792,26 +2560,18 @@ body.sheet-fullscreen #haulingSheetWrapper .sheet-inner::after {
   }
 
   function updateLoaderPlanButton(){
-    const loaderBtn = document.getElementById('btnLoaderPlan');
-    const haulingBtn = document.getElementById('btnHaulingPlan');
-    if (loaderBtn) {
-      loaderBtn.textContent = t('loaderPlanBtn');
-      loaderBtn.classList.toggle('active', activeView === 'loader');
-      loaderBtn.classList.toggle('loader-switch-active', activeView === 'loader');
-    }
-    if (haulingBtn) {
-      haulingBtn.textContent = t('haulingSheetBtn');
-      haulingBtn.classList.toggle('active', activeView === 'hauling');
+    const btn = document.getElementById('btnLoaderPlan');
+    if (btn) {
+      btn.textContent = activeView === 'loader' ? t('haulingPlanBtn') : t('loaderPlanBtn');
+      btn.classList.toggle('loader-switch-active', activeView === 'loader');
     }
   }
 
   function updateMenuButtonStates(){
-    const fullscreenBtn = document.getElementById('btnSheetFullscreen');
-    if (fullscreenBtn) fullscreenBtn.classList.toggle('active', document.body.classList.contains('sheet-fullscreen'));
-    const haulingBtn = document.getElementById('btnHaulingPlan');
-    const loaderBtn = document.getElementById('btnLoaderPlan');
-    if (haulingBtn) haulingBtn.classList.toggle('active', activeView === 'hauling');
-    if (loaderBtn) loaderBtn.classList.toggle('active', activeView === 'loader');
+    const fitBtn = document.getElementById('btnFitPage');
+    const inputBtn = document.getElementById('btnInputView');
+    if (fitBtn) fitBtn.classList.toggle('active', activeView === 'hauling' && viewMode === 'fit');
+    if (inputBtn) inputBtn.classList.toggle('active', activeView === 'hauling' && viewMode === 'input');
   }
 
   function setActiveView(view, silent = false){
@@ -2823,7 +2583,6 @@ body.sheet-fullscreen #haulingSheetWrapper .sheet-inner::after {
     }
     try { localStorage.setItem('recette_touch_active_view', activeView); } catch(e) {}
     updateLoaderPlanButton();
-    setText("btnHaulingPlan", i.haulingSheetBtn);
     updateMenuButtonStates();
     if (!silent) setStatus(activeView === 'loader' ? t('loaderViewStatus') : t('haulingViewStatus'));
     if (activeView === 'hauling' && viewMode === 'fit') setTimeout(fitFullPage, 80);
@@ -2846,8 +2605,6 @@ body.sheet-fullscreen #haulingSheetWrapper .sheet-inner::after {
     setText("btnSheetFullscreen", i.sheetFullscreen);
     setText("btnExitSheetFullscreen", i.exitFullscreen);
     setText("menuHelpSummary", i.helpSummary);
-    setText("btnQuickHelp", i.quickHelp);
-    setText("btnCloseMenu", i.closeMenu);
     setText("btnAddPage", i.addPage);
     setText("btnDeletePage", i.deletePage);
     setText("btnExport", i.exportCsv);
@@ -2908,6 +2665,7 @@ body.sheet-fullscreen #haulingSheetWrapper .sheet-inner::after {
 
     updateMetaUI();
     renderLoaderPlan();
+    if (document.body.classList.contains('sheet-fullscreen')) setTimeout(fitTrueFullscreenSheet, 40);
   }
 
   let menuScrollY = 0;
@@ -2944,17 +2702,42 @@ body.sheet-fullscreen #haulingSheetWrapper .sheet-inner::after {
   }
 
 
+
+  function fitTrueFullscreenSheet(){
+    if (!document.body.classList.contains("sheet-fullscreen")) {
+      document.documentElement.style.setProperty("--true-fs-scale", "1");
+      return;
+    }
+
+    const sheet = document.body.classList.contains("loader-plan-active")
+      ? document.querySelector("#loaderPlanView")
+      : document.querySelector("#haulingSheetWrapper .sheet");
+
+    const inner = sheet ? sheet.querySelector(".sheet-inner") : null;
+    if (!sheet || !inner) return;
+
+    document.documentElement.style.setProperty("--true-fs-scale", "1");
+
+    const designWidth = 1280;
+    const availableWidth = Math.max(320, window.innerWidth);
+    const scale = Math.min(1.25, Math.max(0.22, availableWidth / designWidth));
+
+    document.documentElement.style.setProperty("--true-fs-scale", String(scale));
+    sheet.scrollLeft = 0;
+  }
+
   function setSheetFullscreen(active){
     document.body.classList.toggle("sheet-fullscreen", active);
     document.body.classList.remove("fit-mode", "fit-width-active");
-    document.documentElement.style.setProperty("--sheet-fullscreen-scale", "1");
     document.documentElement.style.setProperty("--view-scale", "1");
+
     if (active) {
       setMenuOpen(false);
-      const sheet = document.querySelector(".sheet");
-      if (sheet) sheet.scrollTop = 0;
+      setTimeout(fitTrueFullscreenSheet, 60);
+    } else {
+      document.documentElement.style.setProperty("--true-fs-scale", "1");
     }
-    updateMenuButtonStates();
+
     try { localStorage.setItem("recette_touch_sheet_fullscreen", active ? "1" : "0"); } catch(e) {}
   }
 
@@ -3690,49 +3473,14 @@ body.sheet-fullscreen #haulingSheetWrapper .sheet-inner::after {
     }
   });
 
-  document.getElementById("btnFitPage").addEventListener("click", () => {
-    if (activeView === "loader") {
-      setStatus(t("loaderViewStatus"));
-      return;
-    }
-    viewMode = "fit";
-    localStorage.setItem("recette_touch_view_mode", viewMode);
-    updateMenuButtonStates();
-    fitFullPage();
-  });
-
   if (document.getElementById("btnSheetFullscreen")) document.getElementById("btnSheetFullscreen").addEventListener("click", () => setSheetFullscreen(true));
 
   if (document.getElementById("btnExitSheetFullscreen")) document.getElementById("btnExitSheetFullscreen").addEventListener("click", () => setSheetFullscreen(false));
 
-  document.getElementById("btnInputView").addEventListener("click", () => {
-    if (activeView === "loader") {
-      setStatus(t("loaderViewStatus"));
-      return;
-    }
-    viewMode = "input";
-    localStorage.setItem("recette_touch_view_mode", viewMode);
-    updateMenuButtonStates();
-    inputView();
-  });
-
   document.getElementById("btnDarkMode").addEventListener("click", cycleDarkMode);
 
-  document.getElementById("btnHaulingPlan").addEventListener("click", () => {
-    setActiveView("hauling");
-  });
-
   document.getElementById("btnLoaderPlan").addEventListener("click", () => {
-    setActiveView("loader");
-  });
-
-  document.getElementById("btnQuickHelp").addEventListener("click", () => {
-    const details = document.getElementById("menuHelpDetails");
-    if (details) details.open = !details.open;
-  });
-
-  document.getElementById("btnCloseMenu").addEventListener("click", () => {
-    setMenuOpen(false);
+    setActiveView(activeView === "loader" ? "hauling" : "loader");
   });
 
   document.getElementById("btnLang").addEventListener("click", () => {
@@ -3771,7 +3519,11 @@ body.sheet-fullscreen #haulingSheetWrapper .sheet-inner::after {
     }, { passive:true });
   }
 
+  window.addEventListener("orientationchange", () => setTimeout(fitTrueFullscreenSheet, 220));
+
   window.addEventListener("resize", () => {
+    if (document.body.classList.contains("sheet-fullscreen")) setTimeout(fitTrueFullscreenSheet, 120);
+
     if (viewMode === "fit") setTimeout(fitFullPage, 120);
   });
 
