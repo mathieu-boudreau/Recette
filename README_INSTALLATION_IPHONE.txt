@@ -222,3 +222,10 @@ CORRECTIFS v4.1
 - Toucher une case heure vide inscrit l’heure automatiquement.
 - Si l’heure est déjà inscrite, elle ne change plus automatiquement.
 - Pour modifier une heure existante, toucher la case heure ouvre une fenêtre de modification manuelle.
+
+
+CORRECTIFS v4.2
+- Correction des en-têtes qui ne suivaient pas dans la feuille.
+- En mode plein écran / vue complète, la feuille devient le conteneur de scroll.
+- Les en-têtes SOURCE, groupe de minerai et noms de minerai restent visibles pendant le scroll vertical.
+- L’impression/PDF garde les en-têtes normaux sans effet sticky.

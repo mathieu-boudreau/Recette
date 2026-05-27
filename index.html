@@ -662,29 +662,77 @@ body.fit-mode .sheet {
   border-color:#111;
 }
 
-/* Sticky table headers while scrolling the sheet. */
+
+/* v4.2: Strong sticky table headers.
+   The sheet itself becomes the scroll container, so the SOURCE/mineral headers stay visible. */
+.sheet {
+  overscroll-behavior:contain;
+}
+body.sheet-fullscreen .sheet,
+body.fit-mode .sheet {
+  height:calc(100dvh - 54px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+  max-height:calc(100dvh - 54px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+  overflow:auto !important;
+  -webkit-overflow-scrolling:touch;
+}
+body.sheet-fullscreen .sheet-inner,
+body.fit-mode .sheet-inner {
+  transform:none !important;
+  width:100% !important;
+}
+#sheetTable {
+  border-collapse:separate;
+  border-spacing:0;
+}
+#sheetTable thead {
+  position:sticky;
+  top:0;
+  z-index:80;
+}
 #sheetTable thead th {
   position:sticky;
-  z-index:20;
+  background-clip:padding-box;
 }
 #sheetTable thead tr:nth-child(1) th {
   top:0;
-  z-index:23;
+  z-index:83;
 }
 #sheetTable thead tr:nth-child(2) th {
   top:30px;
-  z-index:22;
+  z-index:82;
 }
 #sheetTable thead tr:nth-child(3) th {
   top:58px;
-  z-index:21;
+  z-index:81;
 }
 body.dark-mode #sheetTable thead th {
   box-shadow:0 1px 0 #555;
 }
+body.sheet-fullscreen #sheetTable thead tr:nth-child(1) th,
+body.fit-mode #sheetTable thead tr:nth-child(1) th {
+  top:0;
+}
+body.sheet-fullscreen #sheetTable thead tr:nth-child(2) th,
+body.fit-mode #sheetTable thead tr:nth-child(2) th {
+  top:30px;
+}
+body.sheet-fullscreen #sheetTable thead tr:nth-child(3) th,
+body.fit-mode #sheetTable thead tr:nth-child(3) th {
+  top:58px;
+}
 @media print {
+  #sheetTable {
+    border-collapse:collapse;
+  }
+  #sheetTable thead,
   #sheetTable thead th {
     position:static !important;
+  }
+  body.sheet-fullscreen .sheet,
+  body.fit-mode .sheet {
+    height:auto !important;
+    max-height:none !important;
+    overflow:visible !important;
   }
 }
 
@@ -1229,7 +1277,7 @@ body.loader-plan-active #loaderPlanView { display:block; }
 
       <section class="menu-section menu-status full-span">
         <h3 class="menu-title" id="menuSectionStatus">Statut</h3>
-        <div class="status" id="status">App prête. Les données restent sur ce téléphone. Version 4.1.</div>
+        <div class="status" id="status">App prête. Les données restent sur ce téléphone. Version 4.2.</div>
         <div class="menu-note" id="menuNote">Astuce: ouvre le menu pour les actions et ferme-le pour voir plus de feuille.</div>
         <details class="menu-help-details" id="menuHelpDetails">
           <summary id="menuHelpSummary">Aide rapide</summary>
@@ -1504,7 +1552,7 @@ body.loader-plan-active #loaderPlanView { display:block; }
       menuSectionDanger:"Réinitialisation",
       menuNote:"Astuce: ouvre le menu pour les actions et ferme-le pour voir plus de feuille.",
       menuSwipeHint:"Glisse vers le haut en bas du menu pour le fermer.",
-      statusReady:"App prête. Les données restent sur ce téléphone. Version 4.1.",
+      statusReady:"App prête. Les données restent sur ce téléphone. Version 4.2.",
       sheetName:"Feuille de transport / Hauling Sheet",
       sheetTitle:"Recette",
       voyageHeader:"Voyage",
@@ -1629,7 +1677,7 @@ body.loader-plan-active #loaderPlanView { display:block; }
       menuSectionDanger:"Reset",
       menuNote:"Tip: open the menu for actions, then close it to see more of the sheet.",
       menuSwipeHint:"Swipe up at the bottom of the menu to close it.",
-      statusReady:"App ready. Data stays on this phone. Version 4.1.",
+      statusReady:"App ready. Data stays on this phone. Version 4.2.",
       sheetName:"Hauling Sheet",
       sheetTitle:"Receipt",
       voyageHeader:"Trip",
