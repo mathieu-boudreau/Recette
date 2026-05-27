@@ -27,7 +27,7 @@
   --panel:#fffdf6;
   --panel-line:#d9cfb7;
   --button-line:#7e7e7e;
-  --app-header-height:74px;
+  --app-header-height:56px;
   --sheet-pad:8px;
   --sheet-min-width:1280px;
   --sheet-row-height:32px;
@@ -74,9 +74,9 @@ body.dark-mode {
   right:0;
   z-index:90;
   height:calc(var(--app-header-height) + env(safe-area-inset-top));
-  padding:calc(6px + env(safe-area-inset-top)) 10px 6px;
+  padding:calc(4px + env(safe-area-inset-top)) 10px 4px;
   display:grid;
-  grid-template-columns:48px minmax(0, 1fr) 48px;
+  grid-template-columns:44px minmax(0, 1fr) 44px;
   align-items:center;
   gap:8px;
   background:var(--kiewit-yellow);
@@ -87,9 +87,9 @@ body.dark-mode {
 }
 
 .menu-toggle {
-  width:44px;
-  height:44px;
-  min-height:44px;
+  width:38px;
+  height:38px;
+  min-height:38px;
   padding:0;
   display:grid;
   place-items:center;
@@ -106,8 +106,8 @@ body.dark-mode {
 
 .kiewit-header-img {
   width:100%;
-  max-width:420px;
-  height:56px;
+  max-width:360px;
+  height:36px;
   object-fit:contain;
   justify-self:center;
   background:var(--kiewit-yellow);
@@ -370,7 +370,7 @@ body.loader-plan-active #loaderPlanView {
   touch-action:manipulation;
 }
 
-.screen-meta {
+.screen-sheet-header {
   display:block;
   width:100%;
   min-width:0;
@@ -378,10 +378,12 @@ body.loader-plan-active #loaderPlanView {
   margin:0 0 6px;
   padding:8px;
   background:var(--paper);
-  border:1px solid #aaa;
+  border:1px solid #b6ad98;
+  border-left:5px solid var(--kiewit-yellow);
+  box-shadow:0 1px 0 rgba(0,0,0,.05);
 }
 
-.screen-meta-top {
+.screen-sheet-header-top {
   display:grid;
   grid-template-columns:52px minmax(0,1fr) minmax(92px,150px);
   gap:8px;
@@ -439,6 +441,13 @@ body.loader-plan-active #loaderPlanView {
   align-items:center;
   font-size:13px;
   font-weight:800;
+  min-width:0;
+}
+
+.screen-fields label span {
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
 
 .screen-line-input {
@@ -479,6 +488,10 @@ body.loader-plan-active #loaderPlanView {
   border-color:#111;
 }
 
+.print-sheet-header {
+  display:none;
+}
+
 .top {
   display:grid;
   grid-template-columns:1fr 1.35fr 1fr;
@@ -488,13 +501,17 @@ body.loader-plan-active #loaderPlanView {
   margin-bottom:6px;
 }
 
-#haulingSheetWrapper .top {
+#haulingSheetWrapper .print-sheet-header {
   min-width:var(--sheet-min-width);
 }
 
 @media screen {
-  #haulingSheetWrapper .top {
+  #haulingSheetWrapper .print-sheet-header {
     display:none;
+  }
+
+  #haulingSheetWrapper .screen-sheet-header {
+    display:block;
   }
 }
 
@@ -1004,7 +1021,7 @@ tfoot td,
 }
 
 body.dark-mode .sheet,
-body.dark-mode .screen-meta {
+body.dark-mode .screen-sheet-header {
   background:#141414;
   border-color:#444;
   box-shadow:0 3px 18px rgba(0,0,0,.65);
@@ -1159,27 +1176,27 @@ body.dark-mode .panel {
 
 @media (max-width:767px) {
   :root {
-    --app-header-height:64px;
+    --app-header-height:54px;
     --sheet-pad:6px;
     --sheet-row-height:32px;
     --sheet-head-row-height:30px;
   }
 
   .fixed-app-header {
-    padding:calc(5px + env(safe-area-inset-top)) 8px 5px;
-    grid-template-columns:44px minmax(0, 1fr) 32px;
+    padding:calc(4px + env(safe-area-inset-top)) 8px 4px;
+    grid-template-columns:38px minmax(0, 1fr) 28px;
   }
 
   .menu-toggle {
-    width:42px;
-    height:42px;
-    min-height:42px;
-    font-size:23px;
+    width:36px;
+    height:36px;
+    min-height:36px;
+    font-size:21px;
   }
 
   .kiewit-header-img {
-    max-width:min(300px, 70vw);
-    height:44px;
+    max-width:min(280px, 68vw);
+    height:34px;
   }
 
   .app {
@@ -1199,11 +1216,11 @@ body.dark-mode .panel {
     grid-template-columns:repeat(2, minmax(0, 1fr));
   }
 
-  .screen-meta {
+  .screen-sheet-header {
     padding:6px;
   }
 
-  .screen-meta-top {
+  .screen-sheet-header-top {
     grid-template-columns:44px minmax(0,1fr) minmax(70px,110px);
     gap:6px;
   }
@@ -1256,7 +1273,7 @@ body.dark-mode .panel {
 
 @media (orientation:landscape) {
   :root {
-    --app-header-height:58px;
+    --app-header-height:44px;
     --sheet-min-width:0;
     --sheet-pad:4px;
     --sheet-row-height:30px;
@@ -1264,20 +1281,20 @@ body.dark-mode .panel {
   }
 
   .fixed-app-header {
-    padding:calc(4px + env(safe-area-inset-top)) 8px 4px;
-    grid-template-columns:42px minmax(0, 1fr) 28px;
+    padding:calc(3px + env(safe-area-inset-top)) 8px 3px;
+    grid-template-columns:34px minmax(0, 1fr) 22px;
   }
 
   .menu-toggle {
-    width:40px;
-    height:40px;
-    min-height:40px;
-    font-size:22px;
+    width:32px;
+    height:32px;
+    min-height:32px;
+    font-size:19px;
   }
 
   .kiewit-header-img {
-    height:40px;
-    max-width:min(380px, 66vw);
+    height:28px;
+    max-width:min(300px, 58vw);
   }
 
   .app {
@@ -1298,12 +1315,12 @@ body.dark-mode .panel {
     display:none;
   }
 
-  .screen-meta {
+  .screen-sheet-header {
     margin-bottom:4px;
     padding:5px;
   }
 
-  .screen-meta-top {
+  .screen-sheet-header-top {
     grid-template-columns:38px minmax(0,1fr) minmax(72px,112px);
     gap:6px;
   }
@@ -1418,7 +1435,7 @@ body.dark-mode .panel {
 
 @media (orientation:landscape) and (min-width:900px) {
   :root {
-    --app-header-height:60px;
+    --app-header-height:48px;
     --sheet-row-height:31px;
     --sheet-head-row-height:29px;
   }
@@ -1440,26 +1457,26 @@ body.dark-mode .panel {
 
 @media (orientation:landscape) and (max-height:500px) {
   :root {
-    --app-header-height:54px;
+    --app-header-height:42px;
     --sheet-pad:4px;
     --sheet-row-height:29px;
     --sheet-head-row-height:28px;
   }
 
   .fixed-app-header {
-    padding:calc(4px + env(safe-area-inset-top)) 8px 4px;
-    grid-template-columns:42px minmax(0, 1fr) 24px;
+    padding:calc(3px + env(safe-area-inset-top)) 8px 3px;
+    grid-template-columns:34px minmax(0, 1fr) 20px;
   }
 
   .menu-toggle {
-    width:40px;
-    height:40px;
-    min-height:40px;
+    width:32px;
+    height:32px;
+    min-height:32px;
   }
 
   .kiewit-header-img {
-    height:38px;
-    max-width:min(360px, 72vw);
+    height:26px;
+    max-width:min(280px, 60vw);
   }
 
   .app {
@@ -1467,12 +1484,12 @@ body.dark-mode .panel {
     padding-bottom:calc(4px + env(safe-area-inset-bottom));
   }
 
-  .screen-meta {
+  .screen-sheet-header {
     margin-bottom:4px;
     padding:4px;
   }
 
-  .screen-meta-top {
+  .screen-sheet-header-top {
     grid-template-columns:36px minmax(0,1fr) minmax(64px,94px);
     gap:5px;
   }
@@ -1557,7 +1574,7 @@ body.dark-mode .panel {
   .offline,
   .modal,
   .menu-toggle,
-  .screen-meta,
+  .screen-sheet-header,
   .menu-help-details {
     display:none !important;
   }
@@ -1616,7 +1633,7 @@ body.dark-mode .panel {
     background:#fffdf8 !important;
   }
 
-  #haulingSheetWrapper .top,
+  #haulingSheetWrapper .print-sheet-header,
   .top {
     display:grid !important;
     grid-template-columns:1.65fr 1.15fr 1.1fr !important;
@@ -1925,7 +1942,7 @@ body.dark-mode .panel {
 
       <section class="menu-section menu-status full-span">
         <h3 class="menu-title" id="menuSectionStatus">Statut</h3>
-        <div class="status" id="status">App prête. Les données restent sur ce téléphone. Version 5.9.</div>
+        <div class="status" id="status">App prête. Les données restent sur ce téléphone. Version 5.10.</div>
         <div class="menu-note" id="menuNote">Astuce: ouvre le menu pour les actions et ferme-le pour voir plus de feuille.</div>
         <details class="menu-help-details" id="menuHelpDetails">
           <summary id="menuHelpSummary">Aide rapide</summary>
@@ -1951,8 +1968,8 @@ body.dark-mode .panel {
   <div id="haulingSheetWrapper">
   <div class="sheet">
     <div class="sheet-inner">
-    <div class="screen-meta" id="screenMeta">
-      <div class="screen-meta-top">
+    <div class="screen-sheet-header" id="screenSheetHeader">
+      <div class="screen-sheet-header-top">
         <img class="screen-left-logo" src="./logo.png" alt="Logo">
         <div class="screen-title">
           <div class="screen-sheet-name" id="screenSheetName">Feuille de transport / Hauling Sheet</div>
@@ -1972,7 +1989,7 @@ body.dark-mode .panel {
       </div>
     </div>
 
-    <div class="top">
+    <div class="print-sheet-header top">
       <div class="brand-left">
         <img class="left-logo" src="./logo.png" alt="Logo">
         <div>
@@ -2229,7 +2246,7 @@ body.dark-mode .panel {
       menuSectionDanger:"Réinitialisation",
       menuNote:"Astuce: ouvre le menu pour les actions et ferme-le pour voir plus de feuille.",
       menuSwipeHint:"Glisse vers le haut en bas du menu pour le fermer.",
-      statusReady:"App prête. Les données restent sur ce téléphone. Version 5.9.",
+      statusReady:"App prête. Les données restent sur ce téléphone. Version 5.10.",
       sheetName:"Feuille de transport / Hauling Sheet",
       sheetTitle:"Recette",
       voyageHeader:"Voyage",
@@ -2349,7 +2366,7 @@ body.dark-mode .panel {
       menuSectionDanger:"Reset",
       menuNote:"Tip: open the menu for actions, then close it to see more of the sheet.",
       menuSwipeHint:"Swipe up at the bottom of the menu to close it.",
-      statusReady:"App ready. Data stays on this phone. Version 5.9.",
+      statusReady:"App ready. Data stays on this phone. Version 5.10.",
       sheetName:"Hauling Sheet",
       sheetTitle:"Receipt",
       voyageHeader:"Trip",
@@ -2449,7 +2466,7 @@ body.dark-mode .panel {
 
 
   function resetLegacyLayoutState(){
-    const version = "v5.9-landscape-field-table";
+    const version = "v5.10-normal-screen-print-layout";
     try {
       if (localStorage.getItem("recette_touch_layout_version") !== version) {
         [
