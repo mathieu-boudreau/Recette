@@ -229,3 +229,18 @@ CORRECTIFS v4.2
 - En mode plein écran / vue complète, la feuille devient le conteneur de scroll.
 - Les en-têtes SOURCE, groupe de minerai et noms de minerai restent visibles pendant le scroll vertical.
 - L’impression/PDF garde les en-têtes normaux sans effet sticky.
+
+
+CORRECTIFS v4.3
+- Correction du problème où la feuille sortait blanche en impression/PDF.
+- Le mode impression force maintenant la feuille visible, en mode clair, sans scroll container et sans sticky headers.
+- Compatible avec mode sombre, plein écran et vue complète.
+
+
+CORRECTIFS v4.4
+- Optimisation iPhone + iPad.
+- Header et menu adaptés selon iPhone portrait, iPhone paysage, iPad portrait et iPad paysage.
+- Boutons plus confortables au toucher.
+- Menu plus large et mieux structuré sur iPad.
+- Meilleure utilisation de l’espace en plein écran et vue complète.
+- Impression/PDF conservée en mode original.

@@ -1230,6 +1230,565 @@ body.loader-plan-active #loaderPlanView { display:block; }
 
   @page { size: landscape; margin:2mm; }
 }
+
+/* v4.3 print/PDF visibility fix */
+@media print {
+  html,
+  body {
+    background:#fff !important;
+    color:#000 !important;
+    height:auto !important;
+    min-height:0 !important;
+    overflow:visible !important;
+    position:static !important;
+    width:100% !important;
+  }
+
+  body.menu-open,
+  body.menu-open.menu-scroll-locked,
+  body.sheet-fullscreen,
+  body.fit-mode,
+  body.dark-mode {
+    position:static !important;
+    overflow:visible !important;
+    background:#fff !important;
+  }
+
+  body.menu-open.menu-scroll-locked {
+    top:auto !important;
+    left:auto !important;
+    right:auto !important;
+    width:100% !important;
+  }
+
+  .fixed-app-header,
+  .toolbar,
+  .offline,
+  .installbox,
+  .modal,
+  .menu-toggle,
+  .exit-fullscreen-btn,
+  .menu-help-details {
+    display:none !important;
+  }
+
+  .app {
+    display:block !important;
+    max-width:none !important;
+    width:100% !important;
+    margin:0 !important;
+    padding:0 !important;
+    background:#fff !important;
+    overflow:visible !important;
+  }
+
+  body:not(.loader-plan-active) #haulingSheetWrapper {
+    display:block !important;
+    visibility:visible !important;
+    width:100% !important;
+    overflow:visible !important;
+  }
+
+  body:not(.loader-plan-active) #loaderPlanView {
+    display:none !important;
+  }
+
+  body.loader-plan-active #haulingSheetWrapper {
+    display:none !important;
+  }
+
+  body.loader-plan-active #loaderPlanView {
+    display:block !important;
+    visibility:visible !important;
+    width:100% !important;
+    overflow:visible !important;
+  }
+
+  .sheet,
+  body.sheet-fullscreen .sheet,
+  body.fit-mode .sheet {
+    display:block !important;
+    visibility:visible !important;
+    height:auto !important;
+    max-height:none !important;
+    min-height:0 !important;
+    width:100% !important;
+    max-width:100% !important;
+    overflow:visible !important;
+    margin:0 !important;
+    padding:0 !important;
+    border:0 !important;
+    box-shadow:none !important;
+    background:#fffdf8 !important;
+  }
+
+  .sheet-inner,
+  body.sheet-fullscreen .sheet-inner,
+  body.fit-mode .sheet-inner,
+  body:not(.loader-plan-active) .sheet-inner,
+  body.loader-plan-active .sheet-inner {
+    display:block !important;
+    visibility:visible !important;
+    transform:none !important;
+    transform-origin:top left !important;
+    width:100% !important;
+    max-width:100% !important;
+    height:auto !important;
+    max-height:none !important;
+    overflow:visible !important;
+    margin:0 !important;
+    padding:0 !important;
+    background:#fffdf8 !important;
+  }
+
+  #sheetTable,
+  .loader-plan-table {
+    display:table !important;
+    visibility:visible !important;
+    width:100% !important;
+    max-width:100% !important;
+    table-layout:fixed !important;
+    border-collapse:collapse !important;
+    page-break-inside:avoid !important;
+    break-inside:avoid-page !important;
+    background:#fffdf8 !important;
+  }
+
+  #sheetTable thead,
+  #sheetTable tbody,
+  #sheetTable tfoot,
+  #sheetTable tr,
+  #sheetTable th,
+  #sheetTable td,
+  .loader-plan-table thead,
+  .loader-plan-table tbody,
+  .loader-plan-table tfoot,
+  .loader-plan-table tr,
+  .loader-plan-table th,
+  .loader-plan-table td {
+    visibility:visible !important;
+    position:static !important;
+    color:#000 !important;
+    -webkit-text-fill-color:#000 !important;
+  }
+
+  #sheetTable thead th,
+  #sheetTable th,
+  #sheetTable td {
+    border:1px solid #aaa !important;
+  }
+
+  #sheetTable th,
+  #sheetTable td {
+    height:10.2px !important;
+    min-height:0 !important;
+    padding:0 !important;
+    line-height:1 !important;
+    font-size:5.8px !important;
+  }
+
+  #sheetTable thead th {
+    background:#f2f2f2 !important;
+  }
+
+  #sheetTable .source-main {
+    background:#dedede !important;
+  }
+  #sheetTable .group-anuri {
+    background:var(--yellow) !important;
+  }
+  #sheetTable .group-qaki {
+    background:var(--green) !important;
+  }
+  #sheetTable .group-pad {
+    background:var(--blue) !important;
+  }
+  #sheetTable .group-kiki {
+    background:var(--pink) !important;
+  }
+
+  #sheetTable td.ore-cell:not(:empty),
+  #sheetTable tr.selected td.ore-cell:not(:empty),
+  #sheetTable tr.next-line td.ore-cell:not(:empty) {
+    background:#fff !important;
+  }
+
+  #sheetTable tr.selected td,
+  #sheetTable tr.next-line td {
+    box-shadow:none !important;
+  }
+
+  .bucket-mark {
+    background:#111 !important;
+    height:7px !important;
+    width:2px !important;
+  }
+
+  .bucket-x {
+    color:#111 !important;
+    font-size:7px !important;
+  }
+
+  .top,
+  .foot,
+  .note,
+  .page-print-label {
+    display:flex !important;
+    visibility:visible !important;
+    max-width:100% !important;
+    overflow:visible !important;
+  }
+
+  .top {
+    display:grid !important;
+    grid-template-columns:1.65fr 1.15fr 1.1fr !important;
+    gap:2px !important;
+    margin-bottom:2px !important;
+    page-break-inside:avoid !important;
+    break-inside:avoid-page !important;
+  }
+
+  .brand-left {
+    grid-template-columns:24px minmax(0,1fr) !important;
+    gap:2px !important;
+  }
+
+  .left-logo {
+    width:22px !important;
+    height:22px !important;
+  }
+
+  .right-logo {
+    height:20px !important;
+    max-width:110px !important;
+  }
+
+  .title-box {
+    font-size:9px !important;
+    min-width:138px !important;
+    padding:1px 6px !important;
+    color:#000 !important;
+    -webkit-text-fill-color:#000 !important;
+  }
+
+  .line-input,
+  .foot input {
+    color:#000 !important;
+    -webkit-text-fill-color:#000 !important;
+    font-size:6.8px !important;
+    min-height:10px !important;
+    border-bottom:1px solid #555 !important;
+    background:transparent !important;
+  }
+
+  .sheet-name,
+  .fields,
+  .truck,
+  .foot,
+  .note,
+  .page-print-label {
+    color:#000 !important;
+    -webkit-text-fill-color:#000 !important;
+    font-size:5.8px !important;
+  }
+
+  tfoot td,
+  .total-cell {
+    background:#eef7ff !important;
+    color:#000 !important;
+    -webkit-text-fill-color:#000 !important;
+  }
+
+  @page {
+    size: landscape;
+    margin:2mm;
+  }
+}
+
+
+/* v4.4 iPhone + iPad optimization */
+:root {
+  --app-header-height: 74px;
+  --app-touch-target: 48px;
+  --app-shell-padding-x: 8px;
+}
+
+.fixed-app-header {
+  min-height:calc(var(--app-header-height) + env(safe-area-inset-top));
+}
+
+.menu-toggle,
+button {
+  touch-action:manipulation;
+}
+
+.toolbar {
+  max-width:min(980px, calc(100vw - 16px));
+  margin:0 auto;
+}
+
+.sheet {
+  width:100%;
+}
+
+/* iPhone portrait: compact header, menu easier to reach, bigger touch targets. */
+@media (max-width: 767px) {
+  :root {
+    --app-header-height: 64px;
+    --app-touch-target: 50px;
+    --app-shell-padding-x: 6px;
+  }
+
+  .app {
+    padding-top:calc(72px + env(safe-area-inset-top));
+    padding-left:var(--app-shell-padding-x);
+    padding-right:var(--app-shell-padding-x);
+  }
+
+  .fixed-app-header {
+    height:calc(var(--app-header-height) + env(safe-area-inset-top));
+    padding:calc(5px + env(safe-area-inset-top)) 8px 5px;
+    grid-template-columns:44px 1fr 32px;
+  }
+
+  .menu-toggle {
+    width:42px;
+    height:42px;
+    min-height:42px;
+    border-radius:12px;
+  }
+
+  .kiewit-header-img {
+    height:46px;
+    max-width:min(300px, 70vw);
+  }
+
+  .toolbar {
+    top:calc(var(--app-header-height) + env(safe-area-inset-top) + 6px);
+    left:6px;
+    right:6px;
+    max-height:calc(100dvh - var(--app-header-height) - env(safe-area-inset-top) - 18px);
+    padding:12px;
+    border-radius:18px;
+  }
+
+  .toolbar-layout {
+    gap:12px;
+  }
+
+  .menu-section {
+    padding:11px;
+    border-radius:15px;
+  }
+
+  .menu-grid,
+  .menu-grid.columns-3 {
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+    gap:9px;
+  }
+
+  button {
+    min-height:var(--app-touch-target);
+    font-size:15px;
+    padding:9px 10px;
+  }
+
+  .status,
+  .menu-note,
+  .menu-help-text {
+    font-size:13px;
+  }
+
+  .sheet {
+    padding:6px;
+  }
+}
+
+/* Small iPhone width: one-column menu for reliability. */
+@media (max-width: 390px) {
+  .menu-grid,
+  .menu-grid.columns-3 {
+    grid-template-columns:1fr;
+  }
+
+  .kiewit-header-img {
+    max-width:68vw;
+  }
+
+  button {
+    min-height:46px;
+  }
+}
+
+/* iPhone landscape: reduce header/menu so the sheet has room. */
+@media (max-height: 480px) and (orientation: landscape) {
+  :root {
+    --app-header-height: 48px;
+  }
+
+  .app {
+    padding-top:calc(54px + env(safe-area-inset-top));
+  }
+
+  .fixed-app-header {
+    height:calc(var(--app-header-height) + env(safe-area-inset-top));
+    padding:calc(3px + env(safe-area-inset-top)) 8px 3px;
+    grid-template-columns:38px 1fr 24px;
+  }
+
+  .menu-toggle {
+    width:36px;
+    height:36px;
+    min-height:36px;
+    border-radius:10px;
+  }
+
+  .kiewit-header-img {
+    height:34px;
+  }
+
+  .toolbar {
+    top:calc(var(--app-header-height) + env(safe-area-inset-top) + 4px);
+    max-height:calc(100dvh - var(--app-header-height) - env(safe-area-inset-top) - 10px);
+  }
+
+  .toolbar-layout {
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+  }
+
+  .menu-section.full-span,
+  .menu-section.menu-status {
+    grid-column:1 / -1;
+  }
+}
+
+/* iPad/tablet: wider menu, better use of landscape and bigger control spacing. */
+@media (min-width: 768px) {
+  :root {
+    --app-header-height: 82px;
+    --app-touch-target: 52px;
+    --app-shell-padding-x: 12px;
+  }
+
+  .app {
+    max-width:none;
+    padding-top:calc(94px + env(safe-area-inset-top));
+    padding-left:var(--app-shell-padding-x);
+    padding-right:var(--app-shell-padding-x);
+  }
+
+  .fixed-app-header {
+    height:calc(var(--app-header-height) + env(safe-area-inset-top));
+    grid-template-columns:58px 1fr 58px;
+    padding:calc(7px + env(safe-area-inset-top)) 14px 7px;
+  }
+
+  .menu-toggle {
+    width:52px;
+    height:52px;
+    min-height:52px;
+    border-radius:14px;
+    font-size:26px;
+  }
+
+  .kiewit-header-img {
+    height:64px;
+    max-width:520px;
+  }
+
+  .toolbar {
+    top:calc(var(--app-header-height) + env(safe-area-inset-top) + 10px);
+    left:50%;
+    right:auto;
+    transform:translateX(-50%);
+    width:min(980px, calc(100vw - 28px));
+    max-height:calc(100dvh - var(--app-header-height) - env(safe-area-inset-top) - 24px);
+    padding:16px;
+  }
+
+  .toolbar-layout {
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+    align-items:start;
+  }
+
+  .menu-section.full-span,
+  .menu-section.menu-status {
+    grid-column:1 / -1;
+  }
+
+  button {
+    min-height:var(--app-touch-target);
+    font-size:16px;
+  }
+
+  .sheet {
+    padding:12px;
+  }
+}
+
+/* iPad landscape/fullscreen: maximize sheet space. */
+@media (min-width: 900px) and (orientation: landscape) {
+  .toolbar-layout {
+    grid-template-columns:repeat(3, minmax(0, 1fr));
+  }
+
+  .menu-section.full-span,
+  .menu-section.menu-status {
+    grid-column:auto;
+  }
+
+  .menu-grid.columns-3 {
+    grid-template-columns:repeat(3, minmax(0, 1fr));
+  }
+
+  body.sheet-fullscreen .sheet,
+  body.fit-mode .sheet {
+    height:calc(100dvh - 12px - env(safe-area-inset-bottom));
+    max-height:calc(100dvh - 12px - env(safe-area-inset-bottom));
+  }
+}
+
+/* iPad portrait full view: leave enough visible height below the compact header. */
+@media (min-width: 768px) and (orientation: portrait) {
+  body.fit-mode .fixed-app-header {
+    height:calc(58px + env(safe-area-inset-top));
+  }
+
+  body.fit-mode .kiewit-header-img {
+    height:42px;
+  }
+
+  body.fit-mode .app {
+    padding-top:calc(68px + env(safe-area-inset-top));
+  }
+
+  body.fit-mode .sheet {
+    height:calc(100dvh - 74px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    max-height:calc(100dvh - 74px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+  }
+}
+
+/* Keyboard-friendly inputs on iPad/iPhone. */
+input,
+textarea,
+button {
+  font-size:max(16px, 1em);
+}
+
+/* Preserve compact print exactly as print CSS defines it. */
+@media print {
+  .fixed-app-header,
+  .toolbar {
+    transform:none !important;
+  }
+
+  input,
+  textarea,
+  button {
+    font-size:inherit !important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -1277,7 +1836,7 @@ body.loader-plan-active #loaderPlanView { display:block; }
 
       <section class="menu-section menu-status full-span">
         <h3 class="menu-title" id="menuSectionStatus">Statut</h3>
-        <div class="status" id="status">App prête. Les données restent sur ce téléphone. Version 4.2.</div>
+        <div class="status" id="status">App prête. Les données restent sur ce téléphone. Version 4.4.</div>
         <div class="menu-note" id="menuNote">Astuce: ouvre le menu pour les actions et ferme-le pour voir plus de feuille.</div>
         <details class="menu-help-details" id="menuHelpDetails">
           <summary id="menuHelpSummary">Aide rapide</summary>
@@ -1552,7 +2111,7 @@ body.loader-plan-active #loaderPlanView { display:block; }
       menuSectionDanger:"Réinitialisation",
       menuNote:"Astuce: ouvre le menu pour les actions et ferme-le pour voir plus de feuille.",
       menuSwipeHint:"Glisse vers le haut en bas du menu pour le fermer.",
-      statusReady:"App prête. Les données restent sur ce téléphone. Version 4.2.",
+      statusReady:"App prête. Les données restent sur ce téléphone. Version 4.4.",
       sheetName:"Feuille de transport / Hauling Sheet",
       sheetTitle:"Recette",
       voyageHeader:"Voyage",
@@ -1677,7 +2236,7 @@ body.loader-plan-active #loaderPlanView { display:block; }
       menuSectionDanger:"Reset",
       menuNote:"Tip: open the menu for actions, then close it to see more of the sheet.",
       menuSwipeHint:"Swipe up at the bottom of the menu to close it.",
-      statusReady:"App ready. Data stays on this phone. Version 4.2.",
+      statusReady:"App ready. Data stays on this phone. Version 4.4.",
       sheetName:"Hauling Sheet",
       sheetTitle:"Receipt",
       voyageHeader:"Trip",
