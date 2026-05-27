@@ -261,9 +261,9 @@ CORRECTIFS v4.7
 - Le zoom du header est bloqué; seul le plein écran ajuste la feuille.
 
 
-CORRECTIFS v4.8
-- Refonte du mode plein écran.
-- Mini barre fixe en plein écran avec burger + bouton Quitter.
-- Le menu ne déborde plus en plein écran et prend toute la largeur proprement.
-- Les en-têtes du tableau restent visibles pendant le scroll en plein écran.
-- Le bouton Quitter est plus compact et ne cache plus la feuille comme avant.
+CORRECTIFS v4.9
+- Restauration stable après le problème de mise en page.
+- La feuille s’ajuste automatiquement à la largeur de l’écran.
+- Le header ne zoome plus.
+- Les options Vue complète / Vue saisie restent cachées pour simplifier.
+- Le plein écran garde la feuille ajustée sans casser le menu.
