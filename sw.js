@@ -1,4 +1,4 @@
-const CACHE_NAME = "recette-touch-v4.4.0-ipad-iphone-optimized";
+const CACHE_NAME = "recette-touch-v4.6.0-intuitive-sheet-zoom";
 const ASSETS = [
   "./",
   "./index.html",

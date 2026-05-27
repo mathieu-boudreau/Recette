@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#111111">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Recette Touch">
@@ -252,8 +252,9 @@ body.sheet-fullscreen .sheet {
 }
 
 body.sheet-fullscreen .sheet-inner {
-  transform:none !important;
-  width:100% !important;
+  transform:scale(var(--sheet-fullscreen-scale)) !important;
+  transform-origin:top left !important;
+  width:calc(100% / var(--sheet-fullscreen-scale)) !important;
 }
 
 body.sheet-fullscreen #loaderPlanView {
@@ -1789,6 +1790,111 @@ button {
   }
 }
 
+
+/* v4.5: true fullscreen fit-width mode */
+:root {
+  --sheet-fullscreen-scale: 1;
+}
+
+body.sheet-fullscreen .sheet {
+  overflow:auto !important;
+  -webkit-overflow-scrolling:touch;
+}
+
+body.sheet-fullscreen .sheet-inner {
+  transform:scale(var(--sheet-fullscreen-scale)) !important;
+  transform-origin:top left !important;
+  width:calc(100% / var(--sheet-fullscreen-scale)) !important;
+}
+
+body.sheet-fullscreen #sheetTable {
+  min-width:1280px;
+}
+
+body.sheet-fullscreen.fit-width-active .sheet {
+  overflow:hidden auto !important;
+}
+
+body.sheet-fullscreen.fit-width-active .sheet-inner {
+  width:calc(100% / var(--sheet-fullscreen-scale)) !important;
+}
+
+@media print {
+  body.sheet-fullscreen .sheet-inner,
+  body.sheet-fullscreen.fit-width-active .sheet-inner {
+    transform:none !important;
+    width:100% !important;
+  }
+}
+
+
+/* v4.6 intuitive layout: header never zooms, only the sheet scales. */
+html, body {
+  overscroll-behavior:none;
+}
+
+.fixed-app-header,
+.toolbar,
+.exit-fullscreen-btn,
+.menu-toggle {
+  transform:none !important;
+  zoom:1 !important;
+}
+
+body.sheet-fullscreen .app {
+  padding-top:calc(8px + env(safe-area-inset-top)) !important;
+}
+
+body.sheet-fullscreen .sheet {
+  height:calc(100dvh - 58px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
+  max-height:calc(100dvh - 58px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
+  overflow:hidden auto !important;
+  -webkit-overflow-scrolling:touch;
+}
+
+body.sheet-fullscreen.fit-width-active .sheet {
+  overflow:hidden auto !important;
+}
+
+body.sheet-fullscreen .sheet-inner {
+  transform:scale(var(--sheet-fullscreen-scale, 1)) !important;
+  transform-origin:top left !important;
+  width:calc(100% / var(--sheet-fullscreen-scale, 1)) !important;
+}
+
+body.sheet-fullscreen #sheetTable {
+  min-width:1280px;
+}
+
+/* In normal mode, keep the app readable and allow normal scroll instead of many view choices. */
+body:not(.sheet-fullscreen) .sheet-inner {
+  transform:none !important;
+  width:100% !important;
+}
+
+/* Hide any old view buttons if a cached DOM keeps them around. */
+#btnFitPage,
+#btnInputView {
+  display:none !important;
+}
+
+@media print {
+  html, body {
+    overscroll-behavior:auto;
+  }
+  body.sheet-fullscreen .sheet,
+  body.sheet-fullscreen.fit-width-active .sheet {
+    height:auto !important;
+    max-height:none !important;
+    overflow:visible !important;
+  }
+  body.sheet-fullscreen .sheet-inner,
+  body.sheet-fullscreen.fit-width-active .sheet-inner {
+    transform:none !important;
+    width:100% !important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -1815,8 +1921,6 @@ button {
         <h3 class="menu-title" id="menuSectionViews">Vues et feuilles</h3>
         <div class="menu-grid">
           <button id="btnLoaderPlan">Feuille loader</button>
-          <button id="btnFitPage">Vue complète</button>
-          <button id="btnInputView">Vue saisie</button>
           <button id="btnSheetFullscreen">Plein écran feuille</button>
           <button id="btnPrint">Imprimer/PDF</button>
         </div>
@@ -1836,8 +1940,8 @@ button {
 
       <section class="menu-section menu-status full-span">
         <h3 class="menu-title" id="menuSectionStatus">Statut</h3>
-        <div class="status" id="status">App prête. Les données restent sur ce téléphone. Version 4.4.</div>
-        <div class="menu-note" id="menuNote">Astuce: ouvre le menu pour les actions et ferme-le pour voir plus de feuille.</div>
+        <div class="status" id="status">App prête. Les données restent sur ce téléphone. Version 4.6.</div>
+        <div class="menu-note" id="menuNote">Astuce: ouvre le menu pour les actions. Le plein écran ajuste automatiquement la feuille à la largeur. Le header ne zoome plus.</div>
         <details class="menu-help-details" id="menuHelpDetails">
           <summary id="menuHelpSummary">Aide rapide</summary>
           <div id="helpText" class="menu-help-text"></div>
@@ -2096,7 +2200,7 @@ button {
       pagePlus:"Page +",
       fit:"Vue complète",
       input:"Vue saisie",
-      sheetFullscreen:"Plein écran feuille",
+      sheetFullscreen:"Plein écran",
       exitFullscreen:"Quitter plein écran",
       helpSummary:"Aide rapide",
       addPage:"+ Nouvelle page",
@@ -2105,13 +2209,13 @@ button {
       printPdf:"Imprimer/PDF",
       reset:"Reset feuille",
       menuSectionQuick:"Actions rapides",
-      menuSectionViews:"Vues et feuilles",
+      menuSectionViews:"Feuille",
       menuSectionPages:"Pages",
       menuSectionStatus:"Statut",
       menuSectionDanger:"Réinitialisation",
-      menuNote:"Astuce: ouvre le menu pour les actions et ferme-le pour voir plus de feuille.",
+      menuNote:"Astuce: ouvre le menu pour les actions. Le plein écran ajuste automatiquement la feuille à la largeur. Le header ne zoome plus.",
       menuSwipeHint:"Glisse vers le haut en bas du menu pour le fermer.",
-      statusReady:"App prête. Les données restent sur ce téléphone. Version 4.4.",
+      statusReady:"App prête. Les données restent sur ce téléphone. Version 4.6.",
       sheetName:"Feuille de transport / Hauling Sheet",
       sheetTitle:"Recette",
       voyageHeader:"Voyage",
@@ -2221,7 +2325,7 @@ button {
       pagePlus:"Page +",
       fit:"Full view",
       input:"Entry view",
-      sheetFullscreen:"Sheet fullscreen",
+      sheetFullscreen:"Fullscreen",
       exitFullscreen:"Exit fullscreen",
       helpSummary:"Quick help",
       addPage:"+ New page",
@@ -2230,13 +2334,13 @@ button {
       printPdf:"Print/PDF",
       reset:"Reset sheet",
       menuSectionQuick:"Quick actions",
-      menuSectionViews:"Views and sheets",
+      menuSectionViews:"Sheet",
       menuSectionPages:"Pages",
       menuSectionStatus:"Status",
       menuSectionDanger:"Reset",
-      menuNote:"Tip: open the menu for actions, then close it to see more of the sheet.",
+      menuNote:"Tip: open the menu for actions. Fullscreen automatically fits the sheet to the screen width. The header no longer zooms.",
       menuSwipeHint:"Swipe up at the bottom of the menu to close it.",
-      statusReady:"App ready. Data stays on this phone. Version 4.4.",
+      statusReady:"App ready. Data stays on this phone. Version 4.6.",
       sheetName:"Hauling Sheet",
       sheetTitle:"Receipt",
       voyageHeader:"Trip",
@@ -2618,10 +2722,8 @@ button {
   }
 
   function updateMenuButtonStates(){
-    const fitBtn = document.getElementById('btnFitPage');
-    const inputBtn = document.getElementById('btnInputView');
-    if (fitBtn) fitBtn.classList.toggle('active', activeView === 'hauling' && viewMode === 'fit');
-    if (inputBtn) inputBtn.classList.toggle('active', activeView === 'hauling' && viewMode === 'input');
+    const fullscreenBtn = document.getElementById('btnSheetFullscreen');
+    if (fullscreenBtn) fullscreenBtn.classList.toggle('active', document.body.classList.contains('sheet-fullscreen'));
   }
 
   function setActiveView(view, silent = false){
@@ -2635,6 +2737,7 @@ button {
     updateLoaderPlanButton();
     updateMenuButtonStates();
     if (!silent) setStatus(activeView === 'loader' ? t('loaderViewStatus') : t('haulingViewStatus'));
+    if (document.body.classList.contains("sheet-fullscreen")) setTimeout(fitFullscreenSheetToWidth, 80);
     if (activeView === 'hauling' && viewMode === 'fit') setTimeout(fitFullPage, 80);
   }
 
@@ -2650,8 +2753,6 @@ button {
     setText("btnMax3", max3 ? i.maxOn : i.maxOff);
     setText("btnPrevPage", i.pageMinus);
     setText("btnNextPage", i.pagePlus);
-    setText("btnFitPage", i.fit);
-    setText("btnInputView", i.input);
     setText("btnSheetFullscreen", i.sheetFullscreen);
     setText("btnExitSheetFullscreen", i.exitFullscreen);
     setText("menuHelpSummary", i.helpSummary);
@@ -2715,6 +2816,7 @@ button {
 
     updateMetaUI();
     renderLoaderPlan();
+    if (document.body.classList.contains("sheet-fullscreen")) setTimeout(fitFullscreenSheetToWidth, 50);
   }
 
   let menuScrollY = 0;
@@ -2747,14 +2849,81 @@ button {
     try { localStorage.setItem("recette_touch_menu_open", open ? "1" : "0"); } catch(e) {}
     const toggle = document.getElementById("menuToggle");
     if (toggle) toggle.textContent = open ? t("menuClose") : t("menu");
-    if (viewMode === "fit" && activeView === "hauling") setTimeout(fitFullPage, 90);
+    if (document.body.classList.contains("sheet-fullscreen")) setTimeout(fitFullscreenSheetToWidth, 90);
   }
 
+
+
+  function fitFullscreenSheetToWidth(){
+    if (!document.body.classList.contains("sheet-fullscreen")) {
+      document.documentElement.style.setProperty("--sheet-fullscreen-scale", "1");
+      document.body.classList.remove("fit-width-active");
+      return;
+    }
+
+    const sheet = document.body.classList.contains("loader-plan-active")
+      ? document.querySelector("#loaderPlanView")
+      : document.querySelector("#haulingSheetWrapper .sheet");
+
+    const sheetInner = sheet ? sheet.querySelector(".sheet-inner") : null;
+    if (!sheet || !sheetInner) return;
+
+    document.documentElement.style.setProperty("--sheet-fullscreen-scale", "1");
+    document.body.classList.remove("fit-width-active");
+
+    const availableWidth = Math.max(320, sheet.clientWidth - 8);
+    const table = document.body.classList.contains("loader-plan-active")
+      ? sheet.querySelector(".loader-plan-table")
+      : sheet.querySelector("#sheetTable");
+
+    const contentWidth = Math.max(table ? table.scrollWidth : 1280, 1280);
+    const scale = Math.min(1, Math.max(0.22, availableWidth / contentWidth));
+
+    document.documentElement.style.setProperty("--sheet-fullscreen-scale", String(scale));
+    document.body.classList.toggle("fit-width-active", scale < 0.995);
+
+    const scaledHeight = Math.ceil(sheetInner.scrollHeight * scale + 12);
+    sheet.style.minHeight = scaledHeight + "px";
+    updateMenuButtonStates();
+  }
+
+    const sheet = document.querySelector("body.loader-plan-active #loaderPlanView, body:not(.loader-plan-active) #haulingSheetWrapper .sheet");
+    const sheetInner = sheet ? sheet.querySelector(".sheet-inner") : document.querySelector(".sheet-inner");
+    if (!sheet || !sheetInner) return;
+
+    document.documentElement.style.setProperty("--sheet-fullscreen-scale", "1");
+    document.body.classList.remove("fit-width-active");
+
+    const availableWidth = Math.max(320, sheet.clientWidth - 8);
+    const contentWidth = Math.max(1280, sheetInner.scrollWidth);
+    const scale = Math.min(1, Math.max(0.22, availableWidth / contentWidth));
+
+    document.documentElement.style.setProperty("--sheet-fullscreen-scale", String(scale));
+    document.body.classList.toggle("fit-width-active", scale < 0.995);
+
+    const scaledHeight = Math.ceil(sheetInner.scrollHeight * scale + 12);
+    sheet.style.minHeight = scaledHeight + "px";
+  }
 
   function setSheetFullscreen(active){
     document.body.classList.toggle("sheet-fullscreen", active);
     if (active) {
       setMenuOpen(false);
+      document.documentElement.style.setProperty("--sheet-fullscreen-scale", "1");
+      setTimeout(fitFullscreenSheetToWidth, 80);
+    } else {
+      document.documentElement.style.setProperty("--sheet-fullscreen-scale", "1");
+      document.body.classList.remove("fit-width-active");
+      const sheets = document.querySelectorAll(".sheet");
+      sheets.forEach(sheet => sheet.style.minHeight = "");
+    }
+    updateMenuButtonStates();
+    try { localStorage.setItem("recette_touch_sheet_fullscreen", active ? "1" : "0"); } catch(e) {}
+  } else {
+      document.documentElement.style.setProperty("--sheet-fullscreen-scale", "1");
+      document.body.classList.remove("fit-width-active");
+      const sheet = document.querySelector(".sheet");
+      if (sheet) sheet.style.minHeight = "";
       if (viewMode === "fit" && activeView === "hauling") setTimeout(fitFullPage, 80);
     }
     try { localStorage.setItem("recette_touch_sheet_fullscreen", active ? "1" : "0"); } catch(e) {}
@@ -2810,16 +2979,12 @@ button {
   }
 
   function applySavedViewMode(){
-    if (activeView === "loader") {
-      document.body.classList.remove("fit-mode");
-      applyViewScale(1);
-      return;
-    }
-    if (viewMode === "fit") {
-      setTimeout(fitFullPage, 80);
-    } else {
-      inputView();
-    }
+    // v4.6: one intuitive view system. Normal mode or sheet fullscreen only.
+    viewMode = "input";
+    localStorage.setItem("recette_touch_view_mode", viewMode);
+    document.body.classList.remove("fit-mode");
+    applyViewScale(1);
+    updateMenuButtonStates();
   }
 
 
@@ -3484,7 +3649,7 @@ button {
       selected = { row:null, type:null, key:null };
       save();
       render();
-      if (viewMode === "fit") setTimeout(fitFullPage, 80);
+      if (document.body.classList.contains("sheet-fullscreen")) setTimeout(fitFullscreenSheetToWidth, 80);
       setStatus(t("pageStatus", { current: currentPage + 1, total: state.pages.length }));
     }
   });
@@ -3494,36 +3659,14 @@ button {
       selected = { row:null, type:null, key:null };
       save();
       render();
-      if (viewMode === "fit") setTimeout(fitFullPage, 80);
+      if (document.body.classList.contains("sheet-fullscreen")) setTimeout(fitFullscreenSheetToWidth, 80);
       setStatus(t("pageStatus", { current: currentPage + 1, total: state.pages.length }));
     }
-  });
-
-  document.getElementById("btnFitPage").addEventListener("click", () => {
-    if (activeView === "loader") {
-      setStatus(t("loaderViewStatus"));
-      return;
-    }
-    viewMode = "fit";
-    localStorage.setItem("recette_touch_view_mode", viewMode);
-    updateMenuButtonStates();
-    fitFullPage();
   });
 
   document.getElementById("btnSheetFullscreen").addEventListener("click", () => setSheetFullscreen(true));
 
   document.getElementById("btnExitSheetFullscreen").addEventListener("click", () => setSheetFullscreen(false));
-
-  document.getElementById("btnInputView").addEventListener("click", () => {
-    if (activeView === "loader") {
-      setStatus(t("loaderViewStatus"));
-      return;
-    }
-    viewMode = "input";
-    localStorage.setItem("recette_touch_view_mode", viewMode);
-    updateMenuButtonStates();
-    inputView();
-  });
 
   document.getElementById("btnDarkMode").addEventListener("click", cycleDarkMode);
 
@@ -3568,8 +3711,13 @@ button {
   }
 
   window.addEventListener("resize", () => {
-    if (viewMode === "fit") setTimeout(fitFullPage, 120);
+    if (document.body.classList.contains("sheet-fullscreen")) setTimeout(fitFullscreenSheetToWidth, 120);
   });
+
+  window.addEventListener("orientationchange", () => {
+    if (document.body.classList.contains("sheet-fullscreen")) setTimeout(fitFullscreenSheetToWidth, 220);
+  });
+
 
   document.getElementById("btnAddPage").addEventListener("click", () => {
     state.pages.push(blankPage());
@@ -3577,7 +3725,7 @@ button {
     selected = { row:null, type:null, key:null };
     save();
     render();
-    if (viewMode === "fit") setTimeout(fitFullPage, 80);
+    if (document.body.classList.contains("sheet-fullscreen")) setTimeout(fitFullscreenSheetToWidth, 80);
     setStatus(t("newPage", { current: currentPage + 1, total: state.pages.length }));
   });
   document.getElementById("btnDeletePage").addEventListener("click", () => {
@@ -3592,7 +3740,7 @@ button {
     selected = { row:null, type:null, key:null };
     save();
     render();
-    if (viewMode === "fit") setTimeout(fitFullPage, 80);
+    if (document.body.classList.contains("sheet-fullscreen")) setTimeout(fitFullscreenSheetToWidth, 80);
     setStatus(t("deletedPage", { current: currentPage + 1, total: state.pages.length }));
   });
 

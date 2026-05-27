@@ -244,3 +244,18 @@ CORRECTIFS v4.4
 - Menu plus large et mieux structuré sur iPad.
 - Meilleure utilisation de l’espace en plein écran et vue complète.
 - Impression/PDF conservée en mode original.
+
+
+CORRECTIFS v4.5
+- Correction du plein écran: la feuille s’ajuste maintenant à la largeur de l’écran.
+- En plein écran, il ne devrait plus être nécessaire de glisser horizontalement pour voir les autres colonnes.
+- Le scroll reste vertical pour descendre dans les lignes.
+- Recalcul automatique quand on change orientation iPhone/iPad.
+
+
+CORRECTIFS v4.6
+- Correction du problème où le header pouvait être zoomé.
+- Suppression des options de vue redondantes: Vue complète et Vue saisie.
+- Le menu est simplifié: une seule option Plein écran pour la feuille.
+- En plein écran, seule la feuille s’ajuste à la largeur de l’écran.
+- Le header reste fixe et ne zoome plus.
