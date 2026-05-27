@@ -321,7 +321,7 @@ body.menu-open .menu-swipe-hint {
 }
 
 .installbox.show {
-  display:block;
+  display:none;
 }
 
 #haulingSheetWrapper {
@@ -371,35 +371,39 @@ body.loader-plan-active #loaderPlanView {
 }
 
 .screen-sheet-header {
-  display:block;
+  display:grid;
+  grid-template-columns:minmax(168px, .85fr) minmax(0, 2.25fr);
+  align-items:center;
+  gap:8px;
   width:100%;
   min-width:0;
   max-width:100%;
-  margin:0 0 6px;
-  padding:8px;
-  background:linear-gradient(135deg, #111 0%, #1f1f1f 100%);
-  color:#fff;
-  border:1px solid rgba(255,205,35,.38);
-  border-left:5px solid var(--kiewit-yellow);
-  box-shadow:0 6px 16px rgba(0,0,0,.22);
+  margin:0 0 4px;
+  padding:5px 8px;
+  background:linear-gradient(180deg, #fffef8 0%, #f3efe4 100%);
+  color:#111;
+  border:1px solid #d8cfb9;
+  border-left:4px solid var(--kiewit-yellow);
+  box-shadow:0 2px 8px rgba(0,0,0,.08);
 }
 
 .screen-sheet-header-top {
   display:grid;
-  grid-template-columns:52px minmax(0,1fr) minmax(92px,150px);
-  gap:8px;
+  grid-template-columns:34px minmax(0,1fr) minmax(70px,112px);
+  gap:6px;
   align-items:center;
+  min-width:0;
 }
 
 .screen-left-logo {
-  width:48px;
-  height:48px;
+  width:32px;
+  height:32px;
   object-fit:contain;
 }
 
 .screen-right-logo {
   width:100%;
-  max-height:42px;
+  max-height:26px;
   object-fit:contain;
   justify-self:end;
 }
@@ -410,80 +414,84 @@ body.loader-plan-active #loaderPlanView {
 }
 
 .screen-sheet-name {
-  margin-bottom:4px;
-  color:#f4f1e8;
-  font-size:14px;
-  line-height:1.1;
+  margin:0;
+  color:#4b4b4b;
+  font-size:10px;
+  line-height:1;
   font-weight:900;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
 
 .screen-title-box {
-  padding:2px 0;
+  padding:0;
   background:transparent;
   border:0;
-  color:var(--kiewit-yellow);
-  font-size:20px;
+  color:#111;
+  font-size:17px;
   line-height:1.1;
   font-weight:900;
 }
 
 .screen-fields {
   display:grid;
-  grid-template-columns:repeat(2, minmax(0,1fr));
-  gap:8px 10px;
-  margin-top:8px;
-  align-items:end;
+  grid-template-columns:minmax(112px,1fr) minmax(108px,1fr) minmax(112px,1fr) auto;
+  gap:7px;
+  margin-top:0;
+  align-items:center;
+  min-width:0;
 }
 
 .screen-fields label {
   display:grid;
-  grid-template-columns:auto minmax(0,1fr);
-  gap:6px;
+  grid-template-columns:max-content minmax(0,1fr);
+  gap:5px;
   align-items:center;
-  font-size:13px;
+  font-size:11px;
   font-weight:800;
-  color:#f4f1e8;
+  color:#333;
   min-width:0;
 }
 
 .screen-fields label span {
   white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
 }
 
 .screen-line-input {
   width:100%;
   min-width:0;
-  min-height:28px;
+  min-height:24px;
   border:0;
-  border-bottom:2px solid rgba(255,255,255,.48);
+  border-bottom:2px solid #777;
   border-radius:0;
   background:transparent;
   padding:2px 4px;
-  color:#fff;
-  -webkit-text-fill-color:#fff;
-  font-size:16px;
+  color:#111;
+  -webkit-text-fill-color:#111;
+  font-size:14px;
   font-weight:800;
 }
 
 .screen-truck-row {
   display:flex;
   align-items:center;
-  gap:8px;
-  color:#f4f1e8;
-  font-size:13px;
+  justify-content:flex-end;
+  gap:5px;
+  color:#333;
+  font-size:11px;
   font-weight:900;
+  white-space:nowrap;
 }
 
 .screen-truck-choice {
-  min-height:36px;
-  padding:4px 12px;
-  border:1px solid rgba(255,255,255,.35);
+  min-height:28px;
+  padding:2px 9px;
+  border:1px solid #9f9f9f;
   border-radius:8px;
-  background:rgba(255,255,255,.08);
-  color:#fff;
-  font-size:18px;
+  background:#fff;
+  color:#111;
+  font-size:15px;
   font-weight:900;
 }
 
@@ -516,7 +524,7 @@ body.loader-plan-active #loaderPlanView {
   }
 
   #haulingSheetWrapper .screen-sheet-header {
-    display:block;
+    display:grid;
   }
 }
 
@@ -1124,7 +1132,6 @@ tfoot td,
   margin-top:8px;
 }
 
-body.dark-mode .sheet,
 body.dark-mode .sheet {
   background:#141414;
   border-color:#444;
@@ -1135,6 +1142,13 @@ body.dark-mode .screen-sheet-header {
   background:linear-gradient(135deg, #0d0d0d 0%, #191919 100%);
   border-color:rgba(255,205,35,.35);
   box-shadow:0 6px 18px rgba(0,0,0,.68);
+  color:#fff;
+}
+
+body.dark-mode .screen-sheet-name,
+body.dark-mode .screen-fields label,
+body.dark-mode .screen-truck-row {
+  color:#f4f1e8;
 }
 
 body.dark-mode th,
@@ -1279,6 +1293,12 @@ body.dark-mode .screen-title-box {
   border:0;
 }
 
+body.dark-mode .screen-truck-choice {
+  background:rgba(255,255,255,.08);
+  color:#fff;
+  border-color:rgba(255,255,255,.35);
+}
+
 body.dark-mode .truck-choice,
 body.dark-mode .truck-choice {
   background:#1f1f1f;
@@ -1360,51 +1380,48 @@ body.dark-mode .panel {
   }
 
   .screen-sheet-header {
+    grid-template-columns:1fr;
     padding:6px;
-    border-left-width:4px;
   }
 
   .screen-sheet-header-top {
-    grid-template-columns:44px minmax(0,1fr) minmax(70px,110px);
+    grid-template-columns:36px minmax(0,1fr) minmax(72px,104px);
     gap:6px;
   }
 
   .screen-left-logo {
-    width:40px;
-    height:40px;
+    width:34px;
+    height:34px;
   }
 
   .screen-right-logo {
-    max-height:32px;
+    max-height:28px;
   }
 
   .screen-sheet-name {
-    font-size:12px;
+    font-size:10px;
   }
 
   .screen-title-box {
-    padding:3px 6px;
-    font-size:17px;
+    font-size:16px;
   }
 
   .screen-fields {
-    grid-template-columns:1fr;
+    grid-template-columns:repeat(2, minmax(0,1fr));
     gap:6px;
   }
 
   .screen-fields label {
-    grid-template-columns:82px minmax(0,1fr);
-    font-size:12px;
+    font-size:11px;
   }
 
   .screen-line-input {
-    min-height:26px;
-    font-size:15px;
+    min-height:24px;
+    font-size:14px;
   }
 
   .screen-truck-row {
-    justify-content:center;
-    font-size:12px;
+    justify-content:flex-start;
   }
 }
 
@@ -1460,63 +1477,61 @@ body.dark-mode .panel {
   }
 
   .screen-sheet-header {
+    grid-template-columns:minmax(130px, .7fr) minmax(0, 2.7fr);
     margin-bottom:4px;
-    padding:5px;
+    padding:3px 5px;
     border-left-width:4px;
   }
 
   .screen-sheet-header-top {
-    grid-template-columns:38px minmax(0,1fr) minmax(72px,112px);
-    gap:6px;
+    grid-template-columns:28px minmax(0,1fr) minmax(54px,74px);
+    gap:4px;
   }
 
   .screen-left-logo {
-    width:36px;
-    height:36px;
+    width:27px;
+    height:27px;
   }
 
   .screen-right-logo {
-    max-height:28px;
+    max-height:20px;
   }
 
   .screen-sheet-name {
-    margin-bottom:2px;
-    font-size:11px;
+    display:none;
   }
 
   .screen-title-box {
-    padding:2px 6px;
-    font-size:15px;
+    font-size:14px;
   }
 
   .screen-fields {
-    grid-template-columns:repeat(4, minmax(0,1fr));
-    gap:5px;
-    margin-top:5px;
+    grid-template-columns:minmax(92px, .85fr) minmax(96px, .85fr) minmax(98px, 1fr) auto;
+    gap:4px;
   }
 
   .screen-fields label {
-    grid-template-columns:auto minmax(0,1fr);
+    grid-template-columns:max-content minmax(0,1fr);
     gap:4px;
-    font-size:11px;
+    font-size:10px;
   }
 
   .screen-line-input {
-    min-height:22px;
+    min-height:20px;
     padding:1px 3px;
-    font-size:13px;
+    font-size:12px;
   }
 
   .screen-truck-row {
-    justify-content:flex-start;
+    justify-content:flex-end;
     gap:5px;
-    font-size:11px;
+    font-size:0;
   }
 
   .screen-truck-choice {
-    min-height:28px;
-    padding:2px 8px;
-    font-size:14px;
+    min-height:24px;
+    padding:1px 7px;
+    font-size:13px;
   }
 
   #sheetTable {
@@ -1630,62 +1645,63 @@ body.dark-mode .panel {
   }
 
   .screen-sheet-header {
+    grid-template-columns:minmax(112px, .65fr) minmax(0, 2.9fr);
     margin-bottom:4px;
-    padding:4px;
+    padding:3px 4px;
     border-left-width:4px;
   }
 
   .screen-sheet-header-top {
-    grid-template-columns:36px minmax(0,1fr) minmax(64px,94px);
-    gap:5px;
+    grid-template-columns:26px minmax(0,1fr) minmax(46px,66px);
+    gap:4px;
   }
 
   .screen-left-logo {
-    width:34px;
-    height:34px;
+    width:25px;
+    height:25px;
   }
 
   .screen-right-logo {
-    max-height:26px;
+    max-height:18px;
   }
 
   .screen-sheet-name {
-    font-size:11px;
-    margin-bottom:2px;
+    display:none;
   }
 
   .screen-title-box {
-    font-size:15px;
-    padding:2px 5px;
+    font-size:13px;
+    padding:0;
   }
 
   .screen-fields {
-    grid-template-columns:repeat(4, minmax(0,1fr));
-    gap:5px;
-    margin-top:5px;
+    grid-template-columns:minmax(86px, .85fr) minmax(90px, .85fr) minmax(92px, 1fr) auto;
+    gap:4px;
+    margin-top:0;
   }
 
   .screen-fields label {
-    grid-template-columns:auto minmax(0,1fr);
+    grid-template-columns:max-content minmax(0,1fr);
     gap:4px;
-    font-size:11px;
+    font-size:10px;
   }
 
   .screen-line-input {
-    min-height:22px;
-    font-size:13px;
+    min-height:20px;
+    padding:1px 3px;
+    font-size:12px;
   }
 
   .screen-truck-row {
-    justify-content:flex-start;
+    justify-content:flex-end;
     gap:5px;
-    font-size:11px;
+    font-size:0;
   }
 
   .screen-truck-choice {
-    min-height:28px;
-    padding:2px 8px;
-    font-size:14px;
+    min-height:24px;
+    padding:1px 6px;
+    font-size:13px;
   }
 
   .modal {
@@ -2114,7 +2130,7 @@ body.dark-mode .panel {
 
       <section class="menu-section menu-status full-span">
         <h3 class="menu-title" id="menuSectionStatus">Statut</h3>
-        <div class="status" id="status">App prête. Les données restent sur ce téléphone. Version 5.11.</div>
+        <div class="status" id="status">App prête. Les données restent sur ce téléphone. Version 5.12.</div>
         <div class="menu-note" id="menuNote">Astuce: ouvre le menu pour les actions et ferme-le pour voir plus de feuille.</div>
         <details class="menu-help-details" id="menuHelpDetails">
           <summary id="menuHelpSummary">Aide rapide</summary>
@@ -2398,10 +2414,6 @@ body.dark-mode .panel {
       .catch(() => setStatus(t("cacheFail")));
   }
 
-  if (!window.matchMedia("(display-mode: standalone)").matches && !navigator.standalone) {
-    document.getElementById("installBox").classList.add("show");
-  }
-
   const ORES = ["A1","A2","A3","A4 pad ore","A4 dump","Bldr Cassé A","B1","B2","B3","C1","C2","Bldr Cassé B","D1","D2","D3","D4"];
   const LOADER_PLAN_ITEMS = [...ORES, "Boulder"];
   const ROWS = 60;
@@ -2445,7 +2457,7 @@ body.dark-mode .panel {
       menuSectionDanger:"Réinitialisation",
       menuNote:"Astuce: ouvre le menu pour les actions et ferme-le pour voir plus de feuille.",
       menuSwipeHint:"Glisse vers le haut en bas du menu pour le fermer.",
-      statusReady:"App prête. Les données restent sur ce téléphone. Version 5.11.",
+      statusReady:"App prête. Les données restent sur ce téléphone. Version 5.12.",
       sheetName:"Feuille de transport / Hauling Sheet",
       sheetTitle:"Recette",
       voyageHeader:"Voyage",
@@ -2480,6 +2492,10 @@ body.dark-mode .panel {
       loaderPlanSummaryNoteWarn:"Le total visé devrait être 100% pour la soirée.",
       loaderNotes:"Notes",
       date:"Date:",
+      screenDate:"Date",
+      screenTruckNo:"Camion",
+      screenName:"Nom",
+      screenTruckType:"Type",
       truckNo:"No de Camion :",
       name:"Nom:",
       truckType:"Truck type :",
@@ -2575,7 +2591,7 @@ body.dark-mode .panel {
       menuSectionDanger:"Reset",
       menuNote:"Tip: open the menu for actions, then close it to see more of the sheet.",
       menuSwipeHint:"Swipe up at the bottom of the menu to close it.",
-      statusReady:"App ready. Data stays on this phone. Version 5.11.",
+      statusReady:"App ready. Data stays on this phone. Version 5.12.",
       sheetName:"Hauling Sheet",
       sheetTitle:"Receipt",
       voyageHeader:"Trip",
@@ -2610,6 +2626,10 @@ body.dark-mode .panel {
       loaderPlanSummaryNoteWarn:"The planned total should reach 100% for the shift.",
       loaderNotes:"Notes",
       date:"Date:",
+      screenDate:"Date",
+      screenTruckNo:"Truck #",
+      screenName:"Name",
+      screenTruckType:"Type",
       truckNo:"Truck No:",
       name:"Name:",
       truckType:"Truck type:",
@@ -2687,7 +2707,7 @@ body.dark-mode .panel {
 
 
   function resetLegacyLayoutState(){
-    const version = "v5.11-premium-responsive-field-layout";
+    const version = "v5.12-compact-operational-strip";
     try {
       if (localStorage.getItem("recette_touch_layout_version") !== version) {
         [
@@ -3030,15 +3050,15 @@ body.dark-mode .panel {
     setText("menuToggle", document.body.classList.contains("menu-open") ? i.menuClose : i.menu);
 
     setHtml("installText", i.install);
-    setHtml("helpText", i.help);
+    setHtml("helpText", i.help + "<br><br>" + i.install);
     setText("sheetName", i.sheetName);
     setText("sheetTitle", i.sheetTitle);
     setText("screenSheetName", i.sheetName);
     setText("screenSheetTitle", i.sheetTitle);
-    setText("screenLabelDate", i.date);
-    setText("screenLabelTruckNo", i.truckNo);
-    setText("screenLabelName", i.name);
-    setText("screenLabelTruckType", i.truckType);
+    setText("screenLabelDate", i.screenDate);
+    setText("screenLabelTruckNo", i.screenTruckNo);
+    setText("screenLabelName", i.screenName);
+    setText("screenLabelTruckType", i.screenTruckType);
     setText("thVoyage", i.voyageHeader);
     setHtml("thLoadingTime", i.loadingTimeHeader);
     setText("thSource", i.source);
