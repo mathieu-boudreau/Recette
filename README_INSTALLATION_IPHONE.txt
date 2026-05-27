@@ -248,16 +248,10 @@ CORRECTIFS v5.0
 - Impression/PDF conservée en mode clair original.
 
 
-CORRECTIFS v5.3
-- Refonte simple du plein écran.
-- La feuille utilise maintenant 100% de la largeur et hauteur du viewport.
-- Le tableau est mis à l’échelle pour voir toutes les colonnes sans glisser horizontalement.
-- Le header et le menu sont cachés en plein écran.
-- Bouton × compact pour quitter le plein écran.
-
-
-CORRECTIFS v5.4
-- Correction du plein écran: les en-têtes du tableau restent visibles pendant le scroll.
-- Suppression du scaling transform en plein écran, qui empêchait les en-têtes sticky de fonctionner sur iPhone.
-- Le tableau est maintenant compressé à la largeur de l’écran en CSS, donc toutes les colonnes restent visibles.
-- Bouton × compact conservé.
+CORRECTIFS v5.5
+- Vue unique stable: toutes les colonnes visibles sans glissement horizontal.
+- Suppression complète du plein écran cassé.
+- Header Kiewit stable, non zoomable.
+- Tableau compressé à la largeur de l’écran.
+- En-têtes du tableau visibles pendant le scroll.
+- Reset automatique des anciens états de plein écran/fit conservés par Safari.
