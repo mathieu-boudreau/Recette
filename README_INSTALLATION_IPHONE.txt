@@ -237,33 +237,12 @@ CORRECTIFS v4.3
 - Compatible avec mode sombre, plein écran et vue complète.
 
 
-CORRECTIFS v4.4
-- Optimisation iPhone + iPad.
-- Header et menu adaptés selon iPhone portrait, iPhone paysage, iPad portrait et iPad paysage.
-- Boutons plus confortables au toucher.
-- Menu plus large et mieux structuré sur iPad.
-- Meilleure utilisation de l’espace en plein écran et vue complète.
-- Impression/PDF conservée en mode original.
-
-
-CORRECTIFS v4.5
-- Correction du plein écran: la feuille s’ajuste maintenant à la largeur de l’écran.
-- En plein écran, il ne devrait plus être nécessaire de glisser horizontalement pour voir les autres colonnes.
-- Le scroll reste vertical pour descendre dans les lignes.
-- Recalcul automatique quand on change orientation iPhone/iPad.
-
-
-CORRECTIFS v4.7
-- Restauration stable après le bug d’interface de la version précédente.
-- Le menu burger fonctionne normalement.
-- La feuille revient à une mise en page normale.
-- Les options Vue complète / Vue saisie sont cachées pour simplifier le menu.
-- Le zoom du header est bloqué; seul le plein écran ajuste la feuille.
-
-
-CORRECTIFS v4.9
-- Restauration stable après le problème de mise en page.
-- La feuille s’ajuste automatiquement à la largeur de l’écran.
-- Le header ne zoome plus.
-- Les options Vue complète / Vue saisie restent cachées pour simplifier.
-- Le plein écran garde la feuille ajustée sans casser le menu.
+CORRECTIFS v5.0
+- Reset propre de la partie affichage.
+- Supprime automatiquement les anciens états cassés conservés par Safari/localStorage.
+- Menu burger simple et stable.
+- Header Kiewit fixe et non zoomable.
+- Feuille lisible par défaut avec scroll dans la feuille.
+- En-têtes du tableau visibles pendant le scroll dans la feuille.
+- Options Vue complète / Vue saisie / plein écran cachées pour enlever la confusion.
+- Impression/PDF conservée en mode clair original.
