@@ -1,4 +1,4 @@
-const CACHE_NAME = "recette-touch-v5.12.2-loader-header-longpress";
+const CACHE_NAME = "recette-touch-v5.12.3-loader-manual-buckets";
 const ASSETS = [
   "./",
   "./index.html",
