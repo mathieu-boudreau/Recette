@@ -1,4 +1,4 @@
-const CACHE_NAME = "recette-touch-v5.12.4-loader-bucket-percentages";
+const CACHE_NAME = "recette-touch-v5.12.5-loader-shift-workflow";
 const ASSETS = [
   "./",
   "./index.html",

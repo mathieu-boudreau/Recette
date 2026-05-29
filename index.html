@@ -949,6 +949,31 @@ tfoot td,
   font-weight:700;
 }
 
+.loader-shift-toggle {
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0, 1fr));
+  gap:6px;
+  align-items:center;
+}
+
+.loader-shift-choice {
+  min-height:28px;
+  padding:3px 8px;
+  border:1.5px solid #777;
+  border-radius:8px;
+  background:#fff;
+  color:#111;
+  font-size:13px;
+  font-weight:900;
+  touch-action:manipulation;
+}
+
+.loader-shift-choice.active {
+  background:var(--kiewit-yellow);
+  border-color:var(--kiewit-yellow);
+  color:#111;
+}
+
 #loaderPlanBlend {
   min-width:340px;
 }
@@ -988,6 +1013,14 @@ tfoot td,
 .loader-status.complete { color:#157347; }
 .loader-status.remaining { color:#b42318; }
 .loader-status.partial { color:#664d03; }
+
+.loader-plan-table tbody tr.loader-active-row td {
+  background:#fff5c2;
+}
+
+.loader-plan-table tbody tr.loader-active-row td:first-child {
+  box-shadow:inset 4px 0 0 var(--kiewit-yellow);
+}
 
 .loader-plan-table th:nth-child(1) { width:22%; }
 .loader-plan-table th:nth-child(2) { width:14%; }
@@ -1280,6 +1313,7 @@ body.dark-mode .line-input,
 body.dark-mode .screen-line-input,
 body.dark-mode .loader-plan-input,
 body.dark-mode .loader-bucket-target-input,
+body.dark-mode .loader-shift-choice,
 body.dark-mode .loader-done-tap,
 body.dark-mode .loader-notes-wrap textarea {
   background:#111;
@@ -1936,12 +1970,12 @@ body.dark-mode .panel {
   .foot input,
   .loader-plan-input,
   .loader-bucket-target-input,
+  .loader-shift-choice,
   .loader-done-tap,
   #loaderPlanNotes,
   #loaderPlanBlend,
   #loaderPlanDate,
   #loaderPlanName,
-  #loaderPlanShift,
   #loaderPlanTarget {
     min-height:10px !important;
     padding:0 1px !important;
@@ -1954,6 +1988,27 @@ body.dark-mode .panel {
     font-weight:800 !important;
     opacity:1 !important;
     line-height:1 !important;
+  }
+
+  .loader-shift-toggle {
+    display:grid !important;
+    grid-template-columns:repeat(2, minmax(0,1fr)) !important;
+    gap:2px !important;
+  }
+
+  .loader-shift-choice {
+    min-width:0 !important;
+    border:1px solid #777 !important;
+    text-align:center !important;
+    box-shadow:none !important;
+  }
+
+  .loader-shift-choice.active,
+  body.dark-mode .loader-shift-choice.active {
+    background:#fff !important;
+    border:1px solid #000 !important;
+    color:#000 !important;
+    -webkit-text-fill-color:#000 !important;
   }
 
   .truck {
@@ -2372,7 +2427,11 @@ body.dark-mode .panel {
         <div class="title">
           <div class="title-box" id="loaderSheetTitle">Feuille recette loader</div>
           <div class="fields loader-plan-title-fields">
-            <label id="labelLoaderPlanShift">Quart :</label><input class="line-input" id="loaderPlanShift" autocomplete="off">
+            <label id="labelLoaderPlanShift">Quart :</label>
+            <div class="loader-shift-toggle" role="group" aria-labelledby="labelLoaderPlanShift">
+              <button type="button" class="loader-shift-choice" id="loaderShiftDay" data-shift="day">Jour</button>
+              <button type="button" class="loader-shift-choice" id="loaderShiftNight" data-shift="night">Nuit</button>
+            </div>
             <label id="labelLoaderPlanTarget">Tonnage cible :</label><input class="line-input" id="loaderPlanTarget" autocomplete="off" placeholder="Ex: 2800 t">
           </div>
         </div>
@@ -2558,12 +2617,14 @@ body.dark-mode .panel {
       loaderPlanName:"No Loader:",
       loaderPlanOperator:"Opérateur:",
       loaderPlanShift:"Quart :",
+      loaderShiftDay:"Jour",
+      loaderShiftNight:"Nuit",
       loaderPlanTarget:"Tonnage cible :",
       loaderOre:"Minerai",
       loaderPercent:"Pourcentage",
       loaderTonnes:"Tonnes estimées",
       loaderBuckets:"Cible buckets",
-      loaderDone:"Buckets faits",
+      loaderDone:"Faits",
       loaderStatus:"Suivi",
       loaderComplete:"Complet",
       loaderRemaining:"reste",
@@ -2695,12 +2756,14 @@ body.dark-mode .panel {
       loaderPlanName:"Loader No:",
       loaderPlanOperator:"Operator:",
       loaderPlanShift:"Shift:",
+      loaderShiftDay:"Day",
+      loaderShiftNight:"Night",
       loaderPlanTarget:"Target tonnage:",
       loaderOre:"Ore",
       loaderPercent:"Percentage",
       loaderTonnes:"Estimated tonnes",
       loaderBuckets:"Bucket target",
-      loaderDone:"Buckets done",
+      loaderDone:"Done",
       loaderStatus:"Progress",
       loaderComplete:"Complete",
       loaderRemaining:"left",
@@ -2786,6 +2849,7 @@ body.dark-mode .panel {
   let selected = { row:null, type:null, key:null };
   let max3 = true;
   let loaderRow = null;
+  let loaderActiveItem = null;
   let timeRow = null;
   let datePickerPrevious = "";
   let timePickerValue = { hour:"00", minute:"00" };
@@ -2907,7 +2971,7 @@ body.dark-mode .panel {
     base.date = plan.date || "";
     base.name = plan.name || "";
     base.operator = plan.operator || "";
-    base.shift = plan.shift || "";
+    base.shift = normalizeLoaderShift(plan.shift);
     base.target = plan.target || "";
     base.notes = plan.notes || "";
     base.items = Object.assign(blankLoaderPlanItems(), plan.items || {});
@@ -2918,7 +2982,16 @@ body.dark-mode .panel {
 
   function loaderPlanState(){
     if (!state.loaderPlan) state.loaderPlan = blankLoaderPlan();
+    state.loaderPlan.shift = normalizeLoaderShift(state.loaderPlan.shift);
     return state.loaderPlan;
+  }
+
+  function normalizeLoaderShift(value){
+    const v = String(value || "").trim().toLowerCase();
+    if (!v) return "";
+    if (["day", "jour", "j", "d"].includes(v)) return "day";
+    if (["night", "nuit", "n"].includes(v)) return "night";
+    return "";
   }
 
   function cleanPercentValue(value){
@@ -3070,7 +3143,6 @@ body.dark-mode .panel {
       loaderPlanDate: plan.date || '',
       loaderPlanName: plan.name || '',
       loaderPlanOperator: plan.operator || '',
-      loaderPlanShift: plan.shift || '',
       loaderPlanTarget: plan.target || '',
       loaderPlanNotes: plan.notes || ''
     };
@@ -3091,7 +3163,27 @@ body.dark-mode .panel {
       const value = Number.isFinite(raw) && raw > 0 ? raw : 0;
       btn.textContent = String(value);
     });
+    renderLoaderShift();
+    setLoaderActiveItem(loaderActiveItem);
     updateLoaderPlanDerived();
+  }
+
+  function renderLoaderShift(){
+    const plan = loaderPlanState();
+    document.querySelectorAll('.loader-shift-choice').forEach(btn => {
+      const active = btn.dataset.shift === plan.shift;
+      btn.classList.toggle('active', active);
+      btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+  }
+
+  function setLoaderActiveItem(item){
+    loaderActiveItem = item || null;
+    document.querySelectorAll('.loader-plan-table tbody tr').forEach(tr => {
+      const field = tr.querySelector('[data-target-buckets], .loader-done-tap');
+      const rowItem = field?.dataset?.targetBuckets || field?.dataset?.done || "";
+      tr.classList.toggle('loader-active-row', Boolean(loaderActiveItem && rowItem === loaderActiveItem));
+    });
   }
 
   function saveLoaderPlanFromInputs(){
@@ -3099,7 +3191,7 @@ body.dark-mode .panel {
     plan.date = document.getElementById('loaderPlanDate')?.value || '';
     plan.name = document.getElementById('loaderPlanName')?.value || '';
     plan.operator = document.getElementById('loaderPlanOperator')?.value || '';
-    plan.shift = document.getElementById('loaderPlanShift')?.value || '';
+    plan.shift = normalizeLoaderShift(plan.shift);
     plan.target = document.getElementById('loaderPlanTarget')?.value || '';
     plan.notes = document.getElementById('loaderPlanNotes')?.value || '';
     document.querySelectorAll('.loader-plan-input').forEach(input => {
@@ -3108,6 +3200,7 @@ body.dark-mode .panel {
     });
     if (!plan.manualTargets) plan.manualTargets = blankLoaderPlanManualTargets();
     document.querySelectorAll('.loader-bucket-target-input').forEach(input => {
+      if (document.activeElement === input) setLoaderActiveItem(input.dataset.targetBuckets);
       plan.manualTargets[input.dataset.targetBuckets] = cleanBucketTargetValue(input.value);
       if (input.value !== plan.manualTargets[input.dataset.targetBuckets]) input.value = plan.manualTargets[input.dataset.targetBuckets];
     });
@@ -3194,6 +3287,8 @@ body.dark-mode .panel {
     setText("labelLoaderPlanName", i.loaderPlanName);
     setText("labelLoaderPlanOperator", i.loaderPlanOperator);
     setText("labelLoaderPlanShift", i.loaderPlanShift);
+    setText("loaderShiftDay", i.loaderShiftDay);
+    setText("loaderShiftNight", i.loaderShiftNight);
     setText("labelLoaderPlanTarget", i.loaderPlanTarget);
     setText("thLoaderOre", i.loaderOre);
     setText("thLoaderPercent", i.loaderPercent);
@@ -3988,16 +4083,26 @@ body.dark-mode .panel {
   // Ces champs ne sont plus saisis manuellement.
 
 
-  ["loaderPlanDate","loaderPlanName","loaderPlanOperator","loaderPlanShift","loaderPlanTarget","loaderPlanNotes"].forEach(id => {
+  ["loaderPlanDate","loaderPlanName","loaderPlanOperator","loaderPlanTarget","loaderPlanNotes"].forEach(id => {
     const el = document.getElementById(id);
     if (!el) return;
     el.addEventListener('input', saveLoaderPlanFromInputs);
+  });
+  document.querySelectorAll('.loader-shift-choice').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const plan = loaderPlanState();
+      plan.shift = btn.dataset.shift;
+      save();
+      renderLoaderShift();
+    });
   });
   document.querySelectorAll('.loader-plan-input').forEach(input => {
     input.addEventListener('input', saveLoaderPlanFromInputs);
   });
   document.querySelectorAll('.loader-bucket-target-input').forEach(input => {
     input.addEventListener('input', saveLoaderPlanFromInputs);
+    input.addEventListener('focus', () => setLoaderActiveItem(input.dataset.targetBuckets));
+    input.addEventListener('click', () => setLoaderActiveItem(input.dataset.targetBuckets));
   });
   let loaderDonePressTimer = null;
   let loaderDoneLongPressHandled = false;
@@ -4008,6 +4113,7 @@ body.dark-mode .panel {
   }
 
   function adjustLoaderDone(item, delta){
+    setLoaderActiveItem(item);
     const plan = loaderPlanState();
     const current = Number(String(plan.done[item] || '').replace(',', '.')) || 0;
     const target = getLoaderTargetBuckets(item);
@@ -4030,6 +4136,7 @@ body.dark-mode .panel {
       adjustLoaderDone(item, 1);
     });
     const start = () => {
+      setLoaderActiveItem(item);
       loaderDoneLongPressHandled = false;
       clearTimeout(loaderDonePressTimer);
       loaderDonePressTimer = setTimeout(() => {
