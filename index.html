@@ -953,9 +953,9 @@ tfoot td,
   min-width:340px;
 }
 
+.loader-percent,
 .loader-tonnes,
 .loader-buckets,
-.loader-manual-buckets,
 .loader-status {
   background:#fffdf8;
   font-weight:800;
@@ -989,13 +989,12 @@ tfoot td,
 .loader-status.remaining { color:#b42318; }
 .loader-status.partial { color:#664d03; }
 
-.loader-plan-table th:nth-child(1) { width:20%; }
-.loader-plan-table th:nth-child(2) { width:10%; }
-.loader-plan-table th:nth-child(3) { width:14%; }
-.loader-plan-table th:nth-child(4) { width:12%; }
+.loader-plan-table th:nth-child(1) { width:22%; }
+.loader-plan-table th:nth-child(2) { width:14%; }
+.loader-plan-table th:nth-child(3) { width:13%; }
+.loader-plan-table th:nth-child(4) { width:15%; }
 .loader-plan-table th:nth-child(5) { width:14%; }
-.loader-plan-table th:nth-child(6) { width:12%; }
-.loader-plan-table th:nth-child(7) { width:18%; }
+.loader-plan-table th:nth-child(6) { width:22%; }
 
 #loaderPercentTotal.ok { color:#157347; }
 #loaderPercentTotal.warn { color:#b42318; }
@@ -2387,40 +2386,38 @@ body.dark-mode .panel {
         <thead>
           <tr>
             <th id="thLoaderOre">Minerai</th>
-            <th id="thLoaderPercent">%</th>
-            <th id="thLoaderTonnes">Tonnes estimées</th>
             <th id="thLoaderBuckets">Cible buckets</th>
-            <th id="thLoaderManualBuckets">Cible manuelle</th>
+            <th id="thLoaderPercent">Pourcentage</th>
+            <th id="thLoaderTonnes">Tonnes estimées</th>
             <th id="thLoaderDone">Buckets faits</th>
             <th id="thLoaderStatus">Suivi</th>
           </tr>
         </thead>
         <tbody>
-          <tr><td>A1</td><td><input class="loader-plan-input" data-item="A1" inputmode="decimal" autocomplete="off"></td><td class="loader-tonnes" data-tonnes="A1"></td><td class="loader-buckets" data-buckets="A1"></td><td class="loader-manual-buckets"><input class="loader-bucket-target-input" data-target-buckets="A1" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></td><td><button type="button" class="loader-done-tap" data-done="A1">0</button></td><td class="loader-status" data-status="A1"></td></tr>
-          <tr><td>A2</td><td><input class="loader-plan-input" data-item="A2" inputmode="decimal" autocomplete="off"></td><td class="loader-tonnes" data-tonnes="A2"></td><td class="loader-buckets" data-buckets="A2"></td><td class="loader-manual-buckets"><input class="loader-bucket-target-input" data-target-buckets="A2" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></td><td><button type="button" class="loader-done-tap" data-done="A2">0</button></td><td class="loader-status" data-status="A2"></td></tr>
-          <tr><td>A3</td><td><input class="loader-plan-input" data-item="A3" inputmode="decimal" autocomplete="off"></td><td class="loader-tonnes" data-tonnes="A3"></td><td class="loader-buckets" data-buckets="A3"></td><td class="loader-manual-buckets"><input class="loader-bucket-target-input" data-target-buckets="A3" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></td><td><button type="button" class="loader-done-tap" data-done="A3">0</button></td><td class="loader-status" data-status="A3"></td></tr>
-          <tr><td>A4 pad ore</td><td><input class="loader-plan-input" data-item="A4 pad ore" inputmode="decimal" autocomplete="off"></td><td class="loader-tonnes" data-tonnes="A4 pad ore"></td><td class="loader-buckets" data-buckets="A4 pad ore"></td><td class="loader-manual-buckets"><input class="loader-bucket-target-input" data-target-buckets="A4 pad ore" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></td><td><button type="button" class="loader-done-tap" data-done="A4 pad ore">0</button></td><td class="loader-status" data-status="A4 pad ore"></td></tr>
-          <tr><td>A4 dump</td><td><input class="loader-plan-input" data-item="A4 dump" inputmode="decimal" autocomplete="off"></td><td class="loader-tonnes" data-tonnes="A4 dump"></td><td class="loader-buckets" data-buckets="A4 dump"></td><td class="loader-manual-buckets"><input class="loader-bucket-target-input" data-target-buckets="A4 dump" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></td><td><button type="button" class="loader-done-tap" data-done="A4 dump">0</button></td><td class="loader-status" data-status="A4 dump"></td></tr>
-          <tr><td>Bldr Cassé A</td><td><input class="loader-plan-input" data-item="Bldr Cassé A" inputmode="decimal" autocomplete="off"></td><td class="loader-tonnes" data-tonnes="Bldr Cassé A"></td><td class="loader-buckets" data-buckets="Bldr Cassé A"></td><td class="loader-manual-buckets"><input class="loader-bucket-target-input" data-target-buckets="Bldr Cassé A" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></td><td><button type="button" class="loader-done-tap" data-done="Bldr Cassé A">0</button></td><td class="loader-status" data-status="Bldr Cassé A"></td></tr>
-          <tr><td>B1</td><td><input class="loader-plan-input" data-item="B1" inputmode="decimal" autocomplete="off"></td><td class="loader-tonnes" data-tonnes="B1"></td><td class="loader-buckets" data-buckets="B1"></td><td class="loader-manual-buckets"><input class="loader-bucket-target-input" data-target-buckets="B1" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></td><td><button type="button" class="loader-done-tap" data-done="B1">0</button></td><td class="loader-status" data-status="B1"></td></tr>
-          <tr><td>B2</td><td><input class="loader-plan-input" data-item="B2" inputmode="decimal" autocomplete="off"></td><td class="loader-tonnes" data-tonnes="B2"></td><td class="loader-buckets" data-buckets="B2"></td><td class="loader-manual-buckets"><input class="loader-bucket-target-input" data-target-buckets="B2" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></td><td><button type="button" class="loader-done-tap" data-done="B2">0</button></td><td class="loader-status" data-status="B2"></td></tr>
-          <tr><td>B3</td><td><input class="loader-plan-input" data-item="B3" inputmode="decimal" autocomplete="off"></td><td class="loader-tonnes" data-tonnes="B3"></td><td class="loader-buckets" data-buckets="B3"></td><td class="loader-manual-buckets"><input class="loader-bucket-target-input" data-target-buckets="B3" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></td><td><button type="button" class="loader-done-tap" data-done="B3">0</button></td><td class="loader-status" data-status="B3"></td></tr>
-          <tr><td>C1</td><td><input class="loader-plan-input" data-item="C1" inputmode="decimal" autocomplete="off"></td><td class="loader-tonnes" data-tonnes="C1"></td><td class="loader-buckets" data-buckets="C1"></td><td class="loader-manual-buckets"><input class="loader-bucket-target-input" data-target-buckets="C1" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></td><td><button type="button" class="loader-done-tap" data-done="C1">0</button></td><td class="loader-status" data-status="C1"></td></tr>
-          <tr><td>C2</td><td><input class="loader-plan-input" data-item="C2" inputmode="decimal" autocomplete="off"></td><td class="loader-tonnes" data-tonnes="C2"></td><td class="loader-buckets" data-buckets="C2"></td><td class="loader-manual-buckets"><input class="loader-bucket-target-input" data-target-buckets="C2" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></td><td><button type="button" class="loader-done-tap" data-done="C2">0</button></td><td class="loader-status" data-status="C2"></td></tr>
-          <tr><td>Bldr Cassé B</td><td><input class="loader-plan-input" data-item="Bldr Cassé B" inputmode="decimal" autocomplete="off"></td><td class="loader-tonnes" data-tonnes="Bldr Cassé B"></td><td class="loader-buckets" data-buckets="Bldr Cassé B"></td><td class="loader-manual-buckets"><input class="loader-bucket-target-input" data-target-buckets="Bldr Cassé B" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></td><td><button type="button" class="loader-done-tap" data-done="Bldr Cassé B">0</button></td><td class="loader-status" data-status="Bldr Cassé B"></td></tr>
-          <tr><td>D1</td><td><input class="loader-plan-input" data-item="D1" inputmode="decimal" autocomplete="off"></td><td class="loader-tonnes" data-tonnes="D1"></td><td class="loader-buckets" data-buckets="D1"></td><td class="loader-manual-buckets"><input class="loader-bucket-target-input" data-target-buckets="D1" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></td><td><button type="button" class="loader-done-tap" data-done="D1">0</button></td><td class="loader-status" data-status="D1"></td></tr>
-          <tr><td>D2</td><td><input class="loader-plan-input" data-item="D2" inputmode="decimal" autocomplete="off"></td><td class="loader-tonnes" data-tonnes="D2"></td><td class="loader-buckets" data-buckets="D2"></td><td class="loader-manual-buckets"><input class="loader-bucket-target-input" data-target-buckets="D2" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></td><td><button type="button" class="loader-done-tap" data-done="D2">0</button></td><td class="loader-status" data-status="D2"></td></tr>
-          <tr><td>D3</td><td><input class="loader-plan-input" data-item="D3" inputmode="decimal" autocomplete="off"></td><td class="loader-tonnes" data-tonnes="D3"></td><td class="loader-buckets" data-buckets="D3"></td><td class="loader-manual-buckets"><input class="loader-bucket-target-input" data-target-buckets="D3" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></td><td><button type="button" class="loader-done-tap" data-done="D3">0</button></td><td class="loader-status" data-status="D3"></td></tr>
-          <tr><td>D4</td><td><input class="loader-plan-input" data-item="D4" inputmode="decimal" autocomplete="off"></td><td class="loader-tonnes" data-tonnes="D4"></td><td class="loader-buckets" data-buckets="D4"></td><td class="loader-manual-buckets"><input class="loader-bucket-target-input" data-target-buckets="D4" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></td><td><button type="button" class="loader-done-tap" data-done="D4">0</button></td><td class="loader-status" data-status="D4"></td></tr>
-          <tr><td>Boulder</td><td><input class="loader-plan-input" data-item="Boulder" inputmode="decimal" autocomplete="off"></td><td class="loader-tonnes" data-tonnes="Boulder"></td><td class="loader-buckets" data-buckets="Boulder"></td><td class="loader-manual-buckets"><input class="loader-bucket-target-input" data-target-buckets="Boulder" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></td><td><button type="button" class="loader-done-tap" data-done="Boulder">0</button></td><td class="loader-status" data-status="Boulder"></td></tr>
+          <tr><td>A1</td><td class="loader-buckets"><input class="loader-bucket-target-input" data-target-buckets="A1" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></td><td class="loader-percent" data-percent="A1"></td><td class="loader-tonnes" data-tonnes="A1"></td><td><button type="button" class="loader-done-tap" data-done="A1">0</button></td><td class="loader-status" data-status="A1"></td></tr>
+          <tr><td>A2</td><td class="loader-buckets"><input class="loader-bucket-target-input" data-target-buckets="A2" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></td><td class="loader-percent" data-percent="A2"></td><td class="loader-tonnes" data-tonnes="A2"></td><td><button type="button" class="loader-done-tap" data-done="A2">0</button></td><td class="loader-status" data-status="A2"></td></tr>
+          <tr><td>A3</td><td class="loader-buckets"><input class="loader-bucket-target-input" data-target-buckets="A3" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></td><td class="loader-percent" data-percent="A3"></td><td class="loader-tonnes" data-tonnes="A3"></td><td><button type="button" class="loader-done-tap" data-done="A3">0</button></td><td class="loader-status" data-status="A3"></td></tr>
+          <tr><td>A4 pad ore</td><td class="loader-buckets"><input class="loader-bucket-target-input" data-target-buckets="A4 pad ore" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></td><td class="loader-percent" data-percent="A4 pad ore"></td><td class="loader-tonnes" data-tonnes="A4 pad ore"></td><td><button type="button" class="loader-done-tap" data-done="A4 pad ore">0</button></td><td class="loader-status" data-status="A4 pad ore"></td></tr>
+          <tr><td>A4 dump</td><td class="loader-buckets"><input class="loader-bucket-target-input" data-target-buckets="A4 dump" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></td><td class="loader-percent" data-percent="A4 dump"></td><td class="loader-tonnes" data-tonnes="A4 dump"></td><td><button type="button" class="loader-done-tap" data-done="A4 dump">0</button></td><td class="loader-status" data-status="A4 dump"></td></tr>
+          <tr><td>Bldr Cassé A</td><td class="loader-buckets"><input class="loader-bucket-target-input" data-target-buckets="Bldr Cassé A" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></td><td class="loader-percent" data-percent="Bldr Cassé A"></td><td class="loader-tonnes" data-tonnes="Bldr Cassé A"></td><td><button type="button" class="loader-done-tap" data-done="Bldr Cassé A">0</button></td><td class="loader-status" data-status="Bldr Cassé A"></td></tr>
+          <tr><td>B1</td><td class="loader-buckets"><input class="loader-bucket-target-input" data-target-buckets="B1" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></td><td class="loader-percent" data-percent="B1"></td><td class="loader-tonnes" data-tonnes="B1"></td><td><button type="button" class="loader-done-tap" data-done="B1">0</button></td><td class="loader-status" data-status="B1"></td></tr>
+          <tr><td>B2</td><td class="loader-buckets"><input class="loader-bucket-target-input" data-target-buckets="B2" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></td><td class="loader-percent" data-percent="B2"></td><td class="loader-tonnes" data-tonnes="B2"></td><td><button type="button" class="loader-done-tap" data-done="B2">0</button></td><td class="loader-status" data-status="B2"></td></tr>
+          <tr><td>B3</td><td class="loader-buckets"><input class="loader-bucket-target-input" data-target-buckets="B3" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></td><td class="loader-percent" data-percent="B3"></td><td class="loader-tonnes" data-tonnes="B3"></td><td><button type="button" class="loader-done-tap" data-done="B3">0</button></td><td class="loader-status" data-status="B3"></td></tr>
+          <tr><td>C1</td><td class="loader-buckets"><input class="loader-bucket-target-input" data-target-buckets="C1" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></td><td class="loader-percent" data-percent="C1"></td><td class="loader-tonnes" data-tonnes="C1"></td><td><button type="button" class="loader-done-tap" data-done="C1">0</button></td><td class="loader-status" data-status="C1"></td></tr>
+          <tr><td>C2</td><td class="loader-buckets"><input class="loader-bucket-target-input" data-target-buckets="C2" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></td><td class="loader-percent" data-percent="C2"></td><td class="loader-tonnes" data-tonnes="C2"></td><td><button type="button" class="loader-done-tap" data-done="C2">0</button></td><td class="loader-status" data-status="C2"></td></tr>
+          <tr><td>Bldr Cassé B</td><td class="loader-buckets"><input class="loader-bucket-target-input" data-target-buckets="Bldr Cassé B" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></td><td class="loader-percent" data-percent="Bldr Cassé B"></td><td class="loader-tonnes" data-tonnes="Bldr Cassé B"></td><td><button type="button" class="loader-done-tap" data-done="Bldr Cassé B">0</button></td><td class="loader-status" data-status="Bldr Cassé B"></td></tr>
+          <tr><td>D1</td><td class="loader-buckets"><input class="loader-bucket-target-input" data-target-buckets="D1" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></td><td class="loader-percent" data-percent="D1"></td><td class="loader-tonnes" data-tonnes="D1"></td><td><button type="button" class="loader-done-tap" data-done="D1">0</button></td><td class="loader-status" data-status="D1"></td></tr>
+          <tr><td>D2</td><td class="loader-buckets"><input class="loader-bucket-target-input" data-target-buckets="D2" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></td><td class="loader-percent" data-percent="D2"></td><td class="loader-tonnes" data-tonnes="D2"></td><td><button type="button" class="loader-done-tap" data-done="D2">0</button></td><td class="loader-status" data-status="D2"></td></tr>
+          <tr><td>D3</td><td class="loader-buckets"><input class="loader-bucket-target-input" data-target-buckets="D3" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></td><td class="loader-percent" data-percent="D3"></td><td class="loader-tonnes" data-tonnes="D3"></td><td><button type="button" class="loader-done-tap" data-done="D3">0</button></td><td class="loader-status" data-status="D3"></td></tr>
+          <tr><td>D4</td><td class="loader-buckets"><input class="loader-bucket-target-input" data-target-buckets="D4" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></td><td class="loader-percent" data-percent="D4"></td><td class="loader-tonnes" data-tonnes="D4"></td><td><button type="button" class="loader-done-tap" data-done="D4">0</button></td><td class="loader-status" data-status="D4"></td></tr>
+          <tr><td>Boulder</td><td class="loader-buckets"><input class="loader-bucket-target-input" data-target-buckets="Boulder" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></td><td class="loader-percent" data-percent="Boulder"></td><td class="loader-tonnes" data-tonnes="Boulder"></td><td><button type="button" class="loader-done-tap" data-done="Boulder">0</button></td><td class="loader-status" data-status="Boulder"></td></tr>
         </tbody>
         <tfoot>
           <tr>
-            <td id="loaderPercentTotalLabel">Total %</td>
+            <td id="loaderTargetTotalLabel">Total cible</td>
+            <td id="loaderManualBucketTotal">0</td>
             <td id="loaderPercentTotal">0%</td>
             <td id="loaderTonnageTotal">0 t</td>
-            <td id="loaderBucketTotal">0</td>
-            <td id="loaderManualBucketTotal">0</td>
             <td id="loaderDoneTotal">0</td>
             <td id="loaderOverallStatus"></td>
           </tr>
@@ -2565,8 +2562,7 @@ body.dark-mode .panel {
       loaderOre:"Minerai",
       loaderPercent:"Pourcentage",
       loaderTonnes:"Tonnes estimées",
-      loaderBuckets:"Cible calc.",
-      loaderManualBuckets:"Cible buckets",
+      loaderBuckets:"Cible buckets",
       loaderDone:"Buckets faits",
       loaderStatus:"Suivi",
       loaderComplete:"Complet",
@@ -2576,9 +2572,10 @@ body.dark-mode .panel {
       loaderOverallRemaining:"reste",
       loaderTapHint:"1 tap = +1 bucket, appui long = -1 bucket",
       loaderPercentTotal:"Total %",
+      loaderTargetTotal:"Total cible",
       loaderBlend:"Recette totale :",
-      loaderPlanSummaryNoteOk:"Le total visé est complet à 100%.",
-      loaderPlanSummaryNoteWarn:"Le total visé devrait être 100% pour la soirée.",
+      loaderPlanSummaryNoteOk:"Les pourcentages sont calculés automatiquement depuis les buckets.",
+      loaderPlanSummaryNoteWarn:"Entre les cibles buckets pour calculer la recette.",
       loaderNotes:"Notes",
       date:"Date:",
       screenDate:"Date",
@@ -2702,8 +2699,7 @@ body.dark-mode .panel {
       loaderOre:"Ore",
       loaderPercent:"Percentage",
       loaderTonnes:"Estimated tonnes",
-      loaderBuckets:"Calc. target",
-      loaderManualBuckets:"Bucket target",
+      loaderBuckets:"Bucket target",
       loaderDone:"Buckets done",
       loaderStatus:"Progress",
       loaderComplete:"Complete",
@@ -2713,9 +2709,10 @@ body.dark-mode .panel {
       loaderOverallRemaining:"left",
       loaderTapHint:"Tap = +1 bucket, long press = -1 bucket",
       loaderPercentTotal:"Total %",
+      loaderTargetTotal:"Target total",
       loaderBlend:"Full recipe:",
-      loaderPlanSummaryNoteOk:"The planned total is complete at 100%.",
-      loaderPlanSummaryNoteWarn:"The planned total should reach 100% for the shift.",
+      loaderPlanSummaryNoteOk:"Percentages are calculated automatically from bucket targets.",
+      loaderPlanSummaryNoteWarn:"Enter bucket targets to calculate the recipe.",
       loaderNotes:"Notes",
       date:"Date:",
       screenDate:"Date",
@@ -2950,12 +2947,15 @@ body.dark-mode .panel {
   }
 
   function buildLoaderPlanBlend(plan){
+    const totalTarget = LOADER_PLAN_ITEMS.reduce((sum, item) => sum + parseBucketTarget(plan.manualTargets?.[item]), 0);
+    if (totalTarget <= 0) return "";
+
     return LOADER_PLAN_ITEMS
       .map(item => {
-        const raw = plan.items[item];
-        const n = Number(String(raw).replace(',', '.'));
-        if (!Number.isFinite(n) || n <= 0) return "";
-        return `${item} ${formatPercentValue(n)}%`;
+        const target = parseBucketTarget(plan.manualTargets?.[item]);
+        if (target <= 0) return "";
+        const percent = target / totalTarget * 100;
+        return `${item} ${formatPercentValue(percent)}%`;
       })
       .filter(Boolean)
       .join(" | ");
@@ -2976,47 +2976,35 @@ body.dark-mode .panel {
   function updateLoaderPlanDerived(){
     const plan = loaderPlanState();
     const targetTonnage = parseTonnage(plan.target);
-    const bucketTonnage = 40 / 3;
+    const totalTargetBuckets = LOADER_PLAN_ITEMS.reduce((sum, item) => sum + parseBucketTarget(plan.manualTargets?.[item]), 0);
 
-    let total = 0;
+    let totalPercent = 0;
     let totalEstimatedTonnes = 0;
-    let totalEstimatedBuckets = 0;
-    let totalRoundedTargetBuckets = 0;
-    let totalManualTargetBuckets = 0;
-    let totalEffectiveTargetBuckets = 0;
     let totalDoneBuckets = 0;
     let totalRemainingBuckets = 0;
 
     LOADER_PLAN_ITEMS.forEach(item => {
-      const pct = Number(String(plan.items[item] || '').replace(',', '.'));
-      const safePct = Number.isFinite(pct) ? pct : 0;
-      total += safePct;
-
-      const tonnes = targetTonnage > 0 ? (targetTonnage * safePct / 100) : 0;
-      const bucketsExact = tonnes > 0 ? (tonnes / bucketTonnage) : 0;
-      const calculatedTarget = bucketsExact > 0 ? Math.max(1, Math.round(bucketsExact)) : 0;
       const manualTarget = parseBucketTarget(plan.manualTargets?.[item]);
-      const bucketTarget = manualTarget > 0 ? manualTarget : calculatedTarget;
+      const percent = totalTargetBuckets > 0 && manualTarget > 0 ? (manualTarget / totalTargetBuckets * 100) : 0;
+      const tonnes = targetTonnage > 0 && percent > 0 ? (targetTonnage * percent / 100) : 0;
+      const bucketTarget = manualTarget;
       const done = Number(String(plan.done[item] || '').replace(',', '.'));
       const doneBuckets = Number.isFinite(done) ? done : 0;
       const remaining = Math.max(0, bucketTarget - doneBuckets);
       const over = doneBuckets > bucketTarget && bucketTarget > 0 ? doneBuckets - bucketTarget : 0;
 
+      totalPercent += percent;
       totalEstimatedTonnes += tonnes;
-      totalEstimatedBuckets += bucketsExact;
-      totalRoundedTargetBuckets += calculatedTarget;
-      totalManualTargetBuckets += manualTarget;
-      totalEffectiveTargetBuckets += bucketTarget;
       totalDoneBuckets += doneBuckets;
       totalRemainingBuckets += remaining;
 
+      const percentCell = document.querySelector('[data-percent="' + item + '"]');
       const tonnesCell = document.querySelector('[data-tonnes="' + item + '"]');
-      const bucketsCell = document.querySelector('[data-buckets="' + item + '"]');
       const statusCell = document.querySelector('[data-status="' + item + '"]');
       const doneBtn = document.querySelector('.loader-done-tap[data-done="' + item + '"]');
 
+      if (percentCell) percentCell.textContent = percent > 0 ? formatPercentValue(percent) + '%' : '';
       if (tonnesCell) tonnesCell.textContent = tonnes > 0 ? formatEstimatedNumber(tonnes, 1) + ' t' : '';
-      if (bucketsCell) bucketsCell.textContent = bucketTarget > 0 ? String(bucketTarget) : '';
       if (doneBtn) {
         doneBtn.textContent = String(doneBuckets);
         doneBtn.classList.toggle('complete', bucketTarget > 0 && doneBuckets >= bucketTarget);
@@ -3041,19 +3029,16 @@ body.dark-mode .panel {
 
     const totalEl = document.getElementById('loaderPercentTotal');
     if (totalEl) {
-      totalEl.textContent = formatPercentValue(total) + '%';
-      totalEl.classList.toggle('ok', Math.abs(total - 100) < 0.05);
-      totalEl.classList.toggle('warn', Math.abs(total - 100) >= 0.05);
+      totalEl.textContent = totalTargetBuckets > 0 ? formatPercentValue(totalPercent) + '%' : '0%';
+      totalEl.classList.toggle('ok', totalTargetBuckets > 0 && Math.abs(totalPercent - 100) < 0.05);
+      totalEl.classList.toggle('warn', totalTargetBuckets <= 0);
     }
 
     const tonnageTotal = document.getElementById('loaderTonnageTotal');
     if (tonnageTotal) tonnageTotal.textContent = totalEstimatedTonnes > 0 ? formatEstimatedNumber(totalEstimatedTonnes, 1) + ' t' : '0 t';
 
-    const bucketTotal = document.getElementById('loaderBucketTotal');
-    if (bucketTotal) bucketTotal.textContent = totalRoundedTargetBuckets > 0 ? String(totalRoundedTargetBuckets) : '0';
-
     const manualBucketTotal = document.getElementById('loaderManualBucketTotal');
-    if (manualBucketTotal) manualBucketTotal.textContent = totalManualTargetBuckets > 0 ? String(totalManualTargetBuckets) : '0';
+    if (manualBucketTotal) manualBucketTotal.textContent = totalTargetBuckets > 0 ? String(totalTargetBuckets) : '0';
 
     const doneTotal = document.getElementById('loaderDoneTotal');
     if (doneTotal) doneTotal.textContent = totalDoneBuckets > 0 ? formatEstimatedNumber(totalDoneBuckets, 1) : '0';
@@ -3061,13 +3046,13 @@ body.dark-mode .panel {
     const overall = document.getElementById('loaderOverallStatus');
     if (overall) {
       overall.classList.remove('complete', 'remaining', 'partial');
-      if (totalEffectiveTargetBuckets <= 0) {
+      if (totalTargetBuckets <= 0) {
         overall.textContent = '';
       } else if (totalRemainingBuckets <= 0) {
         overall.textContent = t('loaderOverallComplete');
         overall.classList.add('complete');
       } else {
-        overall.textContent = totalDoneBuckets + '/' + totalEffectiveTargetBuckets + ' - ' + formatEstimatedNumber(totalRemainingBuckets, 1) + ' ' + t('loaderOverallRemaining');
+        overall.textContent = totalDoneBuckets + '/' + totalTargetBuckets + ' - ' + formatEstimatedNumber(totalRemainingBuckets, 1) + ' ' + t('loaderOverallRemaining');
         overall.classList.add('remaining');
       }
     }
@@ -3075,7 +3060,7 @@ body.dark-mode .panel {
     const blend = document.getElementById('loaderPlanBlend');
     if (blend) blend.value = buildLoaderPlanBlend(plan);
     const note = document.getElementById('loaderPlanSummaryNote');
-    if (note) note.textContent = Math.abs(total - 100) < 0.05 ? t('loaderPlanSummaryNoteOk') : t('loaderPlanSummaryNoteWarn');
+    if (note) note.textContent = totalTargetBuckets > 0 ? t('loaderPlanSummaryNoteOk') : t('loaderPlanSummaryNoteWarn');
   }
 
   function renderLoaderPlan(){
@@ -3214,10 +3199,9 @@ body.dark-mode .panel {
     setText("thLoaderPercent", i.loaderPercent);
     setText("thLoaderTonnes", i.loaderTonnes);
     setText("thLoaderBuckets", i.loaderBuckets);
-    setText("thLoaderManualBuckets", i.loaderManualBuckets);
     setText("thLoaderDone", i.loaderDone);
     setText("thLoaderStatus", i.loaderStatus);
-    setText("loaderPercentTotalLabel", i.loaderPercentTotal);
+    setText("loaderTargetTotalLabel", i.loaderTargetTotal);
     setText("loaderTapHint", i.loaderTapHint);
     setText("labelLoaderBlend", i.loaderBlend);
     setText("labelLoaderNotes", i.loaderNotes);
@@ -4020,15 +4004,7 @@ body.dark-mode .panel {
 
   function getLoaderTargetBuckets(item){
     const plan = loaderPlanState();
-    const manualTarget = parseBucketTarget(plan.manualTargets?.[item]);
-    if (manualTarget > 0) return manualTarget;
-
-    const targetTonnage = parseTonnage(plan.target);
-    const pct = Number(String(plan.items[item] || '').replace(',', '.'));
-    const safePct = Number.isFinite(pct) ? pct : 0;
-    const tonnes = targetTonnage > 0 ? (targetTonnage * safePct / 100) : 0;
-    const bucketsExact = tonnes > 0 ? (tonnes / (40 / 3)) : 0;
-    return bucketsExact > 0 ? Math.max(1, Math.round(bucketsExact)) : 0;
+    return parseBucketTarget(plan.manualTargets?.[item]);
   }
 
   function adjustLoaderDone(item, delta){
