@@ -8,6 +8,7 @@
 <meta name="apple-mobile-web-app-title" content="Recette Touch">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icon-192.png">
 <link rel="apple-touch-icon" href="./apple-touch-icon.png">
 <title>Feuille Recette Touch - Hors ligne</title>
 <style>
@@ -991,6 +992,32 @@ tfoot td,
   margin:0 auto;
 }
 
+.loader-bucket-target-input.locked {
+  border-bottom-color:transparent;
+  color:#333;
+  -webkit-text-fill-color:#333;
+}
+
+.loader-buckets.target-locked {
+  background:#f6f1df;
+}
+
+.loader-target-unlock {
+  display:none;
+  width:auto;
+  min-height:22px;
+  margin:4px auto 0;
+  padding:2px 7px;
+  border-radius:7px;
+  font-size:10px;
+  font-weight:900;
+  line-height:1;
+}
+
+.loader-buckets.target-locked .loader-target-unlock {
+  display:block;
+}
+
 .loader-done-tap {
   width:100%;
   border:1px solid #666;
@@ -1269,6 +1296,23 @@ body.dark-mode .total-cell {
   border-color:#777;
 }
 
+body.dark-mode .foot,
+body.dark-mode .foot label,
+body.dark-mode #labelPoids,
+body.dark-mode #labelVoyage {
+  color:#f4f1e8;
+}
+
+body.dark-mode .foot input,
+body.dark-mode #metaPoids,
+body.dark-mode #metaVoyage {
+  background:#111;
+  color:#f4f1e8;
+  -webkit-text-fill-color:#f4f1e8;
+  border-bottom-color:#ffcd23;
+  opacity:1;
+}
+
 body.dark-mode .toolbar,
 body.dark-mode .menu-section,
 body.dark-mode .status,
@@ -1320,6 +1364,16 @@ body.dark-mode .loader-notes-wrap textarea {
   color:#f4f1e8;
   -webkit-text-fill-color:#f4f1e8;
   border-color:#666;
+}
+
+body.dark-mode .loader-bucket-target-input.locked {
+  background:transparent;
+  color:#fff5c2;
+  -webkit-text-fill-color:#fff5c2;
+}
+
+body.dark-mode .loader-buckets.target-locked {
+  background:#241f12;
 }
 
 body.dark-mode .time-options,
@@ -2011,6 +2065,10 @@ body.dark-mode .panel {
     -webkit-text-fill-color:#000 !important;
   }
 
+  .loader-target-unlock {
+    display:none !important;
+  }
+
   .truck {
     margin-top:1px !important;
     gap:5px !important;
@@ -2632,6 +2690,7 @@ body.dark-mode .panel {
       loaderOverallComplete:"Recette complète",
       loaderOverallRemaining:"reste",
       loaderTapHint:"1 tap = +1 bucket, appui long = -1 bucket",
+      loaderUnlock:"Déverrouiller",
       loaderPercentTotal:"Total %",
       loaderTargetTotal:"Total cible",
       loaderBlend:"Recette totale :",
@@ -2771,6 +2830,7 @@ body.dark-mode .panel {
       loaderOverallComplete:"Recipe complete",
       loaderOverallRemaining:"left",
       loaderTapHint:"Tap = +1 bucket, long press = -1 bucket",
+      loaderUnlock:"Unlock",
       loaderPercentTotal:"Total %",
       loaderTargetTotal:"Target total",
       loaderBlend:"Full recipe:",
@@ -2850,6 +2910,7 @@ body.dark-mode .panel {
   let max3 = true;
   let loaderRow = null;
   let loaderActiveItem = null;
+  let loaderUnlockedTargets = new Set();
   let timeRow = null;
   let datePickerPrevious = "";
   let timePickerValue = { hour:"00", minute:"00" };
@@ -3139,6 +3200,7 @@ body.dark-mode .panel {
   function renderLoaderPlan(){
     const plan = loaderPlanState();
     if (!plan.date) plan.date = state?.meta?.date || todayDate();
+    ensureLoaderUnlockButtons();
     const map = {
       loaderPlanDate: plan.date || '',
       loaderPlanName: plan.name || '',
@@ -3165,6 +3227,7 @@ body.dark-mode .panel {
     });
     renderLoaderShift();
     setLoaderActiveItem(loaderActiveItem);
+    updateLoaderTargetLocks();
     updateLoaderPlanDerived();
   }
 
@@ -3186,6 +3249,63 @@ body.dark-mode .panel {
     });
   }
 
+  function loaderDoneCount(plan, item){
+    const raw = Number(String(plan.done?.[item] || "").replace(',', '.'));
+    return Number.isFinite(raw) && raw > 0 ? raw : 0;
+  }
+
+  function isLoaderTargetLocked(plan, item){
+    return loaderDoneCount(plan, item) > 0 && !loaderUnlockedTargets.has(item);
+  }
+
+  function ensureLoaderUnlockButtons(){
+    document.querySelectorAll('.loader-bucket-target-input').forEach(input => {
+      const cell = input.closest('.loader-buckets');
+      if (!cell || cell.querySelector('.loader-target-unlock')) return;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'loader-target-unlock';
+      btn.dataset.unlockTarget = input.dataset.targetBuckets;
+      btn.addEventListener('click', () => {
+        unlockLoaderTarget(btn.dataset.unlockTarget);
+      });
+      cell.appendChild(btn);
+    });
+  }
+
+  function unlockLoaderTarget(item){
+    if (!item) return;
+    loaderUnlockedTargets.add(item);
+    setLoaderActiveItem(item);
+    updateLoaderTargetLocks();
+    const input = document.querySelector('.loader-bucket-target-input[data-target-buckets="' + item + '"]');
+    if (input) {
+      input.focus();
+      input.select?.();
+    }
+  }
+
+  function updateLoaderTargetLocks(){
+    const plan = loaderPlanState();
+    document.querySelectorAll('.loader-bucket-target-input').forEach(input => {
+      const item = input.dataset.targetBuckets;
+      const doneCount = loaderDoneCount(plan, item);
+      const locked = isLoaderTargetLocked(plan, item);
+      const cell = input.closest('.loader-buckets');
+      const unlock = cell?.querySelector('.loader-target-unlock');
+
+      input.readOnly = locked;
+      input.classList.toggle('locked', locked);
+      input.setAttribute('aria-readonly', locked ? 'true' : 'false');
+      if (cell) cell.classList.toggle('target-locked', locked);
+      if (unlock) {
+        unlock.hidden = doneCount <= 0;
+        unlock.textContent = t('loaderUnlock');
+        unlock.setAttribute('aria-label', t('loaderUnlock') + ' ' + item);
+      }
+    });
+  }
+
   function saveLoaderPlanFromInputs(){
     const plan = loaderPlanState();
     plan.date = document.getElementById('loaderPlanDate')?.value || '';
@@ -3201,11 +3321,16 @@ body.dark-mode .panel {
     if (!plan.manualTargets) plan.manualTargets = blankLoaderPlanManualTargets();
     document.querySelectorAll('.loader-bucket-target-input').forEach(input => {
       if (document.activeElement === input) setLoaderActiveItem(input.dataset.targetBuckets);
+      if (isLoaderTargetLocked(plan, input.dataset.targetBuckets)) {
+        input.value = plan.manualTargets[input.dataset.targetBuckets] || '';
+        return;
+      }
       plan.manualTargets[input.dataset.targetBuckets] = cleanBucketTargetValue(input.value);
       if (input.value !== plan.manualTargets[input.dataset.targetBuckets]) input.value = plan.manualTargets[input.dataset.targetBuckets];
     });
 
     save();
+    updateLoaderTargetLocks();
     updateLoaderPlanDerived();
   }
 
@@ -4103,6 +4228,10 @@ body.dark-mode .panel {
     input.addEventListener('input', saveLoaderPlanFromInputs);
     input.addEventListener('focus', () => setLoaderActiveItem(input.dataset.targetBuckets));
     input.addEventListener('click', () => setLoaderActiveItem(input.dataset.targetBuckets));
+    input.addEventListener('blur', () => {
+      loaderUnlockedTargets.delete(input.dataset.targetBuckets);
+      updateLoaderTargetLocks();
+    });
   });
   let loaderDonePressTimer = null;
   let loaderDoneLongPressHandled = false;
@@ -4121,6 +4250,7 @@ body.dark-mode .panel {
     if (delta > 0 && target > 0) next = Math.min(next, target);
     next = Math.max(0, next);
     plan.done[item] = next > 0 ? String(next) : '';
+    loaderUnlockedTargets.delete(item);
     save();
     renderLoaderPlan();
   }
