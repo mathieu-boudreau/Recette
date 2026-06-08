@@ -1,4 +1,4 @@
-const CACHE_NAME = "recette-touch-v5.12.6-loader-target-locks";
+const CACHE_NAME = "recette-touch-v5.12.7-loader-quality-fields";
 const ASSETS = [
   "./",
   "./index.html",
