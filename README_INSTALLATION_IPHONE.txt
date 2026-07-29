@@ -88,7 +88,7 @@ CORRECTIFS v1.7
 
 
 CORRECTIFS v1.8
-- Le champ Poids se calcule automatiquement : nombre de voyages x 40 tonnes.
+- Le champ Poids se calcule automatiquement : nombre de voyages x 37 tonnes.
 - Le champ # de voyage se calcule automatiquement selon les lignes remplies.
 - Le total de voyages n’est plus affiché dans la colonne Numéro Loader.
 - La ligne TOTAL garde seulement les totaux de buckets par minerai et les totaux Silo / Cr-Pad.
@@ -157,7 +157,7 @@ CORRECTIFS v2.7
 CORRECTIFS v2.8
 - La feuille loader calcule maintenant les tonnes estimées par minerai selon le tonnage cible.
 - La feuille loader calcule aussi les buckets estimés.
-- Règle utilisée: 1 voyage de 3 buckets = 40 tonnes, donc 1 bucket ≈ 13.33 tonnes.
+- Règle utilisée: 1 voyage de 3 buckets = 37 tonnes, donc 1 bucket ≈ 12.33 tonnes.
 - Exemple: tonnage cible 2800 t et A1 15% = 420 t ≈ 31.5 buckets.
 
 

@@ -1,4 +1,4 @@
-const CACHE_NAME = "recette-touch-v5.12.7-loader-quality-fields";
+const CACHE_NAME = "recette-touch-v5.14.0-offline-ocr-registry-37t";
 const ASSETS = [
   "./",
   "./index.html",
@@ -29,14 +29,15 @@ self.addEventListener("activate", event => {
 });
 
 self.addEventListener("fetch", event => {
+  if (event.request.method !== "GET") return;
   event.respondWith(
     caches.match(event.request).then(cached => {
       if (cached) return cached;
       return fetch(event.request).then(response => {
         const copy = response.clone();
-        caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
+        event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy)));
         return response;
-      }).catch(() => caches.match("./index.html"));
+      }).catch(() => event.request.mode === "navigate" ? caches.match("./index.html") : Response.error());
     })
   );
 });

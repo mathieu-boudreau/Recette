@@ -1246,6 +1246,301 @@ tfoot td,
   margin-top:8px;
 }
 
+.recipe-import-trigger {
+  min-height:28px;
+  padding:3px 8px;
+  border-color:#8d7600;
+  background:#ffcd23;
+  color:#111;
+  font-size:11px;
+  line-height:1.1;
+  white-space:nowrap;
+}
+
+.recipe-import-summary {
+  display:none;
+  align-items:center;
+  gap:8px;
+  margin:0 0 4px;
+  padding:5px 8px;
+  border:1px solid #d8cfb9;
+  border-left:4px solid var(--kiewit-yellow);
+  background:#fff9dc;
+  color:#222;
+  font-size:11px;
+  font-weight:800;
+}
+
+.recipe-import-summary.show {
+  display:flex;
+}
+
+.recipe-import-summary strong {
+  color:#111;
+}
+
+.recipe-import-panel {
+  width:min(860px, 100%);
+  padding:16px;
+}
+
+.recipe-import-heading {
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:10px;
+}
+
+.recipe-import-heading h2 {
+  margin:0;
+}
+
+.recipe-import-copy {
+  margin:4px 0 0;
+  color:#4b4b4b;
+  font-size:13px;
+  line-height:1.35;
+}
+
+.recipe-import-stage {
+  display:none;
+}
+
+.recipe-import-stage.active {
+  display:block;
+}
+
+.recipe-import-empty {
+  display:grid;
+  gap:12px;
+  padding:10px 0 2px;
+}
+
+.recipe-import-empty button {
+  width:100%;
+}
+
+.recipe-import-preview {
+  display:grid;
+  place-items:center;
+  min-height:140px;
+  overflow:hidden;
+  border:1px solid #cfc6ae;
+  border-radius:6px;
+  background:#f5f1e5;
+}
+
+.recipe-import-preview canvas {
+  display:block;
+  width:auto;
+  max-width:100%;
+  max-height:38dvh;
+  height:auto;
+}
+
+.recipe-import-progress {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:12px 0 4px;
+  color:#222;
+  font-size:14px;
+  font-weight:800;
+}
+
+.recipe-import-spinner {
+  width:22px;
+  height:22px;
+  border:3px solid #ddd1a7;
+  border-top-color:#111;
+  border-radius:50%;
+  animation:recipe-spin .8s linear infinite;
+}
+
+@keyframes recipe-spin {
+  to { transform:rotate(360deg); }
+}
+
+.recipe-review-meta {
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin:8px 0;
+}
+
+.recipe-review-summary {
+  display:grid;
+  grid-template-columns:repeat(3, minmax(0, 1fr));
+  gap:5px;
+  margin:7px 0;
+}
+
+.recipe-review-summary div {
+  min-width:0;
+  padding:5px 6px;
+  border:1px solid #ddd0ab;
+  background:#fffdf4;
+  color:#302b1d;
+  font-size:11px;
+  line-height:1.25;
+  font-weight:800;
+}
+
+.recipe-review-summary strong {
+  display:block;
+  color:#111;
+  font-size:12px;
+}
+
+.recipe-review-badge {
+  padding:4px 7px;
+  border:1px solid #c8b461;
+  border-radius:999px;
+  background:#fff6c9;
+  color:#513f00;
+  font-size:11px;
+  font-weight:900;
+}
+
+.recipe-unknown-list {
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  width:100%;
+}
+
+.recipe-unknown-assignment {
+  display:flex;
+  align-items:center;
+  gap:5px;
+  padding:5px 6px;
+  border:1px solid #d08a32;
+  border-radius:4px;
+  background:#fff0db;
+  color:#5d2b00;
+  font-size:11px;
+  font-weight:900;
+}
+
+.recipe-unknown-assignment select {
+  min-height:28px;
+  border:1px solid #a86b20;
+  border-radius:4px;
+  background:#fff;
+  color:#111;
+  font-size:12px;
+  font-weight:800;
+}
+
+.recipe-review-warning {
+  margin:8px 0;
+  padding:8px 10px;
+  border-left:4px solid #c94920;
+  background:#fff1eb;
+  color:#6d2414;
+  font-size:13px;
+  font-weight:800;
+}
+
+.recipe-review-wrap {
+  overflow:auto;
+  max-height:42dvh;
+  border:1px solid #cfc6ae;
+  border-radius:6px;
+  -webkit-overflow-scrolling:touch;
+}
+
+.recipe-review-table {
+  width:100%;
+  min-width:560px;
+  border-collapse:collapse;
+  font-size:13px;
+}
+
+.recipe-review-table th,
+.recipe-review-table td {
+  padding:6px;
+  border-right:1px solid #d3d3d3;
+  border-bottom:1px solid #d3d3d3;
+  background:#fff;
+  color:#111;
+  text-align:left;
+}
+
+.recipe-review-table th {
+  position:sticky;
+  top:0;
+  z-index:1;
+  background:#111;
+  color:#ffcd23;
+  font-size:11px;
+  text-transform:uppercase;
+}
+
+.recipe-review-table tr.low-confidence td {
+  background:#fff6d9;
+}
+
+.recipe-review-table input {
+  width:100%;
+  min-width:54px;
+  min-height:34px;
+  border:1px solid #999;
+  border-radius:4px;
+  padding:4px 6px;
+  background:#fff;
+  color:#111;
+  font-size:14px;
+  font-weight:800;
+  text-transform:uppercase;
+}
+
+.recipe-review-table .recipe-confidence {
+  white-space:nowrap;
+  font-variant-numeric:tabular-nums;
+  font-weight:900;
+}
+
+.recipe-review-table .recipe-confidence.low {
+  color:#a33416;
+}
+
+.recipe-remove-row {
+  min-width:32px;
+  min-height:34px;
+  padding:0;
+  border-color:#e5b0a9;
+  background:#fff3f1;
+  color:#9b2115;
+  font-size:20px;
+}
+
+.time-value {
+  display:block;
+  min-height:16px;
+}
+
+.imported-code-preview {
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:2px;
+  margin-top:2px;
+}
+
+.imported-code-preview span {
+  display:inline-block;
+  padding:1px 2px;
+  border:1px solid #b89d19;
+  border-radius:2px;
+  background:#fff6c9;
+  color:#332800;
+  font-size:8px;
+  line-height:1.1;
+  font-weight:900;
+}
+
 body.dark-mode .sheet {
   background:#141414;
   border-color:#444;
@@ -1468,6 +1763,83 @@ body.dark-mode .screen-right-logo {
 body.dark-mode .panel {
   background:#151515;
   color:#f4f1e8;
+}
+
+body.dark-mode .recipe-import-copy,
+body.dark-mode .recipe-import-progress {
+  color:#f4f1e8;
+}
+
+body.dark-mode .recipe-import-preview,
+body.dark-mode .recipe-review-wrap {
+  border-color:#555;
+  background:#111;
+}
+
+body.dark-mode .recipe-import-summary {
+  background:#241f12;
+  border-color:#6f5e13;
+  color:#f4f1e8;
+}
+
+body.dark-mode .recipe-import-summary strong {
+  color:#fff5c2;
+}
+
+body.dark-mode .recipe-review-warning {
+  background:#321914;
+  color:#ffd1c3;
+}
+
+body.dark-mode .recipe-review-summary div {
+  background:#1b1b1b;
+  color:#f4f1e8;
+  border-color:#555;
+}
+
+body.dark-mode .recipe-review-summary strong {
+  color:#fff5c2;
+}
+
+body.dark-mode .recipe-unknown-assignment {
+  border-color:#9b6c1e;
+  background:#372612;
+  color:#ffe0b2;
+}
+
+body.dark-mode .recipe-unknown-assignment select {
+  background:#111;
+  color:#f4f1e8;
+  border-color:#9b6c1e;
+}
+
+body.dark-mode .recipe-review-table th {
+  background:#050505;
+  color:#ffcd23;
+  border-color:#555;
+}
+
+body.dark-mode .recipe-review-table td {
+  background:#171717;
+  color:#f4f1e8;
+  border-color:#555;
+}
+
+body.dark-mode .recipe-review-table tr.low-confidence td {
+  background:#302713;
+}
+
+body.dark-mode .recipe-review-table input {
+  background:#111;
+  color:#f4f1e8;
+  -webkit-text-fill-color:#f4f1e8;
+  border-color:#777;
+}
+
+body.dark-mode .imported-code-preview span {
+  background:#332b0d;
+  color:#fff5c2;
+  border-color:#927d18;
 }
 
 @media (min-width:820px) {
@@ -1869,6 +2241,18 @@ body.dark-mode .panel {
     font-size:13px;
   }
 
+  .recipe-import-panel {
+    padding:12px;
+  }
+
+  .recipe-review-wrap {
+    max-height:36dvh;
+  }
+
+  .recipe-review-summary {
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+  }
+
   .modal {
     padding:8px;
   }
@@ -1928,6 +2312,7 @@ body.dark-mode .panel {
   .modal,
   .menu-toggle,
   .screen-sheet-header,
+  .recipe-import-summary,
   .menu-help-details {
     display:none !important;
   }
@@ -2147,6 +2532,13 @@ body.dark-mode .panel {
     background:#fffdf8 !important;
   }
 
+  .imported-code-preview span {
+    background:#fff !important;
+    color:#000 !important;
+    -webkit-text-fill-color:#000 !important;
+    border-color:#000 !important;
+  }
+
   #sheetTable thead,
   #sheetTable tbody,
   #sheetTable tfoot,
@@ -2334,6 +2726,7 @@ body.dark-mode .panel {
         <div class="menu-grid">
           <button id="btnHaulingPlan">Feuille recette</button>
           <button id="btnLoaderPlan">Feuille loader</button>
+          <button id="btnImportRecipe">Importer recette officielle</button>
           <button id="btnPrint">Imprimer/PDF</button>
         </div>
       </section>
@@ -2384,6 +2777,7 @@ body.dark-mode .panel {
         <div class="screen-title">
           <div class="screen-sheet-name" id="screenSheetName">Feuille de transport / Hauling Sheet</div>
           <div class="screen-title-box" id="screenSheetTitle">Recette</div>
+          <button type="button" class="recipe-import-trigger" id="btnImportRecipeScreen">Importer recette</button>
         </div>
         <img class="screen-right-logo" src="./wordmark.png" alt="MINE RAGLAN">
       </div>
@@ -2398,6 +2792,8 @@ body.dark-mode .panel {
         </div>
       </div>
     </div>
+
+    <div class="recipe-import-summary" id="recipeImportSummary" aria-live="polite"></div>
 
     <div class="print-sheet-header top">
       <div class="brand-left">
@@ -2435,7 +2831,7 @@ body.dark-mode .panel {
         <col style="width:4.2%"><col style="width:4.2%"><col style="width:4.2%"><col style="width:4.2%">
         <col style="width:4.2%"><col style="width:4.2%"><col style="width:4.2%"><col style="width:4.2%">
         <col style="width:4.2%"><col style="width:4.2%"><col style="width:4.2%"><col style="width:4.2%">
-        <col style="width:4.2%"><col style="width:4.2%"><col style="width:4.2%"><col style="width:4.2%">
+        <col style="width:4.2%"><col style="width:4.2%"><col style="width:4.2%">
         <col style="width:6%">
         <col style="width:4.65%"><col style="width:4.65%">
       </colgroup>
@@ -2444,15 +2840,14 @@ body.dark-mode .panel {
         <tr>
           <th rowspan="3" class="voy" id="thVoyage">Voyage</th>
           <th rowspan="3" class="time small-h" id="thLoadingTime">HEURE DU<br>CHARGEMENT</th>
-          <th colspan="16" class="source-main" id="thSource">SOURCE</th>
+          <th colspan="15" class="source-main" id="thSource">SOURCE</th>
           <th rowspan="3" class="loader" id="thLoader">Numéro<br>Loader</th>
           <th colspan="2" id="thDestination">DESTINATION</th>
         </tr>
         <tr>
-          <th colspan="6" class="group-anuri">Anuri</th>
-          <th colspan="3" class="group-qaki">Qaki</th>
+          <th colspan="8" class="group-anuri">Anuri</th>
+          <th colspan="4" class="group-qaki">Qaki</th>
           <th colspan="3" class="group-pad">Pad crusher Mine 8</th>
-          <th colspan="4" class="group-kiki">Kikialik</th>
           <th rowspan="2" class="dest small-h">Silo</th>
           <th rowspan="2" class="dest small-h">Cr-Pad</th>
         </tr>
@@ -2463,16 +2858,15 @@ body.dark-mode .panel {
           <th class="ore-wide">A4 pad ore</th>
           <th class="ore-wide">A4 dump</th>
           <th class="ore-wide small-h">Bldr Cassé A</th>
+          <th class="ore">AHR</th>
+          <th class="ore-wide small-h">Ore/Neige</th>
           <th class="ore">B1</th>
           <th class="ore">B2</th>
           <th class="ore">B3</th>
+          <th class="ore">BHR</th>
           <th class="ore">C1</th>
           <th class="ore">C2</th>
           <th class="ore-wide small-h">Bldr Cassé B</th>
-          <th class="ore">D1</th>
-          <th class="ore">D2</th>
-          <th class="ore">D3</th>
-          <th class="ore">D4</th>
         </tr>
       </thead>
       <tbody id="tbody"></tbody>
@@ -2543,9 +2937,12 @@ body.dark-mode .panel {
           <tr><td>A4 pad ore</td><td class="loader-buckets"><input class="loader-bucket-target-input" data-target-buckets="A4 pad ore" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></td><td class="loader-quality"><input class="loader-grade-input" data-grade="A4 pad ore" inputmode="decimal" autocomplete="off"></td><td class="loader-quality"><input class="loader-rm-input" data-rm="A4 pad ore" inputmode="decimal" autocomplete="off"></td><td class="loader-tonnes" data-tonnes="A4 pad ore"></td><td><button type="button" class="loader-done-tap" data-done="A4 pad ore">0</button></td><td class="loader-left" data-left="A4 pad ore"></td><td class="loader-status" data-status="A4 pad ore"></td></tr>
           <tr><td>A4 dump</td><td class="loader-buckets"><input class="loader-bucket-target-input" data-target-buckets="A4 dump" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></td><td class="loader-quality"><input class="loader-grade-input" data-grade="A4 dump" inputmode="decimal" autocomplete="off"></td><td class="loader-quality"><input class="loader-rm-input" data-rm="A4 dump" inputmode="decimal" autocomplete="off"></td><td class="loader-tonnes" data-tonnes="A4 dump"></td><td><button type="button" class="loader-done-tap" data-done="A4 dump">0</button></td><td class="loader-left" data-left="A4 dump"></td><td class="loader-status" data-status="A4 dump"></td></tr>
           <tr><td>Bldr Cassé A</td><td class="loader-buckets"><input class="loader-bucket-target-input" data-target-buckets="Bldr Cassé A" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></td><td class="loader-quality"><input class="loader-grade-input" data-grade="Bldr Cassé A" inputmode="decimal" autocomplete="off"></td><td class="loader-quality"><input class="loader-rm-input" data-rm="Bldr Cassé A" inputmode="decimal" autocomplete="off"></td><td class="loader-tonnes" data-tonnes="Bldr Cassé A"></td><td><button type="button" class="loader-done-tap" data-done="Bldr Cassé A">0</button></td><td class="loader-left" data-left="Bldr Cassé A"></td><td class="loader-status" data-status="Bldr Cassé A"></td></tr>
+          <tr><td>AHR</td><td class="loader-buckets"><input class="loader-bucket-target-input" data-target-buckets="AHR" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></td><td class="loader-quality"><input class="loader-grade-input" data-grade="AHR" inputmode="decimal" autocomplete="off"></td><td class="loader-quality"><input class="loader-rm-input" data-rm="AHR" inputmode="decimal" autocomplete="off"></td><td class="loader-tonnes" data-tonnes="AHR"></td><td><button type="button" class="loader-done-tap" data-done="AHR">0</button></td><td class="loader-left" data-left="AHR"></td><td class="loader-status" data-status="AHR"></td></tr>
+          <tr><td>Ore/Neige</td><td class="loader-buckets"><input class="loader-bucket-target-input" data-target-buckets="Ore/Neige" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></td><td class="loader-quality"><input class="loader-grade-input" data-grade="Ore/Neige" inputmode="decimal" autocomplete="off"></td><td class="loader-quality"><input class="loader-rm-input" data-rm="Ore/Neige" inputmode="decimal" autocomplete="off"></td><td class="loader-tonnes" data-tonnes="Ore/Neige"></td><td><button type="button" class="loader-done-tap" data-done="Ore/Neige">0</button></td><td class="loader-left" data-left="Ore/Neige"></td><td class="loader-status" data-status="Ore/Neige"></td></tr>
           <tr><td>B1</td><td class="loader-buckets"><input class="loader-bucket-target-input" data-target-buckets="B1" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></td><td class="loader-quality"><input class="loader-grade-input" data-grade="B1" inputmode="decimal" autocomplete="off"></td><td class="loader-quality"><input class="loader-rm-input" data-rm="B1" inputmode="decimal" autocomplete="off"></td><td class="loader-tonnes" data-tonnes="B1"></td><td><button type="button" class="loader-done-tap" data-done="B1">0</button></td><td class="loader-left" data-left="B1"></td><td class="loader-status" data-status="B1"></td></tr>
           <tr><td>B2</td><td class="loader-buckets"><input class="loader-bucket-target-input" data-target-buckets="B2" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></td><td class="loader-quality"><input class="loader-grade-input" data-grade="B2" inputmode="decimal" autocomplete="off"></td><td class="loader-quality"><input class="loader-rm-input" data-rm="B2" inputmode="decimal" autocomplete="off"></td><td class="loader-tonnes" data-tonnes="B2"></td><td><button type="button" class="loader-done-tap" data-done="B2">0</button></td><td class="loader-left" data-left="B2"></td><td class="loader-status" data-status="B2"></td></tr>
           <tr><td>B3</td><td class="loader-buckets"><input class="loader-bucket-target-input" data-target-buckets="B3" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></td><td class="loader-quality"><input class="loader-grade-input" data-grade="B3" inputmode="decimal" autocomplete="off"></td><td class="loader-quality"><input class="loader-rm-input" data-rm="B3" inputmode="decimal" autocomplete="off"></td><td class="loader-tonnes" data-tonnes="B3"></td><td><button type="button" class="loader-done-tap" data-done="B3">0</button></td><td class="loader-left" data-left="B3"></td><td class="loader-status" data-status="B3"></td></tr>
+          <tr><td>BHR</td><td class="loader-buckets"><input class="loader-bucket-target-input" data-target-buckets="BHR" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></td><td class="loader-quality"><input class="loader-grade-input" data-grade="BHR" inputmode="decimal" autocomplete="off"></td><td class="loader-quality"><input class="loader-rm-input" data-rm="BHR" inputmode="decimal" autocomplete="off"></td><td class="loader-tonnes" data-tonnes="BHR"></td><td><button type="button" class="loader-done-tap" data-done="BHR">0</button></td><td class="loader-left" data-left="BHR"></td><td class="loader-status" data-status="BHR"></td></tr>
           <tr><td>C1</td><td class="loader-buckets"><input class="loader-bucket-target-input" data-target-buckets="C1" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></td><td class="loader-quality"><input class="loader-grade-input" data-grade="C1" inputmode="decimal" autocomplete="off"></td><td class="loader-quality"><input class="loader-rm-input" data-rm="C1" inputmode="decimal" autocomplete="off"></td><td class="loader-tonnes" data-tonnes="C1"></td><td><button type="button" class="loader-done-tap" data-done="C1">0</button></td><td class="loader-left" data-left="C1"></td><td class="loader-status" data-status="C1"></td></tr>
           <tr><td>C2</td><td class="loader-buckets"><input class="loader-bucket-target-input" data-target-buckets="C2" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></td><td class="loader-quality"><input class="loader-grade-input" data-grade="C2" inputmode="decimal" autocomplete="off"></td><td class="loader-quality"><input class="loader-rm-input" data-rm="C2" inputmode="decimal" autocomplete="off"></td><td class="loader-tonnes" data-tonnes="C2"></td><td><button type="button" class="loader-done-tap" data-done="C2">0</button></td><td class="loader-left" data-left="C2"></td><td class="loader-status" data-status="C2"></td></tr>
           <tr><td>Bldr Cassé B</td><td class="loader-buckets"><input class="loader-bucket-target-input" data-target-buckets="Bldr Cassé B" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></td><td class="loader-quality"><input class="loader-grade-input" data-grade="Bldr Cassé B" inputmode="decimal" autocomplete="off"></td><td class="loader-quality"><input class="loader-rm-input" data-rm="Bldr Cassé B" inputmode="decimal" autocomplete="off"></td><td class="loader-tonnes" data-tonnes="Bldr Cassé B"></td><td><button type="button" class="loader-done-tap" data-done="Bldr Cassé B">0</button></td><td class="loader-left" data-left="Bldr Cassé B"></td><td class="loader-status" data-status="Bldr Cassé B"></td></tr>
@@ -2634,6 +3031,70 @@ body.dark-mode .panel {
   </div>
 </div>
 
+<input id="recipeCameraInput" type="file" accept="image/*" capture="environment" hidden>
+<div class="modal" id="recipeImportModal" aria-modal="true" role="dialog" aria-labelledby="recipeImportTitle">
+  <div class="panel recipe-import-panel">
+    <div class="recipe-import-heading">
+      <div>
+        <h2 id="recipeImportTitle">Importer recette officielle</h2>
+        <p class="recipe-import-copy" id="recipeImportCopy">Photographiez le tableau de recette. Les lignes seront toujours a verifier avant l'import.</p>
+      </div>
+    </div>
+
+    <div class="recipe-import-stage active" data-recipe-stage="start">
+      <div class="recipe-import-empty">
+        <button type="button" class="primary" id="btnRecipeCapture">Prendre une photo</button>
+        <button type="button" id="btnRecipeChoose">Choisir une photo</button>
+      </div>
+    </div>
+
+    <div class="recipe-import-stage" data-recipe-stage="reading">
+      <div class="recipe-import-preview"><canvas id="recipeImportCanvas"></canvas></div>
+      <div class="recipe-import-progress"><span class="recipe-import-spinner" aria-hidden="true"></span><span id="recipeImportProgress">Lecture de la recette...</span></div>
+    </div>
+
+    <div class="recipe-import-stage" data-recipe-stage="review">
+      <div class="recipe-import-preview"><canvas id="recipeReviewCanvas"></canvas></div>
+      <div class="recipe-review-meta" id="recipeReviewMeta"></div>
+      <div class="recipe-review-summary" id="recipeReviewSummary"></div>
+      <div class="recipe-review-warning" id="recipeReviewWarning" hidden></div>
+      <div class="recipe-review-warning" id="recipeImportConflict" hidden>
+        <span id="recipeImportConflictText"></span>
+        <div class="panel-row">
+          <button type="button" id="btnRecipeReplace">Remplacer</button>
+          <button type="button" id="btnRecipeMerge">Ajouter aux lignes vides</button>
+        </div>
+      </div>
+      <div class="recipe-review-wrap">
+        <table class="recipe-review-table" aria-label="Revue de la recette importee">
+          <thead>
+            <tr>
+              <th id="recipeReviewLineLabel">Ligne</th>
+              <th id="recipeReviewTruckLabel">Camion</th>
+              <th id="recipeReviewBucket1Label">Godet 1</th>
+              <th id="recipeReviewBucket2Label">Godet 2</th>
+              <th id="recipeReviewBucket3Label">Godet 3</th>
+              <th id="recipeReviewConfidenceLabel">Lecture</th>
+              <th aria-label="Retirer"></th>
+            </tr>
+          </thead>
+          <tbody id="recipeReviewRows"></tbody>
+        </table>
+      </div>
+      <div class="panel-row">
+        <button type="button" id="btnRecipeAddRow">Ajouter une ligne</button>
+      </div>
+    </div>
+
+    <div class="panel-row">
+      <button type="button" id="btnRecipeRetake" hidden>Reprendre la photo</button>
+      <button type="button" id="btnRecipeChooseAgain" hidden>Choisir une photo</button>
+      <button type="button" id="btnRecipeCancel">Annuler</button>
+      <button type="button" id="btnRecipeConfirm" class="primary" hidden>Confirmer l'import</button>
+    </div>
+  </div>
+</div>
+
 <script>
 (function(){
   "use strict";
@@ -2644,10 +3105,28 @@ body.dark-mode .panel {
       .catch(() => setStatus(t("cacheFail")));
   }
 
-  const ORES = ["A1","A2","A3","A4 pad ore","A4 dump","Bldr Cassé A","B1","B2","B3","C1","C2","Bldr Cassé B","D1","D2","D3","D4"];
+  const ORE_REGISTRY = {
+    groups: [
+      { id:"anuri", label:"Anuri", enabled:true, codes:["A1","A2","A3","A4 pad ore","A4 dump","Bldr Cassé A","AHR","Ore/Neige"] },
+      { id:"qaki", label:"Qaki", enabled:true, codes:["B1","B2","B3","BHR"] },
+      { id:"mine8", label:"Pad crusher Mine 8", enabled:true, codes:["C1","C2","Bldr Cassé B"] },
+      { id:"kikialik", label:"Kikialik", enabled:false, codes:["D1","D2","D3","D4"] }
+    ]
+  };
+  const ORES = ORE_REGISTRY.groups.filter(group => group.enabled).flatMap(group => group.codes);
+  const ALL_ORES = ORE_REGISTRY.groups.flatMap(group => group.codes);
   const LOADER_PLAN_ITEMS = [...ORES, "Boulder"];
   const ROWS = 60;
+  const BUCKETS_PER_TRIP = 3;
+  const TONNES_PER_TRIP = 37;
+  const OCR_ASSETS = {
+    library:"./vendor/ocr/tesseract.min.js",
+    worker:"./vendor/ocr/worker.min.js",
+    core:"./vendor/ocr/tesseract-core-lstm.wasm.js",
+    language:"./vendor/ocr/lang"
+  };
   const KEY = "mine_raglan_recette_touch_offline_v4_pages";
+  const USER_RECIPE_MAPPINGS_KEY = "recette_touch_private_recipe_code_mappings";
   const OLD_KEYS = [KEY, "mine_raglan_recette_touch_offline_v2", "mine_raglan_recette_touch_offline_v3_pages"];
   let lang = localStorage.getItem("recette_touch_lang") || "fr";
   const I18N = {
@@ -2661,6 +3140,57 @@ body.dark-mode .panel {
       darkOffStatus:"Mode nuit désactivé.",
       loaderPlanBtn:"Feuille loader",
       haulingPlanBtn:"Feuille recette",
+      importRecipe:"Importer recette officielle",
+      importRecipeShort:"Importer recette",
+      importRecipeTitle:"Importer recette officielle",
+      importRecipeCopy:"Photographiez le tableau de recette. Les lignes sont toujours a verifier avant l'import.",
+      importCapture:"Prendre une photo",
+      importChoose:"Choisir une photo",
+      importRetake:"Reprendre la photo",
+      importCancel:"Annuler",
+      importConfirm:"Confirmer l'import",
+      importAddRow:"Ajouter une ligne",
+      importReading:"Lecture de la recette...",
+      importPreparing:"Preparation de la photo...",
+      importCorrecting:"Correction de l'image...",
+      importAnalyzing:"Analyse des lignes...",
+      importReviewRequired:"Verification requise.",
+      importReviewLines:"{count} lignes a verifier",
+      importDetectedTrips:"{count} voyages detectes",
+      importAverageConfidence:"Lecture moyenne {percent}%",
+      importLowConfidence:"{count} ligne(s) demandent une verification.",
+      importNeedsReview:"Impossible de lire clairement la ligne {line}. Verifiez-la avant l'import.",
+      importNoRows:"Aucune ligne complete n'a ete lue. Ajoutez ou corrigez les lignes avant l'import.",
+      importNoOcr:"Cette photo ne peut pas etre lue automatiquement sur cet appareil. Ajoutez ou corrigez les lignes dans la revue.",
+      importDuplicateTruck:"Le camion {truck} apparait plus d'une fois. Corrigez ou retirez le doublon avant l'import.",
+      importTooMany:"La recette contient plus de {count} voyages. Ajoutez une nouvelle page avant d'importer.",
+      importInvalid:"Chaque ligne doit contenir un camion et trois godets avant l'import.",
+      importDone:"Recette officielle importee : {count} voyages prets. Ajoutez seulement les heures de chargement.",
+      importSummary:"Recette importee : {planned} voyages prevus, {tonnes} tonnes prevues, {complete} termines.",
+      importLine:"Ligne",
+      importTruck:"Camion",
+      importBucket1:"Godet 1",
+      importBucket2:"Godet 2",
+      importBucket3:"Godet 3",
+      importConfidence:"Lecture",
+      importReadUnknown:"A verifier",
+      importKnown:"Revue prete",
+      importUnknownCodes:"Codes inconnus a classer",
+      importUnknownGroup:"Groupe",
+      importUnknownMissing:"Classez chaque code inconnu avant l'import.",
+      importGroupAnuri:"Anuri",
+      importGroupQaki:"Qaki",
+      importGroupMine8:"Pad crusher Mine 8",
+      importGroupOther:"Autre",
+      importTrips:"Voyages",
+      importBuckets:"Buckets",
+      importPlannedTonnes:"Tonnes prevues",
+      importMaterials:"Par minerai",
+      importExistingData:"Cette page contient deja des donnees. Choisissez comment appliquer la recette.",
+      importReplace:"Remplacer",
+      importMerge:"Ajouter aux lignes vides",
+      importChooseMode:"Choisissez Remplacer ou Ajouter aux lignes vides avant l'import.",
+      importNoEmptyRows:"Il n'y a pas assez de lignes vides pour fusionner cette recette.",
       loaderViewStatus:"Vue feuille loader.",
       haulingViewStatus:"Vue feuille transport.",
       menu:"☰",
@@ -2696,7 +3226,7 @@ body.dark-mode .panel {
       destination:"DESTINATION",
       loaderHeader:"Numéro<br>Loader",
       install:'<b>Installation iPhone :</b> ouvrir cette page dans Safari, bouton Partager, puis <b>Ajouter à l’écran d’accueil</b>. Après cette étape, l’application fonctionne hors ligne.',
-      help:'<b>Feuille Recette Touch.</b> Toucher une case heure inscrit l’heure actuelle. Toucher A1, B2, etc. ajoute 1 trait vertical par bucket. Destination: toucher Silo ou Cr-Pad. Loader: toucher une fois pour entrer le numéro, double toucher pour répéter le dernier loader. + Nouvelle page crée une page 2, 3, etc. Fais défiler la feuille horizontalement et verticalement pour garder les en-têtes visibles pendant la saisie. Le bas du tableau affiche les totaux par colonne. Poids et # de voyage se calculent automatiquement. Le bouton Feuille loader ouvre une feuille de recette imprimable pour le loader avec buckets estimés selon le tonnage cible. Appui long sur une barre minerai: retire 1 bucket.',
+      help:'<b>Feuille Recette Touch.</b> Toucher une case heure inscrit l’heure actuelle. Toucher A1, B2, etc. ajoute 1 trait vertical par bucket. Destination: toucher Silo ou Cr-Pad. Loader: toucher une fois pour entrer le numéro, double toucher pour répéter le dernier loader. + Nouvelle page crée une page 2, 3, etc. Fais défiler la feuille horizontalement et verticalement pour garder les en-têtes visibles pendant la saisie. Le bas du tableau affiche les totaux par colonne. Poids et # de voyage se calculent automatiquement. Une recette importee planifie les trois godets de chaque voyage : 3 buckets = 37 tonnes. Le bouton Feuille loader ouvre une feuille de recette imprimable pour le loader avec buckets estimés selon le tonnage cible. Appui long sur une barre minerai: retire 1 bucket.',
       loaderPlanSheetName:"Feuille loader / Loader sheet",
       loaderSheetTitle:"Feuille recette loader",
       loaderPlanDate:"Date:",
@@ -2806,6 +3336,57 @@ body.dark-mode .panel {
       darkOffStatus:"Night mode disabled.",
       loaderPlanBtn:"Loader sheet",
       haulingPlanBtn:"Hauling sheet",
+      importRecipe:"Import official recipe",
+      importRecipeShort:"Import recipe",
+      importRecipeTitle:"Import official recipe",
+      importRecipeCopy:"Photograph the recipe table. Every line is reviewed before it is imported.",
+      importCapture:"Take photo",
+      importChoose:"Choose photo",
+      importRetake:"Retake photo",
+      importCancel:"Cancel",
+      importConfirm:"Confirm import",
+      importAddRow:"Add row",
+      importReading:"Reading the recipe...",
+      importPreparing:"Preparing photo...",
+      importCorrecting:"Correcting image...",
+      importAnalyzing:"Analyzing rows...",
+      importReviewRequired:"Review required.",
+      importReviewLines:"{count} lines to review",
+      importDetectedTrips:"{count} trips detected",
+      importAverageConfidence:"Average confidence {percent}%",
+      importLowConfidence:"{count} line(s) need verification.",
+      importNeedsReview:"Unable to confidently read line {line}. Review it before importing.",
+      importNoRows:"No complete lines were read. Add or correct the rows before importing.",
+      importNoOcr:"This photo cannot be read automatically on this device. Add or correct the rows in the review.",
+      importDuplicateTruck:"Truck {truck} appears more than once. Correct or remove the duplicate before importing.",
+      importTooMany:"This recipe has more than {count} trips. Add a new page before importing.",
+      importInvalid:"Every line needs a truck and three buckets before import.",
+      importDone:"Official recipe imported: {count} trips are ready. Only add loading times.",
+      importSummary:"Imported recipe: {planned} planned trips, {tonnes} planned tonnes, {complete} complete.",
+      importLine:"Line",
+      importTruck:"Truck",
+      importBucket1:"Bucket 1",
+      importBucket2:"Bucket 2",
+      importBucket3:"Bucket 3",
+      importConfidence:"Read",
+      importReadUnknown:"Verify",
+      importKnown:"Review ready",
+      importUnknownCodes:"Unknown codes to classify",
+      importUnknownGroup:"Group",
+      importUnknownMissing:"Classify each unknown code before importing.",
+      importGroupAnuri:"Anuri",
+      importGroupQaki:"Qaki",
+      importGroupMine8:"Pad crusher Mine 8",
+      importGroupOther:"Other",
+      importTrips:"Trips",
+      importBuckets:"Buckets",
+      importPlannedTonnes:"Planned tonnes",
+      importMaterials:"By material",
+      importExistingData:"This page already contains data. Choose how to apply the recipe.",
+      importReplace:"Replace",
+      importMerge:"Merge into empty rows",
+      importChooseMode:"Choose Replace or Merge into empty rows before importing.",
+      importNoEmptyRows:"There are not enough empty rows to merge this recipe.",
       loaderViewStatus:"Loader sheet view.",
       haulingViewStatus:"Hauling sheet view.",
       menu:"☰",
@@ -2841,7 +3422,7 @@ body.dark-mode .panel {
       destination:"DESTINATION",
       loaderHeader:"Loader<br>Number",
       install:'<b>iPhone installation:</b> open this page in Safari, tap Share, then <b>Add to Home Screen</b>. After that, the app works offline.',
-      help:'<b>Recipe Touch Sheet.</b> Tap a time cell to enter the current time. Tap A1, B2, etc. to add 1 vertical mark per bucket. Destination: tap Silo or Cr-Pad. Loader: tap once to enter the number, double tap to repeat the last loader. + New page creates page 2, 3, etc. Scroll the sheet horizontally and vertically to keep the headers visible while entering data. The bottom of the table shows column totals. Weight and # of trips are calculated automatically. The Loader sheet button opens a printable recipe sheet for the loader with estimated buckets based on target tonnage. Long press an ore mark to remove 1 bucket.',
+      help:'<b>Recipe Touch Sheet.</b> Tap a time cell to enter the current time. Tap A1, B2, etc. to add 1 vertical mark per bucket. Destination: tap Silo or Cr-Pad. Loader: tap once to enter the number, double tap to repeat the last loader. + New page creates page 2, 3, etc. Scroll the sheet horizontally and vertically to keep the headers visible while entering data. The bottom of the table shows column totals. Weight and # of trips are calculated automatically. An imported recipe plans three buckets for each trip: 3 buckets = 37 tonnes. The Loader sheet button opens a printable recipe sheet for the loader with estimated buckets based on target tonnage. Long press an ore mark to remove 1 bucket.',
       loaderPlanSheetName:"Loader sheet / Feuille loader",
       loaderSheetTitle:"Loader recipe sheet",
       loaderPlanDate:"Date:",
@@ -2958,6 +3539,12 @@ body.dark-mode .panel {
   if (!Number.isFinite(currentPage) || currentPage < 0) currentPage = 0;
   let activeView = localStorage.getItem("recette_touch_active_view") || "hauling";
   let darkModeSetting = localStorage.getItem("recette_touch_dark_mode") || "auto";
+  let recipeImportDraft = null;
+  let recipeImportObjectUrl = "";
+  let ocrLibraryPromise = null;
+  let recipeImportRunId = 0;
+  let activeOcrWorker = null;
+  let userRecipeCodeMappings = loadPrivateRecipeMappings();
 
 
   function resetLegacyLayoutState(){
@@ -2990,6 +3577,101 @@ body.dark-mode .panel {
       text = text.replaceAll("{" + k + "}", String(v));
     });
     return text;
+  }
+
+  function normalizeRecipeCode(value){
+    const compact = String(value ?? "")
+      .replace(/[|\\]/g, "I")
+      .replace(/[^a-zA-Z0-9/ -]/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+    if (!compact) return "";
+    const key = compact.toUpperCase().replace(/[ _-]/g, "");
+    const aliases = {
+      A1:"A1", A2:"A2", A3:"A3", A4:"A4",
+      B1:"B1", B2:"B2", B3:"B3",
+      C1:"C1", C2:"C2", D1:"D1", D2:"D2", D3:"D3", D4:"D4",
+      AHR:"AHR", BHR:"BHR", ORE:"Ore", NEIGE:"Neige",
+      ORENEIGE:"Ore/Neige", "ORE/NEIGE":"Ore/Neige"
+    };
+    return aliases[key] || compact.toUpperCase();
+  }
+
+  function normalizeImportedRecipes(recipes){
+    if (!Array.isArray(recipes)) return [];
+    return recipes.slice(-30).map(recipe => ({
+      id: String(recipe?.id || "").trim() || String(Date.now()) + "-" + Math.random().toString(36).slice(2),
+      pageIndex: Math.max(0, Number(recipe?.pageIndex) || 0),
+      createdAt: String(recipe?.createdAt || ""),
+      recipeDate: String(recipe?.recipeDate || ""),
+      shift: ["day", "night"].includes(recipe?.shift) ? recipe.shift : null,
+      source: "photo",
+      assignments: Object.fromEntries(Object.entries(recipe?.assignments || {}).filter(([, value]) => ["anuri", "qaki", "mine8", "other"].includes(value))),
+      rowIndexes: Array.isArray(recipe?.rowIndexes) ? recipe.rowIndexes.map(index => Math.max(0, Number(index) || 0)).slice(0, ROWS) : [],
+      rows: Array.isArray(recipe?.rows) ? recipe.rows.slice(0, ROWS).map(row => ({
+        quarter: String(row?.quarter || "").trim(),
+        truck: String(row?.truck || "").trim(),
+        buckets: Array.isArray(row?.buckets) ? row.buckets.slice(0, BUCKETS_PER_TRIP).map(normalizeRecipeCode) : [],
+        confidence: Math.max(0, Math.min(1, Number(row?.confidence) || 0))
+      })) : []
+    })).filter(recipe => recipe.rows.length);
+  }
+
+  function loadPrivateRecipeMappings(){
+    try {
+      const parsed = JSON.parse(localStorage.getItem(USER_RECIPE_MAPPINGS_KEY) || "{}");
+      if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return {};
+      return Object.fromEntries(Object.entries(parsed).filter(([, value]) => ["anuri", "qaki", "mine8", "other"].includes(value)));
+    } catch(e) {
+      return {};
+    }
+  }
+
+  function savePrivateRecipeMappings(){
+    try {
+      localStorage.setItem(USER_RECIPE_MAPPINGS_KEY, JSON.stringify(userRecipeCodeMappings));
+    } catch(e) {}
+  }
+
+  function recipeUnknownCodes(rows){
+    const codes = new Set();
+    (rows || []).forEach(row => (row.buckets || []).forEach(code => {
+      const normalized = normalizeRecipeCode(code);
+      if (normalized && !isKnownRecipeCode(normalized)) codes.add(normalized);
+    }));
+    return [...codes];
+  }
+
+  function assignmentForUnknownCode(code, draft = recipeImportDraft){
+    const normalized = normalizeRecipeCode(code);
+    return draft?.assignments?.[normalized] || "";
+  }
+
+  function createRecipeImportDraft(rows, native = false){
+    const assignments = {};
+    recipeUnknownCodes(rows).forEach(code => {
+      if (userRecipeCodeMappings[code]) assignments[code] = userRecipeCodeMappings[code];
+    });
+    return { rows, assignments, native, importedAt:new Date().toISOString() };
+  }
+
+  function recipeCodesForRow(row){
+    return Array.isArray(row?.importedRecipe) ? row.importedRecipe.filter(Boolean).slice(0, BUCKETS_PER_TRIP) : [];
+  }
+
+  function mappedOreForRecipeCode(code){
+    const normalized = normalizeRecipeCode(code);
+    return ORES.find(ore => ore.toUpperCase() === normalized.toUpperCase()) || "";
+  }
+
+  function registryGroupForCode(code){
+    const normalized = normalizeRecipeCode(code).toUpperCase();
+    return ORE_REGISTRY.groups.find(group => group.codes.some(item => item.toUpperCase() === normalized)) || null;
+  }
+
+  function isKnownRecipeCode(code){
+    const normalized = normalizeRecipeCode(code).toUpperCase();
+    return Boolean(registryGroupForCode(normalized));
   }
 
   function setStatus(msg){ document.getElementById("status").textContent = msg; }
@@ -3319,6 +4001,11 @@ body.dark-mode .panel {
   function renderLoaderPlan(){
     const plan = loaderPlanState();
     if (!plan.date) plan.date = state?.meta?.date || todayDate();
+    document.querySelectorAll('.loader-plan-table tbody tr').forEach(tr => {
+      const field = tr.querySelector('[data-target-buckets], .loader-done-tap');
+      const item = field?.dataset?.targetBuckets || field?.dataset?.done || "";
+      tr.hidden = Boolean(item && !LOADER_PLAN_ITEMS.includes(item));
+    });
     ensureLoaderUnlockButtons();
     const map = {
       loaderPlanDate: plan.date || '',
@@ -3503,6 +4190,8 @@ body.dark-mode .panel {
     setText("btnAddPage", i.addPage);
     setText("btnDeletePage", i.deletePage);
     setText("btnExport", i.exportCsv);
+    setText("btnImportRecipe", i.importRecipe);
+    setText("btnImportRecipeScreen", i.importRecipeShort);
     setText("btnPrint", i.printPdf);
     setText("btnReset", i.reset);
     setText("menuSectionQuick", i.menuSectionQuick);
@@ -3574,6 +4263,25 @@ body.dark-mode .panel {
     setText("loaderClear", i.clear);
     setText("loaderCancel", i.cancel);
     setText("loaderSave", i.save);
+    setText("recipeImportTitle", i.importRecipeTitle);
+    setText("recipeImportCopy", i.importRecipeCopy);
+    setText("btnRecipeCapture", i.importCapture);
+    setText("btnRecipeChoose", i.importChoose);
+    setText("btnRecipeRetake", i.importRetake);
+    setText("btnRecipeChooseAgain", i.importChoose);
+    setText("btnRecipeCancel", i.importCancel);
+    setText("btnRecipeConfirm", i.importConfirm);
+    setText("btnRecipeAddRow", i.importAddRow);
+    setText("recipeImportProgress", i.importReading);
+    setText("recipeReviewLineLabel", i.importLine);
+    setText("recipeReviewTruckLabel", i.importTruck);
+    setText("recipeReviewBucket1Label", i.importBucket1);
+    setText("recipeReviewBucket2Label", i.importBucket2);
+    setText("recipeReviewBucket3Label", i.importBucket3);
+    setText("recipeReviewConfidenceLabel", i.importConfidence);
+    setText("recipeImportConflictText", i.importExistingData);
+    setText("btnRecipeReplace", i.importReplace);
+    setText("btnRecipeMerge", i.importMerge);
     const manualTimeInput = document.getElementById("timeInput");
     if (manualTimeInput) manualTimeInput.placeholder = i.timeManualPlaceholder;
 
@@ -3615,8 +4323,8 @@ body.dark-mode .panel {
 
   function blankRow(){
     const ores = {};
-    ORES.forEach(o => ores[o] = 0);
-    return { time:"", ores, loader:"", dest:"" };
+    ALL_ORES.forEach(o => ores[o] = 0);
+    return { time:"", ores, loader:"", dest:"", importedRecipe:[], recipeTruck:"", recipeQuarter:"" };
   }
 
   function blankPage(){
@@ -3627,7 +4335,8 @@ body.dark-mode .panel {
     return {
       meta: { date:"", truckNo:"", name:"", truckType:"" },
       pages: [blankPage()],
-      loaderPlan: blankLoaderPlan()
+      loaderPlan: blankLoaderPlan(),
+      importedRecipes: []
     };
   }
 
@@ -3635,11 +4344,16 @@ body.dark-mode .panel {
     if (!Array.isArray(rows) || rows.length !== ROWS) return Array.from({length: ROWS}, blankRow);
     for (const row of rows) {
       row.ores = row.ores || {};
-      ORES.forEach(o => { if (typeof row.ores[o] !== "number") row.ores[o] = 0; });
+      ALL_ORES.forEach(o => { if (typeof row.ores[o] !== "number") row.ores[o] = 0; });
       const normalizedTime = normalizeTimeInput(row.time);
       row.time = normalizedTime === null ? (row.time || "") : normalizedTime;
       row.loader = row.loader || "";
       row.dest = row.dest || "";
+      row.importedRecipe = Array.isArray(row.importedRecipe)
+        ? row.importedRecipe.slice(0, BUCKETS_PER_TRIP).map(normalizeRecipeCode).filter(Boolean)
+        : [];
+      row.recipeTruck = String(row.recipeTruck || "").trim();
+      row.recipeQuarter = String(row.recipeQuarter || "").trim();
     }
     return rows;
   }
@@ -3656,7 +4370,8 @@ body.dark-mode .panel {
           poids: p.poids || "",
           voyage: p.voyage || ""
         })),
-        loaderPlan: normalizeLoaderPlan(parsed.loaderPlan)
+        loaderPlan: normalizeLoaderPlan(parsed.loaderPlan),
+        importedRecipes: normalizeImportedRecipes(parsed.importedRecipes)
       };
     }
 
@@ -3673,7 +4388,8 @@ body.dark-mode .panel {
           poids: parsed.meta?.poids || "",
           voyage: parsed.meta?.voyage || ""
         }],
-        loaderPlan: normalizeLoaderPlan(parsed.loaderPlan)
+        loaderPlan: normalizeLoaderPlan(parsed.loaderPlan),
+        importedRecipes: normalizeImportedRecipes(parsed.importedRecipes)
       };
     }
 
@@ -3720,12 +4436,13 @@ body.dark-mode .panel {
   }
 
   function rowTotal(r){
-    return ORES.reduce((sum, o) => sum + (page().rows[r].ores[o] || 0), 0);
+    return rowBucketTotalFromRow(page().rows[r]);
   }
 
   function rowBucketTotalFromRow(row){
     if (!row || !row.ores) return 0;
-    return ORES.reduce((sum, o) => sum + (row.ores[o] || 0), 0);
+    const entered = ALL_ORES.reduce((sum, o) => sum + (row.ores[o] || 0), 0);
+    return Math.max(entered, recipeCodesForRow(row).length);
   }
 
   function rowStarted(row){
@@ -3735,7 +4452,7 @@ body.dark-mode .panel {
 
   function rowCompleteForNext(row){
     if (!row) return false;
-    return Boolean(row.time && rowBucketTotalFromRow(row) >= 3);
+    return Boolean(row.time && rowBucketTotalFromRow(row) >= BUCKETS_PER_TRIP);
   }
 
   function nextRealRowIndex(){
@@ -3772,7 +4489,7 @@ body.dark-mode .panel {
     const missing = [];
     if (!row.time) missing.push(t("missingHour"));
     const buckets = rowBucketTotalFromRow(row);
-    if (buckets < 3) missing.push(t("missingBuckets", { count: 3 - buckets }));
+    if (buckets < BUCKETS_PER_TRIP) missing.push(t("missingBuckets", { count: BUCKETS_PER_TRIP - buckets }));
 
     flashBlockedLine(r);
     setSelected(next, "time", "time");
@@ -3811,8 +4528,8 @@ body.dark-mode .panel {
       if (row.dest === "Cr-Pad") crPad++;
     });
 
-    const totalBuckets = ORES.reduce((sum, o) => sum + totals[o], 0);
-    const estimatedTonnage = voyageCount * 40;
+    const totalBuckets = page().rows.reduce((sum, row) => sum + rowBucketTotalFromRow(row), 0);
+    const estimatedTonnage = voyageCount * TONNES_PER_TRIP;
     return { totals, silo, crPad, voyageCount, totalBuckets, estimatedTonnage };
   }
 
@@ -3835,9 +4552,56 @@ body.dark-mode .panel {
       if (row.dest === "Cr-Pad") crPad++;
     });
 
-    const totalBuckets = ORES.reduce((sum, o) => sum + totals[o], 0);
-    const estimatedTonnage = voyageCount * 40;
+    const totalBuckets = p.rows.reduce((sum, row) => sum + rowBucketTotalFromRow(row), 0);
+    const estimatedTonnage = voyageCount * TONNES_PER_TRIP;
     return { totals, silo, crPad, voyageCount, totalBuckets, estimatedTonnage };
+  }
+
+  function importedRecipeForCurrentPage(){
+    const recipes = Array.isArray(state.importedRecipes) ? state.importedRecipes : [];
+    const matches = recipes.filter(recipe => recipe.pageIndex === currentPage);
+    return matches.length ? matches[matches.length - 1] : null;
+  }
+
+  function importedRecipeProgress(recipe){
+    const result = { plannedTrips:0, completeTrips:0, plannedBuckets:0, completedBuckets:0, materials:{} };
+    if (!recipe || !Array.isArray(recipe.rows)) return result;
+    recipe.rows.forEach((recipeRow, index) => {
+      const codes = Array.isArray(recipeRow.buckets) ? recipeRow.buckets.filter(Boolean).slice(0, BUCKETS_PER_TRIP) : [];
+      if (!codes.length) return;
+      result.plannedTrips++;
+      result.plannedBuckets += codes.length;
+      const haulingRow = page().rows[recipe.rowIndexes?.[index] ?? index];
+      const tripComplete = Boolean(haulingRow?.time && rowBucketTotalFromRow(haulingRow) >= BUCKETS_PER_TRIP);
+      if (tripComplete) result.completeTrips++;
+      codes.forEach(code => {
+        const entry = result.materials[code] || { buckets:0, completedBuckets:0 };
+        entry.buckets++;
+        if (tripComplete) entry.completedBuckets++;
+        result.materials[code] = entry;
+      });
+    });
+    result.completedBuckets = result.completeTrips * BUCKETS_PER_TRIP;
+    return result;
+  }
+
+  function renderRecipeImportSummary(){
+    const el = document.getElementById("recipeImportSummary");
+    if (!el) return;
+    const recipe = importedRecipeForCurrentPage();
+    if (!recipe) {
+      el.classList.remove("show");
+      el.textContent = "";
+      return;
+    }
+    const progress = importedRecipeProgress(recipe);
+    const tonnes = (progress.plannedTrips * TONNES_PER_TRIP).toFixed(1).replace(/\.0$/, "");
+    const materialDetail = Object.entries(progress.materials)
+      .map(([code, item]) => code + ": " + item.buckets + " b, " + (item.buckets * TONNES_PER_TRIP / BUCKETS_PER_TRIP).toFixed(1).replace(/\.0$/, "") + " t")
+      .join(" | ");
+    el.classList.add("show");
+    el.title = materialDetail;
+    el.innerHTML = "<strong>" + t("importRecipeShort") + "</strong><span>" + t("importSummary", { planned:progress.plannedTrips, tonnes, complete:progress.completeTrips }) + "</span>";
   }
 
   function renderTotals(){
@@ -3939,7 +4703,23 @@ body.dark-mode .panel {
       const time = document.createElement("td");
       time.className = "time-cell";
       time.dataset.type = "time";
-      time.textContent = row.time;
+      const timeValue = document.createElement("span");
+      timeValue.className = "time-value";
+      timeValue.textContent = row.time;
+      time.appendChild(timeValue);
+      const importedCodes = recipeCodesForRow(row);
+      if (importedCodes.length) {
+        const preview = document.createElement("div");
+        preview.className = "imported-code-preview";
+        const label = [row.recipeTruck ? "T" + row.recipeTruck : "", ...importedCodes].filter(Boolean).join(" ");
+        preview.title = label;
+        importedCodes.forEach(code => {
+          const chip = document.createElement("span");
+          chip.textContent = code;
+          preview.appendChild(chip);
+        });
+        time.appendChild(preview);
+      }
       tr.appendChild(time);
 
       ORES.forEach(ore => {
@@ -3970,8 +4750,696 @@ body.dark-mode .panel {
     });
     updateMetaUI();
     renderTotals();
+    renderRecipeImportSummary();
     markNextLine();
     renderLoaderPlan();
+  }
+
+  function setRecipeImportStage(stage){
+    document.querySelectorAll("[data-recipe-stage]").forEach(el => {
+      el.classList.toggle("active", el.dataset.recipeStage === stage);
+    });
+    document.getElementById("btnRecipeRetake").hidden = stage !== "review";
+    document.getElementById("btnRecipeChooseAgain").hidden = stage !== "review";
+    document.getElementById("btnRecipeConfirm").hidden = stage !== "review";
+  }
+
+  function releaseRecipeImportPhoto(){
+    if (recipeImportObjectUrl) URL.revokeObjectURL(recipeImportObjectUrl);
+    recipeImportObjectUrl = "";
+    ["recipeImportCanvas", "recipeReviewCanvas"].forEach(id => {
+      const canvas = document.getElementById(id);
+      if (canvas) {
+        canvas.width = 1;
+        canvas.height = 1;
+      }
+    });
+  }
+
+  function openRecipeImport(){
+    setActiveView("hauling", true);
+    setMenuOpen(false);
+    recipeImportDraft = null;
+    releaseRecipeImportPhoto();
+    document.getElementById("recipeReviewRows").innerHTML = "";
+    document.getElementById("recipeReviewWarning").hidden = true;
+    setRecipeImportStage("start");
+    document.getElementById("recipeImportModal").classList.add("open");
+  }
+
+  function closeRecipeImport(){
+    recipeImportRunId++;
+    if (activeOcrWorker) {
+      const worker = activeOcrWorker;
+      activeOcrWorker = null;
+      worker.terminate().catch(() => {});
+    }
+    document.getElementById("recipeImportModal").classList.remove("open");
+    releaseRecipeImportPhoto();
+    recipeImportDraft = null;
+  }
+
+  function requestRecipePhoto(camera){
+    const input = document.getElementById("recipeCameraInput");
+    input.value = "";
+    if (camera) input.setAttribute("capture", "environment");
+    else input.removeAttribute("capture");
+    input.click();
+  }
+
+  function canvasCopy(source, maxSide = 1600){
+    const scale = Math.min(1, maxSide / Math.max(source.naturalWidth || source.width, source.naturalHeight || source.height));
+    const width = Math.max(1, Math.round((source.naturalWidth || source.width) * scale));
+    const height = Math.max(1, Math.round((source.naturalHeight || source.height) * scale));
+    const canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
+    canvas.getContext("2d", { willReadFrequently:true }).drawImage(source, 0, 0, width, height);
+    return canvas;
+  }
+
+  function luma(r, g, b){
+    return r * .2126 + g * .7152 + b * .0722;
+  }
+
+  function findBrightDocumentBounds(canvas){
+    const ctx = canvas.getContext("2d", { willReadFrequently:true });
+    const { width, height } = canvas;
+    const data = ctx.getImageData(0, 0, width, height).data;
+    const step = Math.max(2, Math.round(Math.min(width, height) / 600));
+    const rows = [];
+    const cols = [];
+    for (let y = 0; y < height; y += step) {
+      let count = 0;
+      for (let x = 0; x < width; x += step) {
+        const i = (y * width + x) * 4;
+        const light = luma(data[i], data[i + 1], data[i + 2]);
+        if (light > 165 && Math.abs(data[i] - data[i + 1]) < 46 && Math.abs(data[i + 1] - data[i + 2]) < 46) count++;
+      }
+      if (count >= Math.max(8, width / step * .12)) rows.push(y);
+    }
+    for (let x = 0; x < width; x += step) {
+      let count = 0;
+      for (let y = 0; y < height; y += step) {
+        const i = (y * width + x) * 4;
+        const light = luma(data[i], data[i + 1], data[i + 2]);
+        if (light > 165 && Math.abs(data[i] - data[i + 1]) < 46 && Math.abs(data[i + 1] - data[i + 2]) < 46) count++;
+      }
+      if (count >= Math.max(8, height / step * .12)) cols.push(x);
+    }
+    if (!rows.length || !cols.length) return { x:0, y:0, width, height };
+    const pad = Math.max(8, step * 4);
+    const minX = Math.max(0, Math.min(...cols) - pad);
+    const maxX = Math.min(width, Math.max(...cols) + pad);
+    const minY = Math.max(0, Math.min(...rows) - pad);
+    const maxY = Math.min(height, Math.max(...rows) + pad);
+    if (maxX - minX < width * .2 || maxY - minY < height * .2) return { x:0, y:0, width, height };
+    return { x:minX, y:minY, width:maxX - minX, height:maxY - minY };
+  }
+
+  function cropCanvas(source, bounds){
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.max(1, Math.round(bounds.width));
+    canvas.height = Math.max(1, Math.round(bounds.height));
+    canvas.getContext("2d", { willReadFrequently:true }).drawImage(source, bounds.x, bounds.y, bounds.width, bounds.height, 0, 0, canvas.width, canvas.height);
+    return canvas;
+  }
+
+  function scaleRecipeCanvas(source){
+    const maxPixels = 2500000;
+    const targetWidth = 1050;
+    let scale = Math.max(1, Math.min(2.2, targetWidth / source.width));
+    scale = Math.min(scale, Math.sqrt(maxPixels / (source.width * source.height)));
+    if (scale <= 1.02) return source;
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.max(1, Math.round(source.width * scale));
+    canvas.height = Math.max(1, Math.round(source.height * scale));
+    const ctx = canvas.getContext("2d", { willReadFrequently:true });
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+    ctx.drawImage(source, 0, 0, canvas.width, canvas.height);
+    return canvas;
+  }
+
+  function rotateRecipeCanvas(source, turns){
+    const normalizedTurns = ((turns % 4) + 4) % 4;
+    if (!normalizedTurns) return cropCanvas(source, { x:0, y:0, width:source.width, height:source.height });
+    const sideways = normalizedTurns % 2 === 1;
+    const canvas = document.createElement("canvas");
+    canvas.width = sideways ? source.height : source.width;
+    canvas.height = sideways ? source.width : source.height;
+    const ctx = canvas.getContext("2d", { willReadFrequently:true });
+    ctx.translate(canvas.width / 2, canvas.height / 2);
+    ctx.rotate(normalizedTurns * Math.PI / 2);
+    ctx.drawImage(source, -source.width / 2, -source.height / 2);
+    return canvas;
+  }
+
+  function findRecipeTableBounds(canvas){
+    const ctx = canvas.getContext("2d", { willReadFrequently:true });
+    const { width, height } = canvas;
+    const pixels = ctx.getImageData(0, 0, width, height).data;
+    const xScores = new Uint32Array(width);
+    const yScores = new Uint32Array(height);
+    const step = Math.max(1, Math.round(Math.min(width, height) / 1000));
+    for (let y = 0; y < height; y += step) {
+      for (let x = 0; x < width; x += step) {
+        const i = (y * width + x) * 4;
+        if (luma(pixels[i], pixels[i + 1], pixels[i + 2]) < 145) {
+          xScores[x]++;
+          yScores[y]++;
+        }
+      }
+    }
+    const minXScore = Math.max(8, Math.round(height / step * .035));
+    const minYScore = Math.max(8, Math.round(width / step * .012));
+    const xHits = [];
+    const yHits = [];
+    xScores.forEach((score, x) => { if (score >= minXScore) xHits.push(x); });
+    yScores.forEach((score, y) => { if (score >= minYScore) yHits.push(y); });
+    if (!xHits.length || !yHits.length) return { x:0, y:0, width, height };
+    const pad = Math.max(10, Math.round(Math.min(width, height) * .018));
+    const minX = Math.max(0, Math.min(...xHits) - pad);
+    const maxX = Math.min(width, Math.max(...xHits) + pad);
+    const minY = Math.max(0, Math.min(...yHits) - pad);
+    const maxY = Math.min(height, Math.max(...yHits) + pad);
+    if (maxX - minX < width * .12 || maxY - minY < height * .18) return { x:0, y:0, width, height };
+    return { x:minX, y:minY, width:maxX - minX, height:maxY - minY };
+  }
+
+  function enhanceRecipeCanvas(source){
+    const canvas = cropCanvas(source, { x:0, y:0, width:source.width, height:source.height });
+    const ctx = canvas.getContext("2d", { willReadFrequently:true });
+    const image = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    for (let i = 0; i < image.data.length; i += 4) {
+      const gray = luma(image.data[i], image.data[i + 1], image.data[i + 2]);
+      const value = Math.max(0, Math.min(255, Math.round((gray - 118) * 1.65 + 128)));
+      image.data[i] = value;
+      image.data[i + 1] = value;
+      image.data[i + 2] = value;
+    }
+    ctx.putImageData(image, 0, 0);
+    return canvas;
+  }
+
+  function adaptiveThresholdRecipeCanvas(source){
+    const canvas = cropCanvas(source, { x:0, y:0, width:source.width, height:source.height });
+    const ctx = canvas.getContext("2d", { willReadFrequently:true });
+    const { width, height } = canvas;
+    const image = ctx.getImageData(0, 0, width, height);
+    const area = (width + 1) * (height + 1);
+    const integral = new Uint32Array(area);
+    for (let y = 1; y <= height; y++) {
+      let rowSum = 0;
+      for (let x = 1; x <= width; x++) {
+        const pixel = (y - 1) * width + (x - 1);
+        rowSum += Math.round(luma(image.data[pixel * 4], image.data[pixel * 4 + 1], image.data[pixel * 4 + 2]));
+        integral[y * (width + 1) + x] = integral[(y - 1) * (width + 1) + x] + rowSum;
+      }
+    }
+    const radius = Math.max(12, Math.round(Math.min(width, height) / 45));
+    for (let y = 0; y < height; y++) {
+      const top = Math.max(0, y - radius);
+      const bottom = Math.min(height - 1, y + radius);
+      for (let x = 0; x < width; x++) {
+        const left = Math.max(0, x - radius);
+        const right = Math.min(width - 1, x + radius);
+        const sum = integral[(bottom + 1) * (width + 1) + (right + 1)] - integral[top * (width + 1) + (right + 1)] - integral[(bottom + 1) * (width + 1) + left] + integral[top * (width + 1) + left];
+        const localAverage = sum / ((right - left + 1) * (bottom - top + 1));
+        const index = (y * width + x) * 4;
+        const gray = luma(image.data[index], image.data[index + 1], image.data[index + 2]);
+        const value = gray < localAverage - 10 ? 0 : 255;
+        image.data[index] = value;
+        image.data[index + 1] = value;
+        image.data[index + 2] = value;
+      }
+    }
+    ctx.putImageData(image, 0, 0);
+    return canvas;
+  }
+
+  function drawCanvasTo(targetId, source){
+    const target = document.getElementById(targetId);
+    if (!target || !source) return;
+    target.width = source.width;
+    target.height = source.height;
+    target.getContext("2d").drawImage(source, 0, 0);
+  }
+
+  function loadRecipeImage(file){
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      recipeImportObjectUrl = URL.createObjectURL(file);
+      img.onload = () => resolve(img);
+      img.onerror = () => reject(new Error("image-load"));
+      img.src = recipeImportObjectUrl;
+    });
+  }
+
+  function parseRecipeCodeTokens(values){
+    const tokens = [];
+    values.forEach(value => {
+      const raw = String(value || "").replace(/ORE\s*\/?\s*NEIGE/gi, "ORE/NEIGE");
+      const matches = raw.match(/[A-Za-z][A-Za-z0-9/ -]*/g) || [];
+      matches.forEach(match => {
+        const code = normalizeRecipeCode(match);
+        if (code && !/^(QUART|CAMION|TRUCK|GODET|BUCKET|SOURCE)$/i.test(code)) tokens.push(code);
+      });
+    });
+    return tokens;
+  }
+
+  function parseRecipeOcrBlocks(blocks){
+    const entries = blocks.map(block => {
+      const box = block.boundingBox || {};
+      return {
+        text: String(block.rawValue || block.text || "").trim(),
+        x: Number(box.x) || 0,
+        y: Number(box.y) || 0,
+        height: Math.min(42, Math.max(10, Number(box.height) || 16)),
+        confidence: Number.isFinite(Number(block.confidence)) ? Number(block.confidence) : .82
+      };
+    }).filter(entry => entry.text);
+    entries.sort((a, b) => a.y - b.y || a.x - b.x);
+    const groups = [];
+    entries.forEach(entry => {
+      const previous = groups[groups.length - 1];
+      const rowTolerance = previous
+        ? Math.max(18, Math.min(38, Math.max(previous.height, entry.height) * .9))
+        : 0;
+      if (previous && Math.abs(entry.y - previous.centerY) <= rowTolerance) {
+        previous.entries.push(entry);
+        previous.centerY = previous.entries.reduce((sum, item) => sum + item.y, 0) / previous.entries.length;
+        previous.height = Math.max(previous.height, entry.height);
+      } else {
+        groups.push({ centerY:entry.y, height:entry.height, entries:[entry] });
+      }
+    });
+    const rows = [];
+    groups.forEach((group, groupIndex) => {
+      const cells = group.entries.sort((a, b) => a.x - b.x);
+      const text = cells.map(cell => cell.text).join(" ");
+      if (/quart|camion|truck|godet|bucket/i.test(text)) return;
+      const values = text.split(/\s+/).map(value => value.trim()).filter(Boolean);
+      const numberIndexes = values.map((value, index) => /^\d{1,3}$/.test(value) ? index : -1).filter(index => index >= 0);
+      const compactTruckCell = values.map((value, index) => {
+        const match = value.match(/^(\d{1,3})\s*[\/|lI]?\s*([A-Za-z][A-Za-z0-9/ -]*)$/);
+        return match ? { index, truck:match[1], firstCode:match[2] } : null;
+      }).find(Boolean);
+      if (!numberIndexes.length && !compactTruckCell) return;
+      const useCompactTruck = compactTruckCell && (numberIndexes.length < 2 || compactTruckCell.index < numberIndexes[1]);
+      const quarter = useCompactTruck && numberIndexes.length
+        ? values[numberIndexes[0]].replace(/[^0-9]/g, "")
+        : (numberIndexes.length ? values[numberIndexes[0]].replace(/[^0-9]/g, "") : "");
+      const truckIndex = useCompactTruck
+        ? compactTruckCell.index
+        : (numberIndexes.length > 1 ? numberIndexes[1] : numberIndexes[0]);
+      const truck = useCompactTruck
+        ? compactTruckCell.truck
+        : values[truckIndex].replace(/[^0-9A-Za-z-]/g, "");
+      const codeValues = useCompactTruck
+        ? [compactTruckCell.firstCode, ...values.slice(truckIndex + 1)]
+        : values.slice(truckIndex + 1);
+      const codes = parseRecipeCodeTokens(codeValues).slice(0, BUCKETS_PER_TRIP);
+      if (!truck || !codes.length) return;
+      const confidence = cells.reduce((sum, cell) => sum + cell.confidence, 0) / cells.length;
+      rows.push({ quarter, truck, buckets:codes, confidence, sourceLine:groupIndex + 1 });
+    });
+    return rows;
+  }
+
+  function absoluteOcrUrl(relativePath){
+    return new URL(relativePath, location.href).href;
+  }
+
+  function setRecipeImportProgress(message){
+    const progress = document.getElementById("recipeImportProgress");
+    if (progress) progress.textContent = message;
+  }
+
+  function loadOfflineOcrLibrary(){
+    if (window.Tesseract) return Promise.resolve(window.Tesseract);
+    if (ocrLibraryPromise) return ocrLibraryPromise;
+    ocrLibraryPromise = new Promise((resolve, reject) => {
+      const script = document.createElement("script");
+      script.src = absoluteOcrUrl(OCR_ASSETS.library);
+      script.async = true;
+      script.onload = () => window.Tesseract ? resolve(window.Tesseract) : reject(new Error("ocr-library"));
+      script.onerror = () => reject(new Error("ocr-library"));
+      document.head.appendChild(script);
+    }).catch(error => {
+      ocrLibraryPromise = null;
+      throw error;
+    });
+    return ocrLibraryPromise;
+  }
+
+  function tesseractBlocks(data){
+    const source = [];
+    if (Array.isArray(data?.blocks)) {
+      data.blocks.forEach(block => {
+        (block?.paragraphs || []).forEach(paragraph => {
+          (paragraph?.lines || []).forEach(line => {
+            if (Array.isArray(line?.words) && line.words.length) source.push(...line.words);
+            else source.push(line);
+          });
+        });
+      });
+    }
+    if (!source.length && Array.isArray(data?.lines)) source.push(...data.lines);
+    if (!source.length && Array.isArray(data?.words)) source.push(...data.words);
+    return source.map(item => {
+      const box = item.bbox || item.boundingBox || {};
+      return {
+        rawValue: item.text || item.rawValue || "",
+        confidence: Number(item.confidence) / 100,
+        boundingBox: {
+          x:Number(box.x0 ?? box.x ?? 0),
+          y:Number(box.y0 ?? box.y ?? 0),
+          width:Math.max(1, Number((box.x1 ?? 0) - (box.x0 ?? 0)) || Number(box.width) || 1),
+          height:Math.max(1, Number((box.y1 ?? 0) - (box.y0 ?? 0)) || Number(box.height) || 1)
+        }
+      };
+    });
+  }
+
+  async function readRecipeWithOfflineOcr(canvas){
+    const Tesseract = await loadOfflineOcrLibrary();
+    let worker = null;
+    try {
+      worker = await Tesseract.createWorker("eng", 1, {
+        workerPath:absoluteOcrUrl(OCR_ASSETS.worker),
+        corePath:absoluteOcrUrl(OCR_ASSETS.core),
+        langPath:absoluteOcrUrl(OCR_ASSETS.language),
+        workerBlobURL:false,
+        logger:message => {
+          if (message?.status === "recognizing text") setRecipeImportProgress(t("importAnalyzing"));
+          else if (message?.status === "loading language traineddata") setRecipeImportProgress(t("importReading"));
+          else if (message?.status === "loading tesseract core") setRecipeImportProgress(t("importCorrecting"));
+        }
+      });
+      activeOcrWorker = worker;
+      await worker.setParameters({
+        tessedit_pageseg_mode:"11",
+        tessedit_char_whitelist:"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz/ ",
+        preserve_interword_spaces:"1",
+        user_defined_dpi:"180"
+      });
+      const result = await worker.recognize(canvas, {}, { text:true, blocks:true });
+      const rows = parseRecipeOcrBlocks(tesseractBlocks(result?.data));
+      return { rows, native:false, engine:"tesseract" };
+    } finally {
+      if (worker) await worker.terminate().catch(() => {});
+      if (activeOcrWorker === worker) activeOcrWorker = null;
+    }
+  }
+
+  async function readRecipeWithNativeOcr(enhanced, thresholded){
+    if (typeof window.TextDetector !== "function") return { rows:[], native:false };
+    try {
+      const detector = new window.TextDetector();
+      const attempts = await Promise.all([detector.detect(enhanced), detector.detect(thresholded)]);
+      const candidates = attempts.map(parseRecipeOcrBlocks);
+      candidates.sort((a, b) => b.length - a.length);
+      return { rows:candidates[0] || [], native:true };
+    } catch(e) {
+      return { rows:[], native:false };
+    }
+  }
+
+  function recipeDraftSummary(rows){
+    const materials = {};
+    let buckets = 0;
+    (rows || []).forEach(row => (row.buckets || []).forEach(code => {
+      const normalized = normalizeRecipeCode(code);
+      if (!normalized) return;
+      materials[normalized] = (materials[normalized] || 0) + 1;
+      buckets++;
+    }));
+    const trips = (rows || []).length;
+    return { trips, buckets, plannedTonnes:buckets * TONNES_PER_TRIP / BUCKETS_PER_TRIP, materials };
+  }
+
+  function renderRecipeReview(){
+    const body = document.getElementById("recipeReviewRows");
+    const warning = document.getElementById("recipeReviewWarning");
+    const meta = document.getElementById("recipeReviewMeta");
+    const confirm = document.getElementById("btnRecipeConfirm");
+    const conflict = document.getElementById("recipeImportConflict");
+    body.innerHTML = "";
+    const rows = recipeImportDraft?.rows || [];
+    const invalid = rows.filter(row => !recipeRowIsComplete(row, recipeImportDraft));
+    const low = rows.filter(row => Number(row.confidence) < .9);
+    const duplicateTrucks = duplicateRecipeTrucks(rows);
+    const unknownCodes = recipeUnknownCodes(rows);
+    const unresolvedUnknowns = unknownCodes.filter(code => !assignmentForUnknownCode(code));
+    const hasExistingData = page().rows.some(rowStarted);
+    conflict.hidden = !hasExistingData;
+    document.getElementById("btnRecipeReplace").classList.toggle("active", recipeImportDraft?.applyMode === "replace");
+    document.getElementById("btnRecipeMerge").classList.toggle("active", recipeImportDraft?.applyMode === "merge");
+    meta.innerHTML = "";
+    const tripBadge = document.createElement("span");
+    tripBadge.className = "recipe-review-badge";
+    tripBadge.textContent = t("importDetectedTrips", { count:rows.length });
+    meta.appendChild(tripBadge);
+    const confidenceBadge = document.createElement("span");
+    confidenceBadge.className = "recipe-review-badge";
+    confidenceBadge.textContent = low.length ? t("importLowConfidence", { count:low.length }) : t("importKnown");
+    meta.appendChild(confidenceBadge);
+    const averageBadge = document.createElement("span");
+    averageBadge.className = "recipe-review-badge";
+    const averageConfidence = rows.length
+      ? Math.round(rows.reduce((sum, row) => sum + Math.max(0, Math.min(1, Number(row.confidence) || 0)), 0) / rows.length * 100)
+      : 0;
+    averageBadge.textContent = t("importAverageConfidence", { percent:averageConfidence });
+    meta.appendChild(averageBadge);
+    const draftSummary = recipeDraftSummary(rows);
+    const summary = document.getElementById("recipeReviewSummary");
+    const materialDetail = Object.entries(draftSummary.materials).map(([code, count]) => {
+      const percentage = draftSummary.buckets ? (count / draftSummary.buckets * 100).toFixed(1).replace(/\.0$/, "") : "0";
+      const tripEquivalent = (count / BUCKETS_PER_TRIP).toFixed(2).replace(/0+$/, "").replace(/\.$/, "");
+      return code + ": " + count + " b, " + tripEquivalent + " v, " + percentage + "%";
+    }).join(" | ");
+    summary.innerHTML = "<div><strong>" + t("importTrips") + "</strong>" + draftSummary.trips + "</div>" +
+      "<div><strong>" + t("importBuckets") + "</strong>" + draftSummary.buckets + "</div>" +
+      "<div><strong>" + t("importPlannedTonnes") + "</strong>" + draftSummary.plannedTonnes.toFixed(1).replace(/\.0$/, "") + " t</div>" +
+      "<div style=\"grid-column:1 / -1\"><strong>" + t("importMaterials") + "</strong>" + materialDetail + "</div>";
+    if (unknownCodes.length) {
+      const unknownList = document.createElement("div");
+      unknownList.className = "recipe-unknown-list";
+      unknownCodes.forEach(code => {
+        const wrap = document.createElement("label");
+        wrap.className = "recipe-unknown-assignment";
+        wrap.append(document.createTextNode(code + " - " + t("importUnknownGroup")));
+        const select = document.createElement("select");
+        select.dataset.recipeUnknownCode = code;
+        [
+          ["", "-"],
+          ["anuri", t("importGroupAnuri")],
+          ["qaki", t("importGroupQaki")],
+          ["mine8", t("importGroupMine8")],
+          ["other", t("importGroupOther")]
+        ].forEach(([value, label]) => {
+          const option = document.createElement("option");
+          option.value = value;
+          option.textContent = label;
+          option.selected = assignmentForUnknownCode(code) === value;
+          select.appendChild(option);
+        });
+        wrap.appendChild(select);
+        unknownList.appendChild(wrap);
+      });
+      meta.appendChild(unknownList);
+    }
+    rows.forEach((row, index) => {
+      const tr = document.createElement("tr");
+      if (Number(row.confidence) < .9 || !recipeRowIsComplete(row, recipeImportDraft) || duplicateTrucks.has(String(row.truck || "").trim().toUpperCase())) tr.classList.add("low-confidence");
+      const cells = [String(index + 1), row.truck || "", row.buckets?.[0] || "", row.buckets?.[1] || "", row.buckets?.[2] || ""];
+      cells.forEach((value, cellIndex) => {
+        const td = document.createElement("td");
+        if (cellIndex === 0) td.textContent = value;
+        else {
+          const input = document.createElement("input");
+          input.value = value;
+          input.dataset.recipeRow = String(index);
+          input.dataset.recipeField = ["truck", "bucket1", "bucket2", "bucket3"][cellIndex - 1];
+          input.autocomplete = "off";
+          td.appendChild(input);
+        }
+        tr.appendChild(td);
+      });
+      const confidence = document.createElement("td");
+      confidence.className = "recipe-confidence" + (Number(row.confidence) < .9 ? " low" : "");
+      confidence.textContent = Number(row.confidence) ? Math.round(Number(row.confidence) * 100) + "%" : t("importReadUnknown");
+      tr.appendChild(confidence);
+      const remove = document.createElement("td");
+      const removeButton = document.createElement("button");
+      removeButton.type = "button";
+      removeButton.className = "recipe-remove-row";
+      removeButton.dataset.removeRecipeRow = String(index);
+      removeButton.setAttribute("aria-label", "Remove row");
+      removeButton.textContent = "-";
+      remove.appendChild(removeButton);
+      tr.appendChild(remove);
+      body.appendChild(tr);
+    });
+    const message = unresolvedUnknowns.length
+      ? t("importUnknownMissing")
+      : (invalid.length
+        ? t("importInvalid")
+        : (duplicateTrucks.size
+          ? t("importDuplicateTruck", { truck:[...duplicateTrucks][0] })
+          : (low.length ? t("importNeedsReview", { line:low[0].sourceLine || low.findIndex(row => Number(row.confidence) < .9) + 1 }) : "")));
+    warning.hidden = !message;
+    warning.textContent = message;
+    confirm.disabled = !rows.length || Boolean(invalid.length) || Boolean(duplicateTrucks.size) || rows.length > ROWS || (hasExistingData && !recipeImportDraft?.applyMode);
+  }
+
+  function recipeRowIsComplete(row, draft = recipeImportDraft){
+    return Boolean(String(row?.truck || "").trim() && Array.isArray(row?.buckets) && row.buckets.length === BUCKETS_PER_TRIP && row.buckets.every(code => {
+      const normalized = normalizeRecipeCode(code);
+      return normalized && (isKnownRecipeCode(normalized) || Boolean(assignmentForUnknownCode(normalized, draft)));
+    }));
+  }
+
+  function duplicateRecipeTrucks(rows){
+    const seen = new Set();
+    const duplicates = new Set();
+    (rows || []).forEach(row => {
+      const truck = String(row?.truck || "").trim().toUpperCase();
+      if (!truck) return;
+      if (seen.has(truck)) duplicates.add(truck);
+      seen.add(truck);
+    });
+    return duplicates;
+  }
+
+  async function processRecipePhoto(file){
+    if (!file || !file.type.startsWith("image/")) return;
+    const runId = ++recipeImportRunId;
+    releaseRecipeImportPhoto();
+    setRecipeImportStage("reading");
+    setRecipeImportProgress(t("importPreparing"));
+    try {
+      const image = await loadRecipeImage(file);
+      if (runId !== recipeImportRunId) return;
+      await new Promise(resolve => requestAnimationFrame(resolve));
+      const original = canvasCopy(image);
+      setRecipeImportProgress(t("importCorrecting"));
+      const documentCanvas = cropCanvas(original, findBrightDocumentBounds(original));
+      const tableCanvas = scaleRecipeCanvas(cropCanvas(documentCanvas, findRecipeTableBounds(documentCanvas)));
+      let enhanced = enhanceRecipeCanvas(tableCanvas);
+      let thresholded = adaptiveThresholdRecipeCanvas(enhanced);
+      const recognizeCandidate = async (candidate, candidateThreshold) => {
+        try {
+          return await readRecipeWithOfflineOcr(candidateThreshold);
+        } catch(e) {
+          return readRecipeWithNativeOcr(candidate, candidateThreshold);
+        }
+      };
+      let recognition = await recognizeCandidate(enhanced, thresholded);
+      if (runId !== recipeImportRunId) return;
+      if (!recognition.rows.length) {
+        for (const turn of [1, 3, 2]) {
+          const rotated = rotateRecipeCanvas(tableCanvas, turn);
+          const candidate = enhanceRecipeCanvas(rotated);
+          const candidateThreshold = adaptiveThresholdRecipeCanvas(candidate);
+          const candidateRecognition = await recognizeCandidate(candidate, candidateThreshold);
+          if (runId !== recipeImportRunId) return;
+          if (candidateRecognition.rows.length > recognition.rows.length) {
+            enhanced = candidate;
+            thresholded = candidateThreshold;
+            recognition = candidateRecognition;
+          }
+          if (recognition.rows.length >= 2) break;
+        }
+      }
+      drawCanvasTo("recipeImportCanvas", enhanced);
+      drawCanvasTo("recipeReviewCanvas", enhanced);
+      recipeImportDraft = createRecipeImportDraft(recognition.rows, recognition.native);
+      setRecipeImportStage("review");
+      renderRecipeReview();
+      if (!recognition.rows.length) {
+        document.getElementById("recipeReviewWarning").hidden = false;
+        document.getElementById("recipeReviewWarning").textContent = recognition.native ? t("importNoRows") : t("importNoOcr");
+      }
+    } catch(e) {
+      if (runId !== recipeImportRunId) return;
+      recipeImportDraft = createRecipeImportDraft([], false);
+      setRecipeImportStage("review");
+      renderRecipeReview();
+      document.getElementById("recipeReviewWarning").hidden = false;
+      document.getElementById("recipeReviewWarning").textContent = t("importNoRows");
+    }
+  }
+
+  function applyImportedRecipe(){
+    const draft = recipeImportDraft;
+    if (!draft || !Array.isArray(draft.rows)) return;
+    if (draft.rows.length > ROWS) {
+      setStatus(t("importTooMany", { count:ROWS }));
+      return;
+    }
+    if (!draft.rows.length || draft.rows.some(row => !recipeRowIsComplete(row, draft))) {
+      renderRecipeReview();
+      return;
+    }
+    const hasExistingData = page().rows.some(rowStarted);
+    if (hasExistingData && !["replace", "merge"].includes(draft.applyMode)) {
+      setStatus(t("importChooseMode"));
+      renderRecipeReview();
+      return;
+    }
+    const rows = draft.applyMode === "merge"
+      ? page().rows.map(row => Object.assign({}, row, { ores:Object.assign({}, row.ores || {}), importedRecipe:recipeCodesForRow(row).slice() }))
+      : Array.from({ length:ROWS }, blankRow);
+    const rowIndexes = [];
+    let nextEmptyRow = 0;
+    draft.rows.forEach((recipeRow, index) => {
+      if (draft.applyMode === "merge") {
+        while (nextEmptyRow < rows.length && rowStarted(rows[nextEmptyRow])) nextEmptyRow++;
+        if (nextEmptyRow >= rows.length) return;
+      }
+      const targetIndex = draft.applyMode === "merge" ? nextEmptyRow++ : index;
+      const row = blankRow();
+      row.recipeQuarter = String(recipeRow.quarter || "").trim();
+      row.recipeTruck = String(recipeRow.truck || "").trim();
+      row.importedRecipe = recipeRow.buckets.map(normalizeRecipeCode).filter(Boolean).slice(0, BUCKETS_PER_TRIP);
+      row.importedRecipe.forEach(code => {
+        const ore = mappedOreForRecipeCode(code);
+        if (ore) row.ores[ore] = (row.ores[ore] || 0) + 1;
+      });
+      rows[targetIndex] = row;
+      rowIndexes.push(targetIndex);
+    });
+    if (rowIndexes.length !== draft.rows.length) {
+      setStatus(t("importNoEmptyRows"));
+      return;
+    }
+    page().rows = rows;
+    const record = {
+      id: String(Date.now()) + "-" + Math.random().toString(36).slice(2),
+      pageIndex: currentPage,
+      createdAt: draft.importedAt || new Date().toISOString(),
+      recipeDate: state.meta.date || "",
+      shift:null,
+      source:"photo",
+      rowIndexes,
+      assignments:Object.fromEntries(Object.entries(draft.assignments || {}).filter(([, value]) => ["anuri", "qaki", "mine8", "other"].includes(value))),
+      rows:draft.rows.map(row => ({
+        quarter:String(row.quarter || "").trim(),
+        truck:String(row.truck || "").trim(),
+        buckets:row.buckets.map(normalizeRecipeCode).filter(Boolean).slice(0, BUCKETS_PER_TRIP),
+        confidence:Number(row.confidence) || 0
+      }))
+    };
+    if (!Array.isArray(state.importedRecipes)) state.importedRecipes = [];
+    state.importedRecipes.push(record);
+    state.importedRecipes = state.importedRecipes.slice(-30);
+    save();
+    render();
+    closeRecipeImport();
+    setStatus(t("importDone", { count:record.rows.length }));
   }
 
   function updateMetaUI(){
@@ -4337,7 +5805,7 @@ body.dark-mode .panel {
   bindMeta("screenMetaTruckNo", "truckNo");
   bindMeta("screenMetaName", "name");
   // Poids et # de voyage sont calculés automatiquement.
-  // 1 voyage complet moyen = 40 tonnes.
+  // 1 voyage complet operationnel = 37 tonnes.
   // Ces champs ne sont plus saisis manuellement.
 
 
@@ -4518,6 +5986,89 @@ body.dark-mode .panel {
 
   document.getElementById("btnDarkMode").addEventListener("click", cycleDarkMode);
 
+  ["btnImportRecipe", "btnImportRecipeScreen"].forEach(id => {
+    const button = document.getElementById(id);
+    if (button) button.addEventListener("click", openRecipeImport);
+  });
+  document.getElementById("btnRecipeCapture").addEventListener("click", () => requestRecipePhoto(true));
+  document.getElementById("btnRecipeChoose").addEventListener("click", () => requestRecipePhoto(false));
+  document.getElementById("btnRecipeRetake").addEventListener("click", () => requestRecipePhoto(true));
+  document.getElementById("btnRecipeChooseAgain").addEventListener("click", () => requestRecipePhoto(false));
+  document.getElementById("btnRecipeCancel").addEventListener("click", closeRecipeImport);
+  document.getElementById("btnRecipeConfirm").addEventListener("click", applyImportedRecipe);
+  document.getElementById("btnRecipeReplace").addEventListener("click", () => {
+    if (!recipeImportDraft) return;
+    recipeImportDraft.applyMode = "replace";
+    renderRecipeReview();
+  });
+  document.getElementById("btnRecipeMerge").addEventListener("click", () => {
+    if (!recipeImportDraft) return;
+    recipeImportDraft.applyMode = "merge";
+    renderRecipeReview();
+  });
+  document.getElementById("recipeCameraInput").addEventListener("change", event => {
+    const file = event.target.files && event.target.files[0];
+    if (file) processRecipePhoto(file);
+  });
+  document.getElementById("btnRecipeAddRow").addEventListener("click", () => {
+    if (!recipeImportDraft) recipeImportDraft = createRecipeImportDraft([], false);
+    if (recipeImportDraft.rows.length >= ROWS) {
+      setStatus(t("importTooMany", { count:ROWS }));
+      return;
+    }
+    recipeImportDraft.rows.push({ quarter:"", truck:"", buckets:["", "", ""], confidence:0, sourceLine:recipeImportDraft.rows.length + 1 });
+    renderRecipeReview();
+    const inputs = document.querySelectorAll('#recipeReviewRows input[data-recipe-row="' + (recipeImportDraft.rows.length - 1) + '"]');
+    if (inputs[0]) inputs[0].focus();
+  });
+  document.getElementById("recipeReviewRows").addEventListener("input", event => {
+    const input = event.target.closest("input[data-recipe-row]");
+    if (!input || !recipeImportDraft) return;
+    const row = recipeImportDraft.rows[Number(input.dataset.recipeRow)];
+    if (!row) return;
+    const field = input.dataset.recipeField;
+    if (field === "truck") row.truck = input.value.trim();
+    else {
+      const bucketIndex = Number(field.slice(-1)) - 1;
+      row.buckets[bucketIndex] = input.value.trim();
+    }
+    document.getElementById("btnRecipeConfirm").disabled = recipeImportDraft.rows.some(recipeRow => !recipeRowIsComplete(recipeRow));
+  });
+  document.getElementById("recipeReviewRows").addEventListener("change", event => {
+    const input = event.target.closest("input[data-recipe-row]");
+    if (!input || !recipeImportDraft) return;
+    const row = recipeImportDraft.rows[Number(input.dataset.recipeRow)];
+    if (!row) return;
+    if (input.dataset.recipeField !== "truck") {
+      const bucketIndex = Number(input.dataset.recipeField.slice(-1)) - 1;
+      row.buckets[bucketIndex] = normalizeRecipeCode(row.buckets[bucketIndex]);
+    }
+    renderRecipeReview();
+  });
+  document.getElementById("recipeReviewRows").addEventListener("click", event => {
+    const button = event.target.closest("[data-remove-recipe-row]");
+    if (!button || !recipeImportDraft) return;
+    recipeImportDraft.rows.splice(Number(button.dataset.removeRecipeRow), 1);
+    renderRecipeReview();
+  });
+  document.getElementById("recipeReviewMeta").addEventListener("change", event => {
+    const select = event.target.closest("select[data-recipe-unknown-code]");
+    if (!select || !recipeImportDraft) return;
+    const code = select.dataset.recipeUnknownCode;
+    if (!recipeImportDraft.assignments) recipeImportDraft.assignments = {};
+    if (select.value) {
+      recipeImportDraft.assignments[code] = select.value;
+      userRecipeCodeMappings[code] = select.value;
+      savePrivateRecipeMappings();
+    } else {
+      delete recipeImportDraft.assignments[code];
+    }
+    renderRecipeReview();
+  });
+  document.getElementById("recipeImportModal").addEventListener("click", event => {
+    if (event.target.id === "recipeImportModal") closeRecipeImport();
+  });
+
   document.getElementById("btnHaulingPlan").addEventListener("click", () => {
     setActiveView("hauling");
   });
@@ -4626,11 +6177,12 @@ body.dark-mode .panel {
     lines.push("");
     state.pages.forEach((p, pageIndex) => {
       lines.push(["PAGE", pageIndex + 1].map(csvSafe).join(";"));
-      lines.push(["Voyage","Heure du chargement", ...ORES, "Numéro Loader", "Silo", "Cr-Pad"].map(csvSafe).join(";"));
+      lines.push(["Voyage","Heure du chargement","Recette officielle", ...ORES, "Numéro Loader", "Silo", "Cr-Pad"].map(csvSafe).join(";"));
       p.rows.forEach((row, i) => {
         lines.push([
           i+1,
           row.time,
+          recipeCodesForRow(row).join(" / "),
           ...ORES.map(o => row.ores[o] || ""),
           row.loader,
           row.dest === "Silo" ? "X" : "",
@@ -4638,7 +6190,7 @@ body.dark-mode .panel {
         ].map(csvSafe).join(";"));
       });
       const summary = pageSummaryFor(p);
-      lines.push(["TOTAL","", ...ORES.map(o => summary.totals[o] || ""), "", summary.silo || "", summary.crPad || ""].map(csvSafe).join(";"));
+      lines.push(["TOTAL","","", ...ORES.map(o => summary.totals[o] || ""), "", summary.silo || "", summary.crPad || ""].map(csvSafe).join(";"));
       lines.push("");
       lines.push(["Poids", summary.voyageCount ? (summary.estimatedTonnage + " " + t("tonnes")) : "", "# de voyage", summary.voyageCount || "", "(Le relevé du poids doit être fait 1 fois par shift)"].map(csvSafe).join(";"));
       lines.push("");
@@ -4745,6 +6297,7 @@ body.dark-mode .panel {
       document.getElementById("loaderModal").classList.remove("open");
       document.getElementById("timeModal").classList.remove("open");
       document.getElementById("dateModal").classList.remove("open");
+      closeRecipeImport();
     }
   });
 
