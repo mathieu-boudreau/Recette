@@ -261,6 +261,49 @@
     return best;
   }
 
+  function selectTableHorizontalRun(positions, blueHeader, dimension){
+    const sorted = positions.slice().sort((left, right) => left - right);
+    if (!blueHeader || sorted.length < 4) return sorted;
+
+    const headerY = blueHeader.y + blueHeader.height * .25;
+    let startIndex = 0;
+    let startDistance = Infinity;
+    sorted.forEach((position, index) => {
+      const distance = Math.abs(position - headerY);
+      if (distance < startDistance) {
+        startIndex = index;
+        startDistance = distance;
+      }
+    });
+
+    const sequence = sorted.slice(startIndex);
+    const sampleGaps = sequence.slice(1, 11)
+      .map((position, index) => position - sequence[index])
+      .filter(gap => gap >= 4 && gap <= dimension * .1);
+    const typicalGap = median(sampleGaps);
+    if (!typicalGap) return sorted;
+
+    let endIndex = sequence.length;
+    for (let index = 1; index < sequence.length; index++) {
+      const gap = sequence[index] - sequence[index - 1];
+      if (gap <= typicalGap * 1.8) continue;
+
+      const nextGap = index + 1 < sequence.length
+        ? sequence[index + 1] - sequence[index]
+        : Infinity;
+      const oneMissingLine = gap <= typicalGap * 2.6 &&
+        nextGap >= typicalGap * .55 &&
+        nextGap <= typicalGap * 1.55;
+      if (oneMissingLine) continue;
+
+      endIndex = index;
+      break;
+    }
+
+    const selected = sequence.slice(0, endIndex);
+    return selected.length >= 4 ? selected : sorted;
+  }
+
   function analyzeBinary(binary){
     const { xScores, yScores } = projections(binary);
     const blueHeader = detectBlueHeader(binary);
@@ -292,7 +335,11 @@
       horizontal = filterTableLineClusters(horizontal, binary.height, 4, 100);
     }
 
-    const horizontalPositions = horizontal.map(line => line.position).sort((a, b) => a - b);
+    const horizontalPositions = selectTableHorizontalRun(
+      horizontal.map(line => line.position),
+      blueHeader,
+      binary.height
+    );
     let yMin = blueHeader?.y ?? horizontalPositions[0] ?? 0;
     let yMax = horizontalPositions[horizontalPositions.length - 1] ?? binary.height - 1;
     if (yMax - yMin < binary.height * .16) {
@@ -305,7 +352,9 @@
     const verticalInHeader = verticalPositions.filter(position => position >= xMin - bounds.width * .03 && position <= xMax + bounds.width * .03);
     const columnCount = blueHeader ? verticalInHeader.length : vertical.length;
     const columnScore = columnCount >= 5 && columnCount <= 8 ? 34 : Math.max(0, 20 - Math.abs(columnCount - 6) * 4);
-    const rowScore = horizontal.length >= 10 ? Math.min(42, horizontal.length * 1.2) : horizontal.length * 1.4;
+    const rowScore = horizontalPositions.length >= 10
+      ? Math.min(42, horizontalPositions.length * 1.2)
+      : horizontalPositions.length * 1.4;
     const aspectScore = aspect >= 1.2 ? Math.min(28, 10 + aspect * 7) : -Math.min(35, (1.2 - aspect) * 40);
     const topSignal = regionBandSignal(binary, bounds, true);
     const bottomSignal = regionBandSignal(binary, bounds, false);
@@ -885,6 +934,43 @@
     return rotateBinary({ width, height, data, gray, saturation }, turns || 0);
   }
 
+  function syntheticRecipePageBinary(rowCount, turns){
+    const columns = 5;
+    const cellWidth = 24;
+    const cellHeight = 10;
+    const tableWidth = columns * cellWidth + 1;
+    const tableHeight = (rowCount + 1) * cellHeight + 1;
+    const offsetX = 30;
+    const offsetY = 20;
+    const width = tableWidth + 80;
+    const height = tableHeight + 150;
+    const data = new Uint8Array(width * height);
+    const gray = new Uint8Array(width * height).fill(245);
+    const saturation = new Uint8Array(width * height);
+    const blue = new Uint8Array(width * height);
+
+    for (let column = 0; column <= columns; column++) {
+      const x = offsetX + column * cellWidth;
+      for (let y = offsetY; y < offsetY + tableHeight; y++) data[y * width + x] = 1;
+    }
+    for (let row = 0; row <= rowCount + 1; row++) {
+      const y = offsetY + Math.min(tableHeight - 1, row * cellHeight);
+      for (let x = offsetX; x < offsetX + tableWidth; x++) data[y * width + x] = 1;
+    }
+    for (let y = offsetY + 1; y < offsetY + cellHeight; y++) {
+      for (let x = offsetX + 1; x < offsetX + tableWidth - 1; x++) {
+        const index = y * width + x;
+        gray[index] = 65;
+        saturation[index] = 100;
+        blue[index] = 1;
+      }
+    }
+
+    const pageBottom = height - 12;
+    for (let x = 0; x < width; x++) data[pageBottom * width + x] = 1;
+    return rotateBinary({ width, height, data, gray, saturation, blue }, turns || 0);
+  }
+
   return {
     ANALYSIS_MAX_SIDE,
     copyCanvas,
@@ -902,6 +988,7 @@
     extractCell,
     buildCellPlan,
     drawGridOverlay,
-    syntheticRecipeBinary
+    syntheticRecipeBinary,
+    syntheticRecipePageBinary
   };
 });

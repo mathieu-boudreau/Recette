@@ -119,6 +119,28 @@ assert.equal(summary.plannedTonnes.toFixed(1), "1307.3");
   assert.equal(rotatedSummary.plannedTonnes.toFixed(1), "1307.3");
 });
 
+[21, 36].forEach(rowCount => {
+  [0, 1, 2, 3].forEach(inputTurns => {
+    const page = ocrEngine.syntheticRecipePageBinary(rowCount, inputTurns);
+    const orientation = ocrEngine.selectOrientation(page);
+    assert.equal(
+      (inputTurns + orientation.turns) % 4,
+      0,
+      rowCount + "-row page rotation " + (inputTurns * 90) + " degrees must be corrected upright"
+    );
+    assert.equal(
+      orientation.analysis.horizontalLines.length,
+      rowCount + 2,
+      "The page edge must not be mistaken for recipe rows"
+    );
+    assert.equal(
+      orientation.analysis.bounds.height < orientation.binary.height * .8,
+      true,
+      "The table crop must exclude the blank lower page"
+    );
+  });
+});
+
 const partialTrip = fixture[17];
 assert.equal(partialTrip.plannedBucketCount, 1);
 assert.equal(partialTrip.isPartialTrip, true);

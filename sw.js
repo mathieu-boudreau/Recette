@@ -1,8 +1,8 @@
-const CACHE_NAME = "recette-touch-v5.17.0-structured-recipe-ocr";
+const CACHE_NAME = "recette-touch-v5.18.0-table-boundary-fix";
 const ASSETS = [
   "./",
   "./index.html",
-  "./recipe-ocr-engine.js?v=5.17.0",
+  "./recipe-ocr-engine.js?v=5.18.0",
   "./manifest.webmanifest",
   "./sw.js",
   "./icon-192.png",
