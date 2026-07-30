@@ -33,7 +33,6 @@ const recipeFunctions = Function("BUCKETS_PER_TRIP", "TONNES_PER_TRIP", "ORES", 
   "normalizeRecipeCode",
   "normalizeRecipeOcrCode",
   "recipeFinalCellConfidence",
-  "normalizeRecipeTruck",
   "normalizeRecipeBuckets",
   "recipeBucketValues",
   "plannedBucketCountForRecipeRow",
@@ -41,9 +40,6 @@ const recipeFunctions = Function("BUCKETS_PER_TRIP", "TONNES_PER_TRIP", "ORES", 
   "recipeCellIsResolved",
   "refreshRecipeRowConfidence",
   "normalizeRecipeImportRow",
-  "numericRecipeTruck",
-  "markRecipeTruckUnresolved",
-  "normalizeRecipeTruckSequence",
   "normalizeRecipeRows",
   "recipeCodesForRow",
   "plannedBucketCountForRow",
@@ -53,14 +49,14 @@ const recipeFunctions = Function("BUCKETS_PER_TRIP", "TONNES_PER_TRIP", "ORES", 
   "importedRecipeProgress",
   "recipeRowIssues",
   "recipeImportIssues",
-  "evaluateRecipeRecognition"
-].map(sourceOf).join("\n") + "\nreturn { recipeCodeKey, recipeKnownCodeFor, normalizeRecipeCode, normalizeRecipeOcrCode, recipeFinalCellConfidence, normalizeRecipeTruck, normalizeRecipeBuckets, recipeBucketValues, plannedBucketCountForRecipeRow, recipeCellMeta, recipeCellIsResolved, refreshRecipeRowConfidence, normalizeRecipeImportRow, numericRecipeTruck, markRecipeTruckUnresolved, normalizeRecipeTruckSequence, normalizeRecipeRows, recipeCodesForRow, plannedBucketCountForRow, rowBucketTotalFromRow, rowCompleteForNext, recipeDraftSummary, importedRecipeProgress, recipeRowIssues, recipeImportIssues, evaluateRecipeRecognition };")(BUCKETS_PER_TRIP, TONNES_PER_TRIP, ALL_ORES, ALL_ORES);
+  "evaluateRecipeRecognition",
+  "recipeDetectedRowHasContent"
+].map(sourceOf).join("\n") + "\nreturn { recipeCodeKey, recipeKnownCodeFor, normalizeRecipeCode, normalizeRecipeOcrCode, recipeFinalCellConfidence, normalizeRecipeBuckets, recipeBucketValues, plannedBucketCountForRecipeRow, recipeCellMeta, recipeCellIsResolved, refreshRecipeRowConfidence, normalizeRecipeImportRow, normalizeRecipeRows, recipeCodesForRow, plannedBucketCountForRow, rowBucketTotalFromRow, rowCompleteForNext, recipeDraftSummary, importedRecipeProgress, recipeRowIssues, recipeImportIssues, evaluateRecipeRecognition, recipeDetectedRowHasContent };")(BUCKETS_PER_TRIP, TONNES_PER_TRIP, ALL_ORES, ALL_ORES);
 
 const {
   normalizeRecipeCode,
   normalizeRecipeOcrCode,
   recipeFinalCellConfidence,
-  normalizeRecipeTruck,
   normalizeRecipeBuckets,
   recipeBucketValues,
   plannedBucketCountForRecipeRow,
@@ -73,7 +69,8 @@ const {
   recipeDraftSummary,
   importedRecipeProgress,
   recipeImportIssues,
-  evaluateRecipeRecognition
+  evaluateRecipeRecognition,
+  recipeDetectedRowHasContent
 } = recipeFunctions;
 
 const fixture = [
@@ -93,6 +90,7 @@ const fixture = [
 
 const summary = recipeDraftSummary(fixture);
 assert.equal(fixture.length, 36);
+assert.deepEqual(normalizeRecipeRows(fixture).map(row => row.truck), Array.from({ length:36 }, (_, index) => String(index + 1)));
 assert.equal(summary.trips, 36);
 assert.equal(summary.buckets, 106);
 assert.deepEqual(summary.materials, {
@@ -145,6 +143,19 @@ assert.equal(summary.plannedTonnes.toFixed(1), "1307.3");
   });
 });
 
+const bucketOnlyPlan = ocrEngine.buildCellDescriptors({
+  valid:true,
+  dataRowCount:36,
+  truckColumn:1,
+  bucketColumns:[2, 3, 4]
+});
+assert.equal(bucketOnlyPlan.length, 108);
+assert.equal(bucketOnlyPlan.every(cell => cell.kind === "material"), true);
+assert.equal(bucketOnlyPlan.some(cell => cell.columnIndex === 0 || cell.columnIndex === 1), false, "Quarter and Truck must be geometry-only columns");
+assert.deepEqual([...new Set(bucketOnlyPlan.map(cell => cell.columnIndex))], [2, 3, 4]);
+assert.equal(recipeDetectedRowHasContent([{ blank:true }, { blank:true }, { blank:true }]), false);
+assert.equal(recipeDetectedRowHasContent([{ blank:true }, { blank:false }, { blank:true }]), true);
+
 const partialTrip = fixture[17];
 assert.equal(partialTrip.plannedBucketCount, 1);
 assert.equal(partialTrip.isPartialTrip, true);
@@ -179,6 +190,16 @@ assert.equal(progress.completedTonnage.toFixed(1), "12.3");
 assert.equal(progress.remainingTonnage.toFixed(1), "1295.0");
 assert.equal(html.includes("imported-code-preview"), false, "Imported material labels must not render in loading-time cells");
 
+const completedPage = {
+  rows:fixture.map((row, index) => Object.assign(haulingRow(row, index), { time:"06:00" }))
+};
+const completedProgress = importedRecipeProgress(recipe, completedPage);
+assert.equal(completedProgress.completeTrips, 36);
+assert.equal(completedProgress.completedBuckets, 106);
+assert.equal(completedProgress.completedTonnage.toFixed(1), "1307.3");
+assert.equal(completedProgress.remainingBuckets, 0);
+assert.equal(completedProgress.remainingTonnage.toFixed(1), "0.0");
+
 [
   ["A1", "A1"], ["AI", "A1"], ["Al", "A1"], ["A I", "A1"], ["JA1", "A1"],
   ["AHR", "AHR"], ["A H R", "AHR"], ["JAHR", "AHR"], ["OH", "AHR"],
@@ -200,22 +221,20 @@ assert.equal(normalizeRecipeOcrCode("XYZ").canMarkAsNew, true);
   assert.equal(normalizeRecipeOcrCode(raw, .22).canMarkAsNew, false, raw + " must be classified as OCR garbage");
 });
 
-const correctedTrucks = normalizeRecipeRows([
-  { truck:"1", buckets:["A1", "C1", "C1"] },
-  { truck:"2", buckets:["A1", "C1", "C1"] },
-  { truck:"3", buckets:["A1", "C1", "C1"] },
+const generatedTrips = normalizeRecipeRows([
+  { quarter:"Nuit", truck:"91", buckets:["A1", "C1", "C1"] },
+  { truck:"OCR?", buckets:["A1", "C1", "C1"] },
+  { truck:"", buckets:["A1", "C1", "C1"] },
   { truck:"41", buckets:["A1", "C1", "C1"] },
   { truck:"5", buckets:["A1", "C1", "C1"] }
 ]);
-assert.deepEqual(correctedTrucks.map(row => row.truck), ["1", "2", "3", "4", "5"]);
-assert.equal(correctedTrucks[3].truckMeta.status, "corrected");
-
-const correctedMiddleTruck = normalizeRecipeRows([
-  { truck:"5", buckets:["A1", "C1", "C1"] },
-  { truck:"61", buckets:["A1", "C1", "C1"] },
-  { truck:"7", buckets:["A1", "C1", "C1"] }
-]);
-assert.equal(correctedMiddleTruck[1].truck, "6");
+assert.deepEqual(generatedTrips.map(row => row.truck), ["1", "2", "3", "4", "5"]);
+assert.equal(generatedTrips.every(row => row.truckMeta.status === "generated"), true);
+assert.equal(generatedTrips.every(row => row.truckMeta.reason === "row-order"), true);
+assert.equal(Object.hasOwn(generatedTrips[0], "quarter"), false, "Quarter must not enter the imported data model");
+generatedTrips.splice(1, 1);
+assert.deepEqual(normalizeRecipeRows(generatedTrips).map(row => row.truck), ["1", "2", "3", "4"]);
+assert.equal(recipeImportIssues(generatedTrips).length, 0, "Generated trips must never add OCR issues");
 
 const unresolvedRecipe = normalizeRecipeRows([{ truck:"1", buckets:["CELL", "C1", "C1"] }]);
 assert.equal(recipeImportIssues(unresolvedRecipe).length > 0, true, "Unresolved OCR artifacts must block import");
@@ -254,7 +273,7 @@ normalizedReference21.forEach(row => row.bucketMeta.forEach(cell => {
 const strongCellEvidence = {
   correctColumn:true,
   validRowAlignment:true,
-  truckSequence:true,
+  rowOrder:true,
   repeatedCode:true
 };
 const moderateExact = normalizeRecipeOcrCode("A1", .4);
@@ -308,6 +327,30 @@ assert.equal(reviewWithUncertainCells.pass, true, "A few uncertain cells must op
 assert.equal(reviewWithUncertainCells.outcome, "review");
 assert.equal(reviewWithUncertainCells.lowConfidence, 10);
 
+const reviewWithBlankGridRow = evaluateRecipeRecognition({
+  ok:true,
+  structureConfidence:.92,
+  grid:{
+    valid:true,
+    confidence:.91,
+    rowHeightDeviation:.08,
+    dataRowCount:22
+  }
+}, {
+  rows:qualityRows,
+  scannedRowCount:22,
+  blankRowsExcluded:1,
+  cells:Array.from({ length:63 }, () => ({
+    type:"material",
+    inkRatio:.04,
+    status:"exact",
+    finalConfidence:.96,
+    normalizationReason:"registry"
+  }))
+});
+assert.equal(reviewWithBlankGridRow.pass, true, "A fully blank segmented row must be excluded without failing geometry");
+assert.equal(reviewWithBlankGridRow.blankRowsExcluded, 1);
+
 const unusableRecognition = evaluateRecipeRecognition(preparedQualityFixture, {
   rows:qualityRows,
   cells:[
@@ -329,5 +372,22 @@ const unusableRecognition = evaluateRecipeRecognition(preparedQualityFixture, {
 });
 assert.equal(unusableRecognition.pass, false, "A mostly unreadable table must still be rejected safely");
 assert.equal(unusableRecognition.outcome, "recovery");
+
+const engineSource = fs.readFileSync("recipe-ocr-engine.js", "utf8");
+assert.equal(engineSource.includes('descriptor.kind === "truck"'), false);
+assert.equal(engineSource.includes('kind:"truck"'), false);
+assert.equal(html.includes('tessedit_char_whitelist:"0123456789"'), false, "The OCR worker must not run a truck-number pass");
+assert.equal(html.includes('data-recipe-field="truck"'), false, "Truck numbers must not have correction inputs");
+assert.equal(html.includes("row.recipeQuarter ="), false, "Quarter must not be stored from OCR");
+assert.equal(html.includes("row.recipeTruck ="), false, "Truck OCR output must not be stored on hauling rows");
+assert.equal(html.includes('id="recipeImportSummary"'), true, "The existing top recipe summary must remain");
+assert.equal(html.includes('id="operationalTotals"'), true, "The bottom operational summary must exist");
+assert.equal(html.includes(".operational-totals {"), true);
+assert.equal(html.includes('operationalRemainingTonnage:"Tonnage restant"'), true);
+assert.equal(html.includes('#sheetTable .time-value {'), true, "Print row content must not force multi-page output");
+
+const serviceWorker = fs.readFileSync("sw.js", "utf8");
+assert.equal(serviceWorker.includes("recette-touch-v5.20.0-bucket-only-operational"), true);
+assert.equal(serviceWorker.includes("./recipe-ocr-engine.js?v=5.20.0"), true);
 
 console.log("recipe import fixtures: PASS");

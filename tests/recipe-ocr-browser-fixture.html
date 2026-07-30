@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Recette OCR browser fixture</title>
+  <style>
+    body { margin:20px; font:14px/1.4 Arial,sans-serif; color:#111; background:#f4f4f1; }
+    pre { padding:16px; border-left:5px solid #ffcd23; background:#fff; white-space:pre-wrap; }
+    iframe { position:fixed; width:1px; height:1px; border:0; opacity:.01; pointer-events:none; }
+  </style>
+</head>
+<body data-status="running">
+  <h1>Recette OCR browser fixture</h1>
+  <pre id="result">Running production OCR pipeline...</pre>
+  <iframe id="app" src="../index.html?ocrDebug=1"></iframe>
+  <script src="../recipe-ocr-engine.js?v=5.20.0"></script>
+  <script>
+  "use strict";
+
+  const reference36 = [
+    ["A1","C1","Ore/Neige"],["A1","AHR","C1"],["A1","B1","BHR"],
+    ["A1","C1","C1"],["A1","C1","C1"],["A1","C1","Ore/Neige"],
+    ["AHR","C1","C1"],["A1","C1","C1"],["A1","B1","BHR"],
+    ["A1","C1","Ore/Neige"],["BHR","C1","C1"],["A1","C1","C1"],
+    ["A1","C1","C1"],["A1","C1","C1"],["A1","B1","BHR"],
+    ["BHR","C1","C1"],["A1","A1","BHR"],["C1",null,null],
+    ["A1","C1","Ore/Neige"],["AHR","C1","C1"],["A1","B1","BHR"],
+    ["A1","C1","C1"],["A1","C1","C1"],["A1","C1","Ore/Neige"],
+    ["AHR","C1","C1"],["A1","C1","C1"],["A1","B1","BHR"],
+    ["A1","A1","AHR"],["AHR","C1","C1"],["A1","C1","C1"],
+    ["A1","C1","C1"],["A1","C1","C1"],["A1","B1","BHR"],
+    ["BHR","C1","C1"],["A1","A1","BHR"],["A1","C1","C1"]
+  ];
+
+  const reference21 = [
+    ["A1","C1","C1"],["AHR","B1","B1"],["A1","A1","C1"],
+    ["A1","C1","C1"],["AHR","B1","B1"],["A1","C1","C1"],
+    ["A1","C1","C1"],["A1","A1","C1"],["A1","A1","AHR"],
+    ["A1","C1","C1"],["A1","C1","C1"],["A1","A1","AHR"],
+    ["A1","A1","A1"],["A1","C1","C1"],["A1","C1","C1"],
+    ["A1","A1","AHR"],["A1","C1","C1"],["A1","A1","A1"],
+    ["A1","A1","AHR"],["A1","C1","C1"],["A1","C1","C1"]
+  ];
+
+  const expectations = {
+    21:{ trips:21, buckets:63, tonnes:"777.0", materials:{ A1:29, AHR:6, B1:4, C1:24 } },
+    36:{ trips:36, buckets:106, tonnes:"1307.3", materials:{ A1:31, AHR:6, "Ore/Neige":5, B1:6, BHR:11, C1:47 } }
+  };
+
+  function drawRecipe(rows){
+    const widths = [110, 150, 210, 210, 210];
+    const rowHeight = 48;
+    const headerHeight = 58;
+    const left = 70;
+    const top = 80;
+    const tableWidth = widths.reduce((sum, value) => sum + value, 0);
+    const tableHeight = headerHeight + rows.length * rowHeight;
+    const canvas = document.createElement("canvas");
+    canvas.width = tableWidth + 140;
+    canvas.height = tableHeight + 160;
+    const context = canvas.getContext("2d");
+    context.fillStyle = "#fff";
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    context.fillStyle = "#1264a3";
+    context.fillRect(left, top, tableWidth, headerHeight);
+    context.strokeStyle = "#15202b";
+    context.lineWidth = 3;
+    context.strokeRect(left, top, tableWidth, tableHeight);
+    let x = left;
+    widths.forEach(width => {
+      context.beginPath();
+      context.moveTo(x, top);
+      context.lineTo(x, top + tableHeight);
+      context.stroke();
+      x += width;
+    });
+    context.beginPath();
+    context.moveTo(left + tableWidth, top);
+    context.lineTo(left + tableWidth, top + tableHeight);
+    context.stroke();
+    for (let row = 0; row <= rows.length; row++) {
+      const y = top + headerHeight + row * rowHeight;
+      context.beginPath();
+      context.moveTo(left, y);
+      context.lineTo(left + tableWidth, y);
+      context.stroke();
+    }
+    const labels = ["Quart", "Camion", "Godet 1", "Godet 2", "Godet 3"];
+    context.textBaseline = "middle";
+    context.textAlign = "center";
+    context.font = "bold 24px Arial";
+    context.fillStyle = "#fff";
+    x = left;
+    labels.forEach((label, index) => {
+      context.fillText(label, x + widths[index] / 2, top + headerHeight / 2);
+      x += widths[index];
+    });
+    context.font = "bold 25px Arial";
+    context.fillStyle = "#111";
+    rows.forEach((buckets, rowIndex) => {
+      const values = ["1", String(rowIndex + 1), ...buckets];
+      let cellX = left;
+      values.forEach((value, columnIndex) => {
+        const printJitter = ((rowIndex + columnIndex) % 5 - 2) * 2;
+        if (value) context.fillText(value, cellX + widths[columnIndex] / 2 + printJitter, top + headerHeight + rowIndex * rowHeight + rowHeight / 2);
+        cellX += widths[columnIndex];
+      });
+    });
+    return canvas;
+  }
+
+  function sortedObject(value){
+    return Object.fromEntries(Object.entries(value).sort(([left], [right]) => left.localeCompare(right)));
+  }
+
+  async function runFixture(app, rows, turns = 0){
+    const upright = drawRecipe(rows);
+    const source = turns ? window.RecetteOcrEngine.rotateCanvas(upright, turns) : upright;
+    const prepared = window.RecetteOcrEngine.prepare(source);
+    if (!prepared.ok) throw new Error(rows.length + "-row prepare failed: " + prepared.error + " " + JSON.stringify({
+      structureConfidence:prepared.structureConfidence,
+      grid:{
+        valid:prepared.grid?.valid,
+        confidence:prepared.grid?.confidence,
+        dataRowCount:prepared.grid?.dataRowCount,
+        columnCount:prepared.grid?.columnCount,
+        verticalLines:prepared.grid?.verticalLines?.length,
+        horizontalLines:prepared.grid?.horizontalLines?.length,
+        rowHeightDeviation:prepared.grid?.rowHeightDeviation
+      },
+      bounds:prepared.debug?.tableBounds
+    }));
+    const recognition = await app.readRecipeSegmentedCells(prepared, 0);
+    const quality = app.evaluateRecipeRecognition(prepared, recognition);
+    const summary = app.recipeDraftSummary(recognition.rows);
+    const expected = expectations[rows.length];
+    const actual = {
+      trips:summary.trips,
+      buckets:summary.buckets,
+      tonnes:summary.plannedTonnes.toFixed(1),
+      materials:sortedObject(summary.materials),
+      firstTrip:recognition.rows[0]?.truck,
+      lastTrip:recognition.rows.at(-1)?.truck,
+      ocrCellCount:recognition.cells.length,
+      unresolved:recognition.cells.filter(cell => cell.status === "unresolved").length,
+      quality:quality.outcome
+    };
+    const pass = actual.trips === expected.trips &&
+      actual.buckets === expected.buckets &&
+      actual.tonnes === expected.tonnes &&
+      actual.firstTrip === "1" &&
+      actual.lastTrip === String(expected.trips) &&
+      actual.ocrCellCount === expected.trips * 3 &&
+      actual.unresolved === 0 &&
+      actual.quality === "review" &&
+      JSON.stringify(actual.materials) === JSON.stringify(sortedObject(expected.materials));
+    return { pass, inputRotation:turns * 90, actual, expected };
+  }
+
+  document.getElementById("app").addEventListener("load", async event => {
+    const output = document.getElementById("result");
+    try {
+      const app = event.currentTarget.contentWindow.__recetteOcrTest;
+      if (!app) throw new Error("Local OCR test API unavailable");
+      const results = [];
+      results.push(await runFixture(app, reference21));
+      results.push(await runFixture(app, reference36));
+      results.push(await runFixture(app, reference21, 1));
+      const pass = results.every(result => result.pass);
+      document.body.dataset.status = pass ? "pass" : "fail";
+      output.textContent = JSON.stringify({ pass, results }, null, 2);
+    } catch(error) {
+      document.body.dataset.status = "fail";
+      output.textContent = JSON.stringify({ pass:false, error:String(error?.stack || error) }, null, 2);
+    }
+  });
+  </script>
+</body>
+</html>

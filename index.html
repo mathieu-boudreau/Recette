@@ -844,6 +844,7 @@ tfoot td,
 }
 
 #haulingSheetWrapper .foot,
+#haulingSheetWrapper .operational-totals,
 #haulingSheetWrapper .page-print-label,
 #haulingSheetWrapper .note {
   min-width:var(--sheet-min-width);
@@ -1292,10 +1293,79 @@ tfoot td,
   font-variant-numeric:tabular-nums;
 }
 
+.operational-totals {
+  display:grid;
+  grid-template-columns:minmax(0, 4fr) minmax(0, 5fr);
+  gap:6px;
+  margin-top:4px;
+  padding:5px 7px;
+  border:1px solid #beb79f;
+  border-left:4px solid var(--kiewit-yellow);
+  background:#f7f7f4;
+  color:#171717;
+}
+
+.operational-totals-group {
+  display:grid;
+  grid-template-columns:repeat(5, minmax(0, 1fr));
+  gap:5px;
+  min-width:0;
+}
+
+.operational-totals-group:first-child {
+  grid-template-columns:repeat(4, minmax(0, 1fr));
+}
+
+.operational-totals-title {
+  grid-column:1 / -1;
+  padding-bottom:2px;
+  border-bottom:1px solid #cfc9b7;
+  font-size:9px;
+  font-weight:950;
+  text-transform:uppercase;
+}
+
+.operational-total {
+  min-width:0;
+}
+
+.operational-total strong {
+  display:block;
+  color:#3b3b38;
+  font-size:8px;
+  font-weight:850;
+  line-height:1.05;
+  text-transform:uppercase;
+}
+
+.operational-total span {
+  display:block;
+  margin-top:2px;
+  color:#111;
+  font-size:12px;
+  font-weight:950;
+  line-height:1;
+  font-variant-numeric:tabular-nums;
+}
+
 @media (max-width:767px) {
   .recipe-import-summary {
     grid-template-columns:repeat(2, minmax(0, 1fr));
     gap:5px 8px;
+  }
+
+  .operational-totals {
+    gap:4px;
+    padding:4px 5px;
+  }
+
+  .operational-totals-group,
+  .operational-totals-group:first-child {
+    gap:3px;
+  }
+
+  .operational-total strong {
+    font-size:7px;
   }
 }
 
@@ -1592,6 +1662,13 @@ tfoot td,
   font-size:14px;
   font-weight:800;
   text-transform:uppercase;
+}
+
+.recipe-review-table .recipe-generated-trip {
+  width:64px;
+  text-align:center;
+  font-weight:950;
+  font-variant-numeric:tabular-nums;
 }
 
 .recipe-cell-note {
@@ -1909,6 +1986,26 @@ body.dark-mode .recipe-import-summary {
 
 body.dark-mode .recipe-import-summary strong {
   color:#fff5c2;
+}
+
+body.dark-mode .operational-totals {
+  border-color:#555;
+  border-left-color:#ffcd23;
+  background:#171717;
+  color:#f4f1e8;
+}
+
+body.dark-mode .operational-totals-title {
+  border-bottom-color:#56524a;
+  color:#ffcd23;
+}
+
+body.dark-mode .operational-total strong {
+  color:#d8d3c8;
+}
+
+body.dark-mode .operational-total span {
+  color:#fff;
 }
 
 body.dark-mode .recipe-review-warning {
@@ -2485,6 +2582,46 @@ body.dark-mode .recipe-accept-new {
     color:#000 !important;
   }
 
+  .operational-totals {
+    display:grid !important;
+    grid-template-columns:4fr 5fr !important;
+    gap:1mm !important;
+    min-width:0 !important;
+    margin:.7mm 0 0 !important;
+    padding:.7mm 1mm !important;
+    break-inside:avoid !important;
+    border:.2mm solid #777 !important;
+    border-left:1.2mm solid #ffcd23 !important;
+    background:#fff !important;
+    color:#000 !important;
+  }
+
+  .operational-totals-group,
+  .operational-totals-group:first-child {
+    gap:.6mm !important;
+  }
+
+  .operational-totals-title {
+    padding:0 0 .3mm !important;
+    border-bottom:.2mm solid #999 !important;
+    color:#000 !important;
+    font-size:4.8pt !important;
+    line-height:1 !important;
+  }
+
+  .operational-total strong {
+    color:#000 !important;
+    font-size:4.2pt !important;
+    line-height:1 !important;
+  }
+
+  .operational-total span {
+    margin-top:.3mm !important;
+    color:#000 !important;
+    font-size:6pt !important;
+    line-height:1 !important;
+  }
+
   .app {
     display:block !important;
     width:100% !important;
@@ -2695,9 +2832,12 @@ body.dark-mode .recipe-accept-new {
     max-width:100% !important;
     border-collapse:collapse !important;
     table-layout:fixed !important;
-    page-break-inside:avoid !important;
-    break-inside:avoid-page !important;
     background:#fffdf8 !important;
+  }
+
+  #sheetTable {
+    page-break-inside:auto !important;
+    break-inside:auto !important;
   }
 
   #sheetTable thead,
@@ -2729,14 +2869,21 @@ body.dark-mode .recipe-accept-new {
 
   #sheetTable th,
   #sheetTable td {
-    height:10.2px !important;
+    box-sizing:border-box !important;
+    height:8px !important;
     min-height:0 !important;
     padding:0 !important;
     border:1px solid #aaa !important;
     background:#fffdf8 !important;
     color:#000 !important;
     line-height:1 !important;
-    font-size:5.8px !important;
+    font-size:4.8px !important;
+  }
+
+  #sheetTable .time-value {
+    min-height:0 !important;
+    height:auto !important;
+    line-height:1 !important;
   }
 
   #sheetTable thead th,
@@ -2751,7 +2898,7 @@ body.dark-mode .recipe-accept-new {
   #sheetTable .group-kiki { background:var(--pink) !important; }
 
   td.ore-cell {
-    font-size:7px !important;
+    font-size:5.8px !important;
     font-weight:900 !important;
   }
 
@@ -2762,14 +2909,14 @@ body.dark-mode .recipe-accept-new {
 
   .bucket-mark {
     width:2px !important;
-    height:7px !important;
+    height:5px !important;
     background:#111 !important;
     border-radius:0 !important;
   }
 
   .bucket-x {
     color:#111 !important;
-    font-size:7px !important;
+    font-size:5.8px !important;
   }
 
   tr.selected td,
@@ -2805,6 +2952,7 @@ body.dark-mode .recipe-accept-new {
   }
 
   .foot,
+  .operational-totals,
   .page-print-label,
   .note,
   .loader-plan-extra,
@@ -3036,6 +3184,7 @@ body.dark-mode .recipe-accept-new {
       </tfoot>
     </table>
 
+    <div class="operational-totals" id="operationalTotals" aria-live="polite"></div>
     <div class="page-print-label" id="pagePrintLabel">Page 1/1</div>
     <div class="foot">
       <label><span id="labelPoids">Poids relevé du voyage :</span> <input id="metaPoids" autocomplete="off" inputmode="decimal"></label>
@@ -3265,7 +3414,6 @@ body.dark-mode .recipe-accept-new {
         <table class="recipe-review-table" aria-label="Revue de la recette importee">
           <thead>
             <tr>
-              <th id="recipeReviewLineLabel">Ligne</th>
               <th id="recipeReviewTruckLabel">Camion</th>
               <th id="recipeReviewBucket1Label">Godet 1</th>
               <th id="recipeReviewBucket2Label">Godet 2</th>
@@ -3299,7 +3447,7 @@ body.dark-mode .recipe-accept-new {
   </div>
 </div>
 
-<script src="./recipe-ocr-engine.js?v=5.19.0"></script>
+<script src="./recipe-ocr-engine.js?v=5.20.0"></script>
 <script>
 (function(){
   "use strict";
@@ -3404,6 +3552,17 @@ body.dark-mode .recipe-accept-new {
       importDoneBuckets:"Godets realises",
       importDoneTonnes:"Tonnage realise",
       importRemainingTonnes:"Tonnage restant",
+      operationalRecipeTotal:"Total recette",
+      operationalCompleted:"Realise",
+      operationalPlannedTrips:"Voyages prevus",
+      operationalPlannedBuckets:"Godets prevus",
+      operationalFullTrips:"Equivalent voyages complets",
+      operationalPlannedTonnage:"Tonnage prevu",
+      operationalStartedTrips:"Voyages commences",
+      operationalCompletedTrips:"Voyages termines",
+      operationalCompletedBuckets:"Godets realises",
+      operationalCompletedTonnage:"Tonnage realise",
+      operationalRemainingTonnage:"Tonnage restant",
       importLine:"Ligne",
       importTruck:"Camion",
       importBucket1:"Godet 1",
@@ -3637,6 +3796,17 @@ body.dark-mode .recipe-accept-new {
       importDoneBuckets:"Buckets completed",
       importDoneTonnes:"Completed tonnage",
       importRemainingTonnes:"Remaining tonnage",
+      operationalRecipeTotal:"Recipe total",
+      operationalCompleted:"Completed",
+      operationalPlannedTrips:"Planned trips",
+      operationalPlannedBuckets:"Planned buckets",
+      operationalFullTrips:"Full-trip equivalent",
+      operationalPlannedTonnage:"Planned tonnage",
+      operationalStartedTrips:"Trips started",
+      operationalCompletedTrips:"Trips completed",
+      operationalCompletedBuckets:"Buckets completed",
+      operationalCompletedTonnage:"Completed tonnage",
+      operationalRemainingTonnage:"Remaining tonnage",
       importLine:"Line",
       importTruck:"Truck",
       importBucket1:"Bucket 1",
@@ -3948,19 +4118,11 @@ body.dark-mode .recipe-accept-new {
     else if (normalized?.status === "new") score += .28;
     if (evidence.correctColumn) score += .08;
     if (evidence.validRowAlignment) score += .07;
-    if (evidence.truckSequence) score += .04;
+    if (evidence.rowOrder) score += .04;
     if (evidence.repeatedCode) score += .04;
     if (normalized?.status === "empty" && evidence.validRowAlignment) score = Math.max(score, .92);
     if (normalized?.status === "unresolved") score = Math.min(score, .68);
     return Math.max(0, Math.min(1, score));
-  }
-
-  function normalizeRecipeTruck(rawValue, engineConfidence = 0){
-    const raw = String(rawValue ?? "").replace(/\s+/g, "").trim();
-    if (!raw) return { raw:"", value:"", status:"unresolved", confidence:0, reason:"missing-truck" };
-    const cleaned = raw.replace(/[Il]/g, "1");
-    if (!/^\d{1,3}$/.test(cleaned)) return { raw, value:cleaned, status:"unresolved", confidence:Math.min(.45, Number(engineConfidence) || .25), reason:"invalid-truck" };
-    return { raw, value:String(Number(cleaned)), status:"exact", confidence:Math.max(.94, Number(engineConfidence) || 0), reason:"truck-number" };
   }
 
   function normalizeRecipeBuckets(buckets){
@@ -3996,12 +4158,12 @@ body.dark-mode .recipe-accept-new {
 
   function refreshRecipeRowConfidence(row){
     const cells = (row.bucketMeta || []).filter(cell => cell.status !== "empty");
-    const scores = [row.truckMeta?.confidence, ...cells.map(cell => cell.confidence)].filter(Number.isFinite);
+    const scores = cells.map(cell => cell.confidence).filter(Number.isFinite);
     row.confidence = scores.length ? scores.reduce((sum, value) => sum + value, 0) / scores.length : 0;
     return row;
   }
 
-  function normalizeRecipeImportRow(row){
+  function normalizeRecipeImportRow(row, generatedIndex = null){
     const sourceBuckets = Array.isArray(row?.buckets) ? row.buckets : [];
     const previousCells = Array.isArray(row?.bucketMeta) ? row.bucketMeta : [];
     const bucketMeta = Array.from({ length:BUCKETS_PER_TRIP }, (_, index) => {
@@ -4020,14 +4182,16 @@ body.dark-mode .recipe-accept-new {
         evidence
       });
     });
-    const truckSource = row?.truckMeta?.raw ?? row?.truck;
-    const truckMeta = normalizeRecipeTruck(truckSource, row?.truckMeta?.confidence ?? row?.confidence);
     const buckets = bucketMeta.map(cell => cell.status === "empty" ? null : cell.value || null);
     const plannedBucketCount = buckets.filter(Boolean).length;
+    const generatedTruck = Number.isInteger(generatedIndex)
+      ? String(generatedIndex + 1)
+      : String(row?.truck || "").trim();
     const normalized = {
-      quarter:String(row?.quarter || "").trim(),
-      truck:truckMeta.value,
-      truckMeta,
+      truck:generatedTruck,
+      truckMeta:Number.isInteger(generatedIndex)
+        ? { value:generatedTruck, status:"generated", reason:"row-order", generated:true }
+        : null,
       buckets,
       bucketMeta,
       plannedBucketCount,
@@ -4047,57 +4211,8 @@ body.dark-mode .recipe-accept-new {
     return refreshRecipeRowConfidence(normalized);
   }
 
-  function numericRecipeTruck(row){
-    const value = String(row?.truckMeta?.value ?? row?.truck ?? "");
-    return /^\d+$/.test(value) ? Number(value) : null;
-  }
-
-  function markRecipeTruckUnresolved(row, reason){
-    row.truckMeta = Object.assign({}, row.truckMeta, { status:"unresolved", reason, confidence:Math.min(.5, Number(row.truckMeta?.confidence) || .4) });
-    return refreshRecipeRowConfidence(row);
-  }
-
-  function normalizeRecipeTruckSequence(rows){
-    const normalized = rows || [];
-    normalized.forEach((row, index) => {
-      const current = numericRecipeTruck(row);
-      if (current === null) return;
-      let previous = null;
-      let next = null;
-      for (let cursor = index - 1; cursor >= 0 && previous === null; cursor--) previous = numericRecipeTruck(normalized[cursor]);
-      for (let cursor = index + 1; cursor < normalized.length && next === null; cursor++) next = numericRecipeTruck(normalized[cursor]);
-      const expected = previous !== null ? previous + 1 : (index === 0 && next !== null ? next - 1 : null);
-      const rawDigits = String(row.truckMeta?.raw || "").replace(/\D/g, "");
-      const canCorrect = expected !== null && next === expected + 1 && current !== expected &&
-        rawDigits.includes(String(expected)) && rawDigits.length === String(expected).length + 1;
-      if (canCorrect) {
-        row.truck = String(expected);
-        row.truckMeta = Object.assign({}, row.truckMeta, {
-          value:String(expected),
-          status:"corrected",
-          confidence:.93,
-          reason:"truck-sequence-correction",
-          proposed:String(expected)
-        });
-        refreshRecipeRowConfidence(row);
-      }
-    });
-
-    const seen = new Set();
-    normalized.forEach((row, index) => {
-      const current = numericRecipeTruck(row);
-      if (current === null) return markRecipeTruckUnresolved(row, "invalid-truck");
-      if (seen.has(current)) markRecipeTruckUnresolved(row, "duplicate-truck");
-      seen.add(current);
-      const previous = index ? numericRecipeTruck(normalized[index - 1]) : null;
-      if (index === 0 && normalized.length > 1 && current !== 1) markRecipeTruckUnresolved(row, "truck-sequence");
-      else if (previous !== null && current !== previous + 1) markRecipeTruckUnresolved(row, "truck-sequence");
-    });
-    return normalized;
-  }
-
   function normalizeRecipeRows(rows){
-    return normalizeRecipeTruckSequence((rows || []).map(normalizeRecipeImportRow));
+    return (rows || []).map((row, index) => normalizeRecipeImportRow(row, index));
   }
 
   function normalizeImportedRecipes(recipes){
@@ -4759,7 +4874,6 @@ body.dark-mode .recipe-accept-new {
     setText("btnRecipeReviewRotateRight", i.importRotateRight);
     setText("btnRecipeReviewCrop", i.importAdjustCrop);
     setText("recipeImportProgress", i.importReading);
-    setText("recipeReviewLineLabel", i.importLine);
     setText("recipeReviewTruckLabel", i.importTruck);
     setText("recipeReviewBucket1Label", i.importBucket1);
     setText("recipeReviewBucket2Label", i.importBucket2);
@@ -4772,6 +4886,8 @@ body.dark-mode .recipe-accept-new {
     if (manualTimeInput) manualTimeInput.placeholder = i.timeManualPlaceholder;
 
     updateMetaUI();
+    renderRecipeImportSummary();
+    renderOperationalTotals();
     renderLoaderPlan();
   }
 
@@ -4810,7 +4926,7 @@ body.dark-mode .recipe-accept-new {
   function blankRow(){
     const ores = {};
     ALL_ORES.forEach(o => ores[o] = 0);
-    return { time:"", ores, loader:"", dest:"", importedRecipe:[], plannedBucketCount:null, recipeTruck:"", recipeQuarter:"" };
+    return { time:"", ores, loader:"", dest:"", importedRecipe:[], plannedBucketCount:null };
   }
 
   function blankPage(){
@@ -4842,8 +4958,8 @@ body.dark-mode .recipe-accept-new {
       row.plannedBucketCount = importedCount
         ? Math.min(importedCount, Math.max(1, Number(row.plannedBucketCount) || importedCount))
         : null;
-      row.recipeTruck = String(row.recipeTruck || "").trim();
-      row.recipeQuarter = String(row.recipeQuarter || "").trim();
+      delete row.recipeTruck;
+      delete row.recipeQuarter;
     }
     return rows;
   }
@@ -5090,6 +5206,9 @@ body.dark-mode .recipe-accept-new {
       ? recipeProgress.startedTrips
       : (p.rows || []).filter(row => Boolean(row.time)).length;
     const voyageCount = recipeProgress ? recipeProgress.completeTrips : completedRows.length;
+    const plannedTrips = recipeProgress
+      ? recipeProgress.plannedTrips
+      : (p.rows || []).filter(row => rowBucketTotalFromRow(row) > 0).length;
     const silo = (p.rows || []).filter(row => row.dest === "Silo").length;
     const crPad = (p.rows || []).filter(row => row.dest === "Cr-Pad").length;
     return {
@@ -5104,7 +5223,7 @@ body.dark-mode .recipe-accept-new {
       plannedTonnage:totalBuckets * TONNES_PER_TRIP / BUCKETS_PER_TRIP,
       estimatedTonnage:completedBuckets * TONNES_PER_TRIP / BUCKETS_PER_TRIP,
       remainingTonnage:Math.max(0, totalBuckets - completedBuckets) * TONNES_PER_TRIP / BUCKETS_PER_TRIP,
-      plannedTrips:recipeProgress?.plannedTrips || 0
+      plannedTrips
     };
   }
 
@@ -5122,7 +5241,7 @@ body.dark-mode .recipe-accept-new {
     el.innerHTML = "";
     const items = [
       [t("importRecipeRows"), progress.plannedTrips],
-      [t("importBuckets"), progress.plannedBuckets],
+      [t("operationalPlannedBuckets"), progress.plannedBuckets],
       [t("importFullTripEquivalent"), progress.fullTripEquivalent.toFixed(2)],
       [t("importPlannedTonnes"), progress.plannedTonnage.toFixed(1) + " t"],
       [t("importStartedTrips"), progress.startedTrips],
@@ -5140,6 +5259,53 @@ body.dark-mode .recipe-accept-new {
       number.textContent = String(value);
       item.append(title, number);
       el.appendChild(item);
+    });
+  }
+
+  function renderOperationalTotals(){
+    const el = document.getElementById("operationalTotals");
+    if (!el) return;
+    const summary = pageSummaryFor(page(), currentPage);
+    const groups = [
+      {
+        title:t("operationalRecipeTotal"),
+        items:[
+          [t("operationalPlannedTrips"), summary.plannedTrips],
+          [t("operationalPlannedBuckets"), summary.totalBuckets],
+          [t("operationalFullTrips"), summary.fullTripEquivalent.toFixed(2)],
+          [t("operationalPlannedTonnage"), summary.plannedTonnage.toFixed(1) + " t"]
+        ]
+      },
+      {
+        title:t("operationalCompleted"),
+        items:[
+          [t("operationalStartedTrips"), summary.startedTrips],
+          [t("operationalCompletedTrips"), summary.voyageCount],
+          [t("operationalCompletedBuckets"), summary.completedBuckets],
+          [t("operationalCompletedTonnage"), summary.estimatedTonnage.toFixed(1) + " t"],
+          [t("operationalRemainingTonnage"), summary.remainingTonnage.toFixed(1) + " t"]
+        ]
+      }
+    ];
+    el.innerHTML = "";
+    groups.forEach(group => {
+      const section = document.createElement("section");
+      section.className = "operational-totals-group";
+      const heading = document.createElement("div");
+      heading.className = "operational-totals-title";
+      heading.textContent = group.title;
+      section.appendChild(heading);
+      group.items.forEach(([label, value]) => {
+        const item = document.createElement("div");
+        item.className = "operational-total";
+        const title = document.createElement("strong");
+        title.textContent = label;
+        const number = document.createElement("span");
+        number.textContent = String(value);
+        item.append(title, number);
+        section.appendChild(item);
+      });
+      el.appendChild(section);
     });
   }
 
@@ -5277,6 +5443,7 @@ body.dark-mode .recipe-accept-new {
     updateMetaUI();
     renderTotals();
     renderRecipeImportSummary();
+    renderOperationalTotals();
     markNextLine();
     renderLoaderPlan();
   }
@@ -5604,125 +5771,6 @@ body.dark-mode .recipe-accept-new {
     });
   }
 
-  function parseRecipeCodeTokens(values){
-    const tokens = [];
-    values.forEach(value => {
-      const raw = String(value || "").replace(/ORE\s*\/?\s*NEIGE/gi, "ORE/NEIGE");
-      const matches = raw.match(/[A-Za-z][A-Za-z0-9/ -]*/g) || [];
-      matches.forEach(match => {
-        const code = normalizeRecipeCode(match);
-        if (code && !/^(QUART|CAMION|TRUCK|GODET|BUCKET|SOURCE)$/i.test(code)) tokens.push(code);
-      });
-    });
-    return tokens;
-  }
-
-  function recipeOcrEntries(blocks){
-    return (blocks || []).map(block => {
-      const box = block.boundingBox || {};
-      return {
-        text:String(block.rawValue || block.text || "").trim(),
-        x:Number(box.x) || 0,
-        y:Number(box.y) || 0,
-        width:Math.max(1, Number(box.width) || 1),
-        height:Math.min(42, Math.max(10, Number(box.height) || 16)),
-        confidence:Number.isFinite(Number(block.confidence)) ? Number(block.confidence) : .82
-      };
-    }).filter(entry => entry.text);
-  }
-
-  function groupRecipeOcrRows(entries){
-    const groups = [];
-    entries.slice().sort((a, b) => a.y - b.y || a.x - b.x).forEach(entry => {
-      const previous = groups[groups.length - 1];
-      const tolerance = previous ? Math.max(16, Math.min(34, Math.max(previous.height, entry.height) * .85)) : 0;
-      if (previous && Math.abs(entry.y - previous.centerY) <= tolerance) {
-        previous.entries.push(entry);
-        previous.centerY = previous.entries.reduce((sum, item) => sum + item.y, 0) / previous.entries.length;
-        previous.height = Math.max(previous.height, entry.height);
-      } else {
-        groups.push({ centerY:entry.y, height:entry.height, entries:[entry] });
-      }
-    });
-    return groups;
-  }
-
-  function medianRecipeValue(values){
-    const ordered = values.slice().sort((a, b) => a - b);
-    if (!ordered.length) return 0;
-    const middle = Math.floor(ordered.length / 2);
-    return ordered.length % 2 ? ordered[middle] : (ordered[middle - 1] + ordered[middle]) / 2;
-  }
-
-  function recipeHeaderColumnAnchors(group){
-    if (!group) return [];
-    const entries = group.entries.slice().sort((a, b) => a.x - b.x);
-    const quarter = entries.find(entry => /quart/i.test(entry.text));
-    const truck = entries.find(entry => /camion|truck/i.test(entry.text));
-    const buckets = entries.filter(entry => /godet|bucket/i.test(entry.text));
-    if (!quarter || !truck || buckets.length < BUCKETS_PER_TRIP) return [];
-    return [quarter.x, truck.x, ...buckets.slice(0, BUCKETS_PER_TRIP).map(entry => entry.x)];
-  }
-
-  function fallbackRecipeColumnAnchors(groups){
-    const candidates = (groups || []).filter(group => {
-      const text = group.entries.map(entry => entry.text).join(" ");
-      return !/quart|camion|truck|godet|bucket/i.test(text) && group.entries.length >= 5;
-    }).slice(0, 12).map(group => group.entries.slice().sort((a, b) => a.x - b.x).slice(0, 5).map(entry => entry.x));
-    if (!candidates.length) return [];
-    return Array.from({ length:5 }, (_, index) => medianRecipeValue(candidates.map(candidate => candidate[index])));
-  }
-
-  function assignRecipeColumns(entries, anchors){
-    const columns = Array.from({ length:5 }, () => []);
-    if (anchors.length !== 5) return columns;
-    (entries || []).forEach(entry => {
-      let column = 0;
-      let distance = Infinity;
-      anchors.forEach((anchor, index) => {
-        const nextDistance = Math.abs(entry.x - anchor);
-        if (nextDistance < distance) {
-          distance = nextDistance;
-          column = index;
-        }
-      });
-      columns[column].push(entry);
-    });
-    return columns.map(column => column.sort((a, b) => a.x - b.x));
-  }
-
-  function parseRecipeOcrBlocks(blocks){
-    const groups = groupRecipeOcrRows(recipeOcrEntries(blocks));
-    const headerIndex = groups.findIndex(group => /quart|camion|truck|godet|bucket/i.test(group.entries.map(entry => entry.text).join(" ")));
-    const headerAnchors = recipeHeaderColumnAnchors(groups[headerIndex]);
-    const anchors = headerAnchors.length ? headerAnchors : fallbackRecipeColumnAnchors(groups);
-    const dataGroups = headerIndex >= 0 ? groups.slice(headerIndex + 1) : groups;
-    const rows = [];
-    dataGroups.forEach((group, groupIndex) => {
-      const text = group.entries.map(entry => entry.text).join(" ");
-      if (/quart|camion|truck|godet|bucket/i.test(text)) return;
-      const columns = assignRecipeColumns(group.entries, anchors);
-      const values = columns.map(column => column.map(entry => entry.text).join(" ").trim());
-      const confidences = columns.map(column => column.length
-        ? column.reduce((sum, entry) => sum + entry.confidence, 0) / column.length
-        : 0);
-      const truck = values[1];
-      const buckets = values.slice(2);
-      if (!truck || !buckets.some(Boolean)) return;
-      const confidence = confidences.filter(Boolean).reduce((sum, value) => sum + value, 0) / Math.max(1, confidences.filter(Boolean).length);
-      rows.push({
-        quarter:values[0],
-        truck,
-        buckets,
-        ocrConfidence:{ bucket1:confidences[2], bucket2:confidences[3], bucket3:confidences[4] },
-        tableAlignmentConfidence:anchors.length === 5 ? .96 : .6,
-        confidence,
-        sourceLine:(headerIndex >= 0 ? headerIndex : 0) + groupIndex + 1
-      });
-    });
-    return normalizeRecipeRows(rows);
-  }
-
   function absoluteOcrUrl(relativePath){
     return new URL(relativePath, location.href).href;
   }
@@ -5867,11 +5915,15 @@ body.dark-mode .recipe-accept-new {
     return values;
   }
 
+  function recipeDetectedRowHasContent(bucketCells){
+    return Array.isArray(bucketCells) && bucketCells.some(cell => cell && !cell.blank);
+  }
+
   async function readRecipeSegmentedCells(prepared, runId){
     const engine = window.RecetteOcrEngine;
     const cellPlan = engine.buildCellPlan(prepared);
     const Tesseract = await loadOfflineOcrLibrary();
-    const cellsByRow = Array.from({ length:prepared.grid.dataRowCount }, () => ({ truck:null, buckets:Array(BUCKETS_PER_TRIP).fill(null) }));
+    const cellsByRow = Array.from({ length:prepared.grid.dataRowCount }, () => ({ buckets:Array(BUCKETS_PER_TRIP).fill(null) }));
     const debugCells = [];
     let worker = null;
     try {
@@ -5889,48 +5941,6 @@ body.dark-mode .recipe-accept-new {
       activeOcrWorker = worker;
       await worker.setParameters({
         tessedit_pageseg_mode:"11",
-        tessedit_char_whitelist:"0123456789",
-        preserve_interword_spaces:"0",
-        textord_tabfind_find_tables:"0",
-        user_defined_dpi:"220"
-      });
-      const truckCells = cellPlan.filter(cell => cell.kind === "truck");
-      const truckSheet = buildRecipeOcrSheet(truckCells, 1);
-      setRecipeImportProgress(t("importCellReading", { current:1, total:2 }));
-      const truckResult = await worker.recognize(truckSheet.canvas, {}, { text:true, blocks:true });
-      const truckValues = readRecipeOcrSheet(truckSheet, truckResult?.data);
-      truckCells.forEach((cell, index) => {
-        let raw = recipeOcrCellText(truckValues[index]?.raw);
-        const rawConfidence = Math.max(0, Math.min(1, Number(truckValues[index]?.confidence) || 0));
-        let confidence = rawConfidence;
-        const expected = String(cell.rowIndex + 1);
-        const truckMeta = normalizeRecipeTruck(raw, confidence);
-        const ocrRaw = raw;
-        if ((truckMeta.status === "unresolved" || truckMeta.value !== expected) && prepared.grid.confidence >= .82) {
-          raw = expected;
-          confidence = Math.max(.9, prepared.grid.confidence);
-        }
-        const normalizedTruck = normalizeRecipeTruck(raw, confidence);
-        const truckEvidence = {
-          correctColumn:cell.columnIndex === prepared.grid.truckColumn,
-          validRowAlignment:prepared.grid.rowHeightDeviation < .42,
-          truckSequence:normalizedTruck.value === expected,
-          geometricSubstitution:ocrRaw !== raw
-        };
-        cellsByRow[cell.rowIndex].truck = {
-          raw,
-          confidence:normalizedTruck.confidence,
-          rawConfidence,
-          evidence:truckEvidence
-        };
-        const debugRecord = recipeCellDebugRecord(cell, raw, rawConfidence, normalizedTruck, truckEvidence);
-        debugRecord.ocrRaw = ocrRaw;
-        debugRecord.geometricExpected = expected;
-        debugCells.push(debugRecord);
-      });
-
-      await worker.setParameters({
-        tessedit_pageseg_mode:"11",
         tessedit_char_whitelist:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789/-",
         preserve_interword_spaces:"0",
         textord_tabfind_find_tables:"0",
@@ -5939,7 +5949,7 @@ body.dark-mode .recipe-accept-new {
       const materialCells = cellPlan.filter(cell => cell.kind === "material");
       if (runId !== recipeImportRunId) throw new Error("ocr-cancelled");
       const materialSheet = buildRecipeOcrSheet(materialCells, BUCKETS_PER_TRIP);
-      setRecipeImportProgress(t("importCellReading", { current:2, total:2 }));
+      setRecipeImportProgress(t("importCellReading", { current:1, total:1 }));
       const materialResult = await worker.recognize(materialSheet.canvas, {}, { text:true, blocks:true });
       const materialValues = readRecipeOcrSheet(materialSheet, materialResult?.data);
       const numericCodesByPrefix = {};
@@ -5973,7 +5983,7 @@ body.dark-mode .recipe-accept-new {
         const evidenceFor = normalized => ({
           correctColumn:bucketIndex >= 0,
           validRowAlignment:prepared.grid.rowHeightDeviation < .42 && prepared.grid.confidence >= .65,
-          truckSequence:cellsByRow[cell.rowIndex].truck?.raw === String(cell.rowIndex + 1),
+          rowOrder:true,
           repeatedCode:Boolean(normalized?.value && normalizedCodeCounts[normalized.value] > 1)
         });
         let normalized = normalizeRecipeOcrCode(raw, rawConfidence);
@@ -6023,16 +6033,17 @@ body.dark-mode .recipe-accept-new {
           confidence:normalized.confidence,
           rawConfidence,
           evidence,
-          meta:normalized
+          meta:normalized,
+          blank:cell.blank
         };
         const debugRecord = recipeCellDebugRecord(cell, raw, rawConfidence, normalized, evidence);
         debugRecord.ocrRaw = ocrRaw;
         debugCells.push(debugRecord);
       }
 
-      const rows = cellsByRow.map((cells, rowIndex) => ({
-        truck:cells.truck?.raw || String(rowIndex + 1),
-        truckMeta:cells.truck,
+      const detectedRows = cellsByRow.map((cells, rowIndex) => ({ cells, rowIndex }))
+        .filter(({ cells }) => recipeDetectedRowHasContent(cells.buckets));
+      const rows = detectedRows.map(({ cells, rowIndex }) => ({
         buckets:cells.buckets.map(cell => cell?.raw || null),
         bucketMeta:cells.buckets.map(cell => cell?.meta || null),
         ocrConfidence:Object.fromEntries(cells.buckets.map((cell, index) => ["bucket" + (index + 1), cell?.confidence ?? 1])),
@@ -6046,10 +6057,10 @@ body.dark-mode .recipe-accept-new {
         engine:"tesseract-cell",
         cells:debugCells,
         cellPlan,
+        scannedRowCount:cellsByRow.length,
+        blankRowsExcluded:cellsByRow.length - detectedRows.length,
         rawSheets:{
-          truck:recipeOcrCellText(truckResult?.data),
           material:recipeOcrCellText(materialResult?.data),
-          truckMap:truckValues.debug,
           materialMap:materialValues.debug
         }
       };
@@ -6073,9 +6084,6 @@ body.dark-mode .recipe-accept-new {
 
   function recipeRowIssues(row, index = 0){
     const issues = [];
-    if (!row?.truckMeta || row.truckMeta.status === "unresolved" || !/^\d+$/.test(String(row.truck || ""))) {
-      issues.push({ row:index, field:"truck", reason:row?.truckMeta?.reason || "invalid-truck" });
-    }
     let plannedBuckets = 0;
     Array.from({ length:BUCKETS_PER_TRIP }, (_, bucketIndex) => recipeCellMeta(row, bucketIndex)).forEach((cell, bucketIndex) => {
       if (cell.status === "empty") return;
@@ -6092,8 +6100,6 @@ body.dark-mode .recipe-accept-new {
 
   function recipeIssueLabel(reason){
     if (reason === "ocr-artifact") return t("importReasonArtifact");
-    if (reason === "invalid-truck" || reason === "missing-truck") return t("importReasonTruck");
-    if (["truck-sequence", "duplicate-truck"].includes(reason)) return t("importReasonSequence");
     return t("importReasonUnknown");
   }
 
@@ -6147,22 +6153,20 @@ body.dark-mode .recipe-accept-new {
     rows.forEach((row, index) => {
       const tr = document.createElement("tr");
       if (issueRows.has(index)) tr.classList.add("low-confidence");
-      const values = [row.truck || "", ...Array.from({ length:BUCKETS_PER_TRIP }, (_, bucketIndex) => recipeCellMeta(row, bucketIndex).value || "")];
-      const fieldMeta = [row.truckMeta, ...Array.from({ length:BUCKETS_PER_TRIP }, (_, bucketIndex) => recipeCellMeta(row, bucketIndex))];
-      const line = document.createElement("td");
-      line.textContent = String(index + 1);
-      tr.appendChild(line);
-      values.forEach((value, cellIndex) => {
+      const truck = document.createElement("td");
+      truck.className = "recipe-generated-trip";
+      truck.textContent = row.truck || String(index + 1);
+      tr.appendChild(truck);
+      Array.from({ length:BUCKETS_PER_TRIP }, (_, bucketIndex) => recipeCellMeta(row, bucketIndex)).forEach((cell, bucketIndex) => {
         const td = document.createElement("td");
         const input = document.createElement("input");
-        input.value = value;
+        input.value = cell.value || "";
         input.dataset.recipeRow = String(index);
-        input.dataset.recipeField = cellIndex ? "bucket" + cellIndex : "truck";
+        input.dataset.recipeField = "bucket" + (bucketIndex + 1);
         input.autocomplete = "off";
-        if (cellIndex) input.setAttribute("list", "recipeKnownCodes");
-        if (cellIndex && !value && row.isPartialTrip) input.placeholder = t("importConfirmedEmpty");
+        input.setAttribute("list", "recipeKnownCodes");
+        if (!cell.value && row.isPartialTrip) input.placeholder = t("importConfirmedEmpty");
         td.appendChild(input);
-        const cell = fieldMeta[cellIndex];
         if (cell?.status !== "empty" && Number(cell?.confidence) < .9) td.classList.add("low-confidence-cell");
         if (cell?.status === "corrected") {
           const note = document.createElement("span");
@@ -6174,11 +6178,11 @@ body.dark-mode .recipe-accept-new {
           note.className = "recipe-cell-note unresolved";
           note.textContent = recipeIssueLabel(cell.reason);
           td.appendChild(note);
-          if (cellIndex && cell.canMarkAsNew) {
+          if (cell.canMarkAsNew) {
             const accept = document.createElement("button");
             accept.type = "button";
             accept.className = "recipe-accept-new";
-            accept.dataset.acceptNewCode = String(index) + ":" + String(cellIndex - 1);
+            accept.dataset.acceptNewCode = String(index) + ":" + String(bucketIndex);
             accept.textContent = t("importNewCode");
             td.appendChild(accept);
           }
@@ -6216,18 +6220,6 @@ body.dark-mode .recipe-accept-new {
     return recipeRowIssues(row).length === 0;
   }
 
-  function duplicateRecipeTrucks(rows){
-    const seen = new Set();
-    const duplicates = new Set();
-    (rows || []).forEach(row => {
-      const truck = String(row?.truck || "").trim().toUpperCase();
-      if (!truck) return;
-      if (seen.has(truck)) duplicates.add(truck);
-      seen.add(truck);
-    });
-    return duplicates;
-  }
-
   function evaluateRecipeRecognition(prepared, recognition){
     const rows = recognition?.rows || [];
     const materialCells = (recognition?.cells || []).filter(cell => cell.type === "material" && cell.inkRatio >= .0045);
@@ -6237,8 +6229,11 @@ body.dark-mode .recipe-accept-new {
     const headerArtifacts = materialCells.filter(cell => cell.normalizationReason === "ocr-artifact").length;
     const plausibleRatio = recognized / Math.max(1, recognized + unresolved);
     const issues = recipeImportIssues(rows);
-    const sequenceIssues = issues.filter(issue => ["truck-sequence", "duplicate-truck", "invalid-truck", "missing-truck"].includes(issue.reason)).length;
-    const rowCountMatches = Boolean(prepared?.grid) && rows.length === prepared.grid.dataRowCount;
+    const scannedRowCount = Number(recognition?.scannedRowCount) || rows.length;
+    const blankRowsExcluded = Math.max(0, Number(recognition?.blankRowsExcluded) || 0);
+    const rowCountMatches = Boolean(prepared?.grid) &&
+      scannedRowCount === prepared.grid.dataRowCount &&
+      rows.length + blankRowsExcluded === scannedRowCount;
     const strongGeometry = Boolean(prepared?.grid?.valid) &&
       prepared.grid.confidence >= .68 &&
       prepared.grid.rowHeightDeviation < .42;
@@ -6246,12 +6241,10 @@ body.dark-mode .recipe-accept-new {
       recognized >= Math.max(3, Math.ceil(materialCells.length * .45)) &&
       plausibleRatio >= .45 &&
       headerArtifacts <= Math.max(2, Math.ceil(materialCells.length * .08));
-    const sequenceIsUsable = sequenceIssues <= Math.max(3, Math.ceil(rows.length * .3));
     const reasons = [];
     if (!prepared?.ok || !prepared?.grid?.valid) reasons.push("structure");
     if (!rowCountMatches) reasons.push("rows");
     if (!usefulReview) reasons.push("cells");
-    if (!sequenceIsUsable) reasons.push("sequence");
     return {
       pass:reasons.length === 0,
       outcome:reasons.length === 0 ? "review" : "recovery",
@@ -6264,8 +6257,8 @@ body.dark-mode .recipe-accept-new {
       headerArtifacts,
       materialCellCount:materialCells.length,
       plausibleRatio,
-      sequenceIssues,
-      sequenceIsUsable,
+      scannedRowCount,
+      blankRowsExcluded,
       issueCount:issues.length,
       structureConfidence:prepared?.structureConfidence || 0
     };
@@ -6508,8 +6501,6 @@ body.dark-mode .recipe-accept-new {
       }
       const targetIndex = draft.applyMode === "merge" ? nextEmptyRow++ : index;
       const row = blankRow();
-      row.recipeQuarter = String(recipeRow.quarter || "").trim();
-      row.recipeTruck = String(recipeRow.truck || "").trim();
       row.importedRecipe = normalizeRecipeBuckets(recipeRow.buckets);
       row.plannedBucketCount = plannedBucketCountForRecipeRow(recipeRow);
       recipeCodesForRow(row).forEach(code => {
@@ -6532,12 +6523,10 @@ body.dark-mode .recipe-accept-new {
       shift:null,
       source:"photo",
       rowIndexes,
-      rows:draft.rows.map(row => {
-        const normalized = normalizeRecipeImportRow(row);
+      rows:draft.rows.map((row, index) => {
+        const normalized = normalizeRecipeImportRow(row, index);
         return {
-          quarter:normalized.quarter,
           truck:normalized.truck,
-          truckMeta:normalized.truckMeta,
           buckets:normalized.buckets,
           bucketMeta:normalized.bucketMeta,
           plannedBucketCount:normalized.plannedBucketCount,
@@ -7183,13 +7172,12 @@ body.dark-mode .recipe-accept-new {
       setStatus(t("importTooMany", { count:ROWS }));
       return;
     }
-    recipeImportDraft.rows.push(normalizeRecipeImportRow({
-      quarter:"",
-      truck:"",
+    recipeImportDraft.rows.push({
       buckets:[null, null, null],
       confidence:0,
       sourceLine:recipeImportDraft.rows.length + 1
-    }));
+    });
+    recipeImportDraft.rows = normalizeRecipeRows(recipeImportDraft.rows);
     renderRecipeReview();
     const inputs = document.querySelectorAll('#recipeReviewRows input[data-recipe-row="' + (recipeImportDraft.rows.length - 1) + '"]');
     if (inputs[0]) inputs[0].focus();
@@ -7200,14 +7188,9 @@ body.dark-mode .recipe-accept-new {
     const row = recipeImportDraft.rows[Number(input.dataset.recipeRow)];
     if (!row) return;
     const field = input.dataset.recipeField;
-    if (field === "truck") {
-      row.truck = input.value.trim();
-      row.truckMeta = null;
-    } else {
-      const bucketIndex = Number(field.slice(-1)) - 1;
-      row.buckets[bucketIndex] = input.value.trim() || null;
-      row.bucketMeta[bucketIndex] = null;
-    }
+    const bucketIndex = Number(field.slice(-1)) - 1;
+    row.buckets[bucketIndex] = input.value.trim() || null;
+    row.bucketMeta[bucketIndex] = null;
     const hasExistingData = page().rows.some(rowStarted);
     document.getElementById("btnRecipeConfirm").disabled = !recipeImportDraft.rows.length ||
       recipeImportIssues(recipeImportDraft.rows).length > 0 ||
@@ -7218,14 +7201,9 @@ body.dark-mode .recipe-accept-new {
     if (!input || !recipeImportDraft) return;
     const row = recipeImportDraft.rows[Number(input.dataset.recipeRow)];
     if (!row) return;
-    if (input.dataset.recipeField === "truck") {
-      row.truck = input.value.trim();
-      row.truckMeta = null;
-    } else {
-      const bucketIndex = Number(input.dataset.recipeField.slice(-1)) - 1;
-      row.buckets[bucketIndex] = input.value.trim() || null;
-      row.bucketMeta[bucketIndex] = null;
-    }
+    const bucketIndex = Number(input.dataset.recipeField.slice(-1)) - 1;
+    row.buckets[bucketIndex] = input.value.trim() || null;
+    row.bucketMeta[bucketIndex] = null;
     recipeImportDraft.rows = normalizeRecipeRows(recipeImportDraft.rows);
     renderRecipeReview();
   });
@@ -7497,6 +7475,14 @@ body.dark-mode .recipe-accept-new {
   applyDarkMode();
   setActiveView(activeView, true);
   applyLanguage();
+  if (LOCAL_PREVIEW) {
+    window.__recetteOcrTest = Object.freeze({
+      readRecipeSegmentedCells,
+      evaluateRecipeRecognition,
+      recipeDraftSummary,
+      normalizeRecipeOcrCode
+    });
+  }
   setInterval(() => { if (darkModeSetting === "auto") applyDarkMode(); }, 60000);
 })();
 </script>

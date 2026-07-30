@@ -851,7 +851,7 @@
   }
 
   function enhanceCell(source, kind){
-    const targetHeight = kind === "truck" ? 86 : 104;
+    const targetHeight = 104;
     const scale = clamp(targetHeight / Math.max(1, source.height), 1.5, 6);
     const canvas = createCanvas(Math.max(80, source.width * scale), Math.max(targetHeight, source.height * scale));
     const context = canvas.getContext("2d", { willReadFrequently:true });
@@ -895,16 +895,28 @@
     };
   }
 
-  function buildCellPlan(prepared){
-    if (!prepared?.tableCanvas || !prepared?.grid?.valid) return [];
-    const plan = [];
-    for (let rowIndex = 0; rowIndex < prepared.grid.dataRowCount; rowIndex++) {
-      plan.push(extractCell(prepared.tableCanvas, prepared.grid, rowIndex, prepared.grid.truckColumn, "truck"));
-      prepared.grid.bucketColumns.forEach(columnIndex => {
-        plan.push(extractCell(prepared.tableCanvas, prepared.grid, rowIndex, columnIndex, "material"));
+  function buildCellDescriptors(grid){
+    if (!grid?.valid) return [];
+    const descriptors = [];
+    for (let rowIndex = 0; rowIndex < grid.dataRowCount; rowIndex++) {
+      grid.bucketColumns.forEach(columnIndex => {
+        descriptors.push({ rowIndex, columnIndex, kind:"material" });
       });
     }
-    return plan.filter(Boolean);
+    return descriptors;
+  }
+
+  function buildCellPlan(prepared){
+    if (!prepared?.tableCanvas || !prepared?.grid?.valid) return [];
+    return buildCellDescriptors(prepared.grid).map(descriptor => (
+      extractCell(
+        prepared.tableCanvas,
+        prepared.grid,
+        descriptor.rowIndex,
+        descriptor.columnIndex,
+        descriptor.kind
+      )
+    )).filter(Boolean);
   }
 
   function drawGridOverlay(target, tableCanvas, grid){
@@ -1012,6 +1024,7 @@
     prepare,
     cellBounds,
     extractCell,
+    buildCellDescriptors,
     buildCellPlan,
     drawGridOverlay,
     syntheticRecipeBinary,
