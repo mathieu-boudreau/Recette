@@ -1,7 +1,8 @@
-const CACHE_NAME = "recette-touch-v5.16.0-accurate-recipe-ocr";
+const CACHE_NAME = "recette-touch-v5.17.0-structured-recipe-ocr";
 const ASSETS = [
   "./",
   "./index.html",
+  "./recipe-ocr-engine.js?v=5.17.0",
   "./manifest.webmanifest",
   "./sw.js",
   "./icon-192.png",
@@ -9,7 +10,11 @@ const ASSETS = [
   "./apple-touch-icon.png",
   "./logo.png",
   "./wordmark.png",
-  "./kiewit-header.png"
+  "./kiewit-header.png",
+  "./vendor/ocr/tesseract.min.js",
+  "./vendor/ocr/worker.min.js",
+  "./vendor/ocr/tesseract-core-lstm.wasm.js",
+  "./vendor/ocr/lang/eng.traineddata.gz"
 ];
 
 self.addEventListener("install", event => {

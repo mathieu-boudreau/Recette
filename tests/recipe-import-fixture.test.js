@@ -2,6 +2,7 @@
 
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
+const ocrEngine = require("../recipe-ocr-engine.js");
 
 const html = fs.readFileSync("index.html", "utf8");
 const BUCKETS_PER_TRIP = 3;
@@ -50,15 +51,8 @@ const recipeFunctions = Function("BUCKETS_PER_TRIP", "TONNES_PER_TRIP", "ORES", 
   "recipeDraftSummary",
   "importedRecipeProgress",
   "recipeRowIssues",
-  "recipeImportIssues",
-  "recipeOcrEntries",
-  "groupRecipeOcrRows",
-  "medianRecipeValue",
-  "recipeHeaderColumnAnchors",
-  "fallbackRecipeColumnAnchors",
-  "assignRecipeColumns",
-  "parseRecipeOcrBlocks"
-].map(sourceOf).join("\n") + "\nreturn { recipeCodeKey, recipeKnownCodeFor, normalizeRecipeCode, normalizeRecipeOcrCode, normalizeRecipeTruck, normalizeRecipeBuckets, recipeBucketValues, plannedBucketCountForRecipeRow, recipeCellMeta, recipeCellIsResolved, refreshRecipeRowConfidence, normalizeRecipeImportRow, numericRecipeTruck, markRecipeTruckUnresolved, normalizeRecipeTruckSequence, normalizeRecipeRows, recipeCodesForRow, plannedBucketCountForRow, rowBucketTotalFromRow, rowCompleteForNext, recipeDraftSummary, importedRecipeProgress, recipeRowIssues, recipeImportIssues, recipeOcrEntries, groupRecipeOcrRows, medianRecipeValue, recipeHeaderColumnAnchors, fallbackRecipeColumnAnchors, assignRecipeColumns, parseRecipeOcrBlocks };")(BUCKETS_PER_TRIP, TONNES_PER_TRIP, ALL_ORES, ALL_ORES);
+  "recipeImportIssues"
+].map(sourceOf).join("\n") + "\nreturn { recipeCodeKey, recipeKnownCodeFor, normalizeRecipeCode, normalizeRecipeOcrCode, normalizeRecipeTruck, normalizeRecipeBuckets, recipeBucketValues, plannedBucketCountForRecipeRow, recipeCellMeta, recipeCellIsResolved, refreshRecipeRowConfidence, normalizeRecipeImportRow, numericRecipeTruck, markRecipeTruckUnresolved, normalizeRecipeTruckSequence, normalizeRecipeRows, recipeCodesForRow, plannedBucketCountForRow, rowBucketTotalFromRow, rowCompleteForNext, recipeDraftSummary, importedRecipeProgress, recipeRowIssues, recipeImportIssues };")(BUCKETS_PER_TRIP, TONNES_PER_TRIP, ALL_ORES, ALL_ORES);
 
 const {
   normalizeRecipeCode,
@@ -75,8 +69,7 @@ const {
   rowCompleteForNext,
   recipeDraftSummary,
   importedRecipeProgress,
-  recipeImportIssues,
-  parseRecipeOcrBlocks
+  recipeImportIssues
 } = recipeFunctions;
 
 const fixture = [
@@ -109,6 +102,22 @@ assert.deepEqual(summary.materials, {
 assert.equal(summary.buckets / BUCKETS_PER_TRIP, 106 / 3);
 assert.equal(summary.plannedTonnes, 106 * 37 / 3);
 assert.equal(summary.plannedTonnes.toFixed(1), "1307.3");
+
+[0, 1, 2, 3].forEach(inputTurns => {
+  const synthetic = ocrEngine.syntheticRecipeBinary(36, inputTurns);
+  const orientation = ocrEngine.selectOrientation(synthetic);
+  assert.equal(
+    (inputTurns + orientation.turns) % 4,
+    0,
+    "Rotation " + (inputTurns * 90) + " degrees must be corrected upright"
+  );
+  assert.equal(orientation.analysis.verticalLines.length, 6);
+  assert.equal(orientation.analysis.horizontalLines.length >= 36, true);
+  const rotatedSummary = recipeDraftSummary(normalizeRecipeRows(fixture));
+  assert.deepEqual(rotatedSummary.materials, summary.materials);
+  assert.equal(rotatedSummary.buckets, 106);
+  assert.equal(rotatedSummary.plannedTonnes.toFixed(1), "1307.3");
+});
 
 const partialTrip = fixture[17];
 assert.equal(partialTrip.plannedBucketCount, 1);
@@ -157,6 +166,13 @@ assert.equal(html.includes("imported-code-preview"), false, "Imported material l
 assert.equal(normalizeRecipeOcrCode("CELL...").status, "unresolved");
 assert.equal(normalizeRecipeOcrCode("XYZ").status, "unresolved");
 assert.equal(normalizeRecipeOcrCode("XYZ").canMarkAsNew, true);
+["O1N1", "O1M", "TOMO", "CELLUL", "XL 5 OC", "DR ZT J", "LGOJDE", "GODE", "ZB", "LODET"].forEach(raw => {
+  const value = normalizeRecipeOcrCode(raw, .22);
+  assert.equal(value.status, "unresolved", raw + " must never become a confirmed material");
+});
+["CELLUL", "XL 5 OC", "DR ZT J", "LGOJDE", "GODE", "LODET"].forEach(raw => {
+  assert.equal(normalizeRecipeOcrCode(raw, .22).canMarkAsNew, false, raw + " must be classified as OCR garbage");
+});
 
 const correctedTrucks = normalizeRecipeRows([
   { truck:"1", buckets:["A1", "C1", "C1"] },
@@ -174,23 +190,6 @@ const correctedMiddleTruck = normalizeRecipeRows([
   { truck:"7", buckets:["A1", "C1", "C1"] }
 ]);
 assert.equal(correctedMiddleTruck[1].truck, "6");
-
-function ocrBlock(text, x, y, confidence = .51) {
-  return { rawValue:text, confidence, boundingBox:{ x, y, width:24, height:14 } };
-}
-
-const segmentedRows = parseRecipeOcrBlocks([
-  ocrBlock("Quart", 0, 0), ocrBlock("Camion", 62, 0), ocrBlock("Godet", 122, 0), ocrBlock("Godet", 182, 0), ocrBlock("Godet", 242, 0),
-  ocrBlock("1", 0, 36), ocrBlock("1", 62, 36), ocrBlock("JA1", 122, 36), ocrBlock("CT", 182, 36), ocrBlock("CT", 242, 36),
-  ocrBlock("1", 0, 62), ocrBlock("2", 62, 62), ocrBlock("JAHR", 122, 62), ocrBlock("B1", 182, 62), ocrBlock("BI", 242, 62),
-  ocrBlock("1", 0, 88), ocrBlock("3", 62, 88), ocrBlock("A1", 122, 88), ocrBlock("A1", 182, 88), ocrBlock("C1", 242, 88),
-  ocrBlock("1", 0, 114), ocrBlock("41", 62, 114), ocrBlock("A1", 122, 114), ocrBlock("C1", 182, 114), ocrBlock("C1", 242, 114),
-  ocrBlock("1", 0, 140), ocrBlock("5", 62, 140), ocrBlock("A1", 122, 140), ocrBlock("C1", 182, 140), ocrBlock("C1", 242, 140)
-]);
-assert.deepEqual(segmentedRows.map(row => row.truck), ["1", "2", "3", "4", "5"]);
-assert.deepEqual(segmentedRows[0].buckets, ["A1", "C1", "C1"]);
-assert.deepEqual(segmentedRows[1].buckets, ["AHR", "B1", "B1"]);
-assert.equal(recipeImportIssues(segmentedRows).length, 0);
 
 const unresolvedRecipe = normalizeRecipeRows([{ truck:"1", buckets:["CELL", "C1", "C1"] }]);
 assert.equal(recipeImportIssues(unresolvedRecipe).length > 0, true, "Unresolved OCR artifacts must block import");

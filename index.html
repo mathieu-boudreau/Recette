@@ -1382,6 +1382,103 @@ tfoot td,
   to { transform:rotate(360deg); }
 }
 
+.recipe-recovery {
+  display:grid;
+  gap:7px;
+  margin-top:10px;
+  padding:12px;
+  border-left:4px solid var(--yellow);
+  background:#fff9dc;
+  color:#171717;
+}
+
+.recipe-recovery strong {
+  font-size:15px;
+}
+
+.recipe-recovery p {
+  margin:0;
+  font-size:13px;
+  line-height:1.35;
+}
+
+.recipe-recovery-actions,
+.recipe-review-tools {
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+}
+
+.recipe-recovery-actions button,
+.recipe-review-tools button {
+  min-height:40px;
+}
+
+.recipe-review-tools {
+  justify-content:flex-end;
+  margin:7px 0 2px;
+}
+
+.recipe-crop-editor {
+  position:relative;
+  display:grid;
+  place-items:center;
+  width:100%;
+  min-height:220px;
+  max-height:58dvh;
+  overflow:hidden;
+  border:1px solid #bca64b;
+  border-radius:6px;
+  background:#171717;
+  touch-action:none;
+}
+
+.recipe-crop-editor canvas {
+  display:block;
+  width:auto;
+  max-width:100%;
+  max-height:58dvh;
+  height:auto;
+}
+
+.recipe-crop-handle {
+  position:absolute;
+  width:30px;
+  height:30px;
+  min-height:30px;
+  padding:0;
+  border:3px solid #111;
+  border-radius:50%;
+  background:var(--yellow);
+  box-shadow:0 0 0 2px #fff;
+  transform:translate(-50%, -50%);
+  touch-action:none;
+}
+
+.recipe-ocr-debug {
+  margin-top:10px;
+  padding:8px;
+  border:1px dashed #8f7c29;
+  background:#fffbe8;
+  color:#111;
+  font-size:11px;
+}
+
+.recipe-ocr-debug canvas {
+  display:block;
+  width:100%;
+  max-height:240px;
+  object-fit:contain;
+  background:#fff;
+}
+
+.recipe-ocr-debug pre {
+  max-height:220px;
+  overflow:auto;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+}
+
 .recipe-review-meta {
   display:flex;
   flex-wrap:wrap;
@@ -1779,6 +1876,17 @@ body.dark-mode .panel {
 
 body.dark-mode .recipe-import-copy,
 body.dark-mode .recipe-import-progress {
+  color:#f4f1e8;
+}
+
+body.dark-mode .recipe-recovery {
+  background:#2c2613;
+  color:#f4f1e8;
+}
+
+body.dark-mode .recipe-ocr-debug {
+  border-color:#8f7c29;
+  background:#17150d;
   color:#f4f1e8;
 }
 
@@ -2261,6 +2369,22 @@ body.dark-mode .recipe-accept-new {
 
   .recipe-import-panel {
     padding:12px;
+  }
+
+  .recipe-recovery-actions {
+    display:grid;
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+  }
+
+  .recipe-recovery-actions button,
+  .recipe-review-tools button {
+    min-width:0;
+    font-size:12px;
+  }
+
+  .recipe-review-tools {
+    display:grid;
+    grid-template-columns:repeat(3, minmax(0, 1fr));
   }
 
   .recipe-review-wrap {
@@ -3080,8 +3204,43 @@ body.dark-mode .recipe-accept-new {
       <div class="recipe-import-progress"><span class="recipe-import-spinner" aria-hidden="true"></span><span id="recipeImportProgress">Lecture de la recette...</span></div>
     </div>
 
+    <div class="recipe-import-stage" data-recipe-stage="recover">
+      <div class="recipe-import-preview"><canvas id="recipeRecoveryCanvas"></canvas></div>
+      <div class="recipe-recovery">
+        <strong id="recipeRecoveryTitle">La lecture automatique n'est pas assez fiable.</strong>
+        <p id="recipeRecoveryCopy">Aucune donnée ne sera importée. Ajustez le cadrage ou reprenez la photo.</p>
+        <div class="recipe-recovery-actions">
+          <button type="button" id="btnRecipeAdjustCrop">Ajuster le cadrage</button>
+          <button type="button" id="btnRecipeRotateLeft">Tourner à gauche</button>
+          <button type="button" id="btnRecipeRotateRight">Tourner à droite</button>
+          <button type="button" id="btnRecipeRetry">Relire</button>
+          <button type="button" id="btnRecipeManual">Saisie manuelle</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="recipe-import-stage" data-recipe-stage="crop">
+      <p class="recipe-import-copy" id="recipeCropCopy">Placez les quatre coins sur le contour du tableau.</p>
+      <div class="recipe-crop-editor" id="recipeCropEditor">
+        <canvas id="recipeCropCanvas"></canvas>
+        <button type="button" class="recipe-crop-handle" data-crop-corner="0" aria-label="Coin supérieur gauche"></button>
+        <button type="button" class="recipe-crop-handle" data-crop-corner="1" aria-label="Coin supérieur droit"></button>
+        <button type="button" class="recipe-crop-handle" data-crop-corner="2" aria-label="Coin inférieur droit"></button>
+        <button type="button" class="recipe-crop-handle" data-crop-corner="3" aria-label="Coin inférieur gauche"></button>
+      </div>
+      <div class="panel-row">
+        <button type="button" id="btnRecipeCropCancel">Retour</button>
+        <button type="button" id="btnRecipeApplyCrop" class="primary">Relire ce cadrage</button>
+      </div>
+    </div>
+
     <div class="recipe-import-stage" data-recipe-stage="review">
       <div class="recipe-import-preview"><canvas id="recipeReviewCanvas"></canvas></div>
+      <div class="recipe-review-tools">
+        <button type="button" id="btnRecipeReviewRotateLeft">Tourner à gauche</button>
+        <button type="button" id="btnRecipeReviewRotateRight">Tourner à droite</button>
+        <button type="button" id="btnRecipeReviewCrop">Ajuster le cadrage</button>
+      </div>
       <div class="recipe-review-meta" id="recipeReviewMeta"></div>
       <div class="recipe-review-summary" id="recipeReviewSummary"></div>
       <div class="recipe-review-warning" id="recipeReviewWarning" hidden></div>
@@ -3114,6 +3273,13 @@ body.dark-mode .recipe-accept-new {
       </div>
     </div>
 
+    <details class="recipe-ocr-debug" id="recipeOcrDebugPanel" hidden>
+      <summary>OCR debug</summary>
+      <canvas id="recipeOcrDebugCanvas"></canvas>
+      <pre id="recipeOcrDebugOutput"></pre>
+      <button type="button" id="btnRecipeDebugExport">Export JSON</button>
+    </details>
+
     <div class="panel-row">
       <button type="button" id="btnRecipeRetake" hidden>Reprendre la photo</button>
       <button type="button" id="btnRecipeChooseAgain" hidden>Choisir une photo</button>
@@ -3123,14 +3289,21 @@ body.dark-mode .recipe-accept-new {
   </div>
 </div>
 
+<script src="./recipe-ocr-engine.js?v=5.17.0"></script>
 <script>
 (function(){
   "use strict";
 
-  if ("serviceWorker" in navigator && location.protocol !== "file:") {
+  const LOCAL_PREVIEW = ["127.0.0.1", "localhost"].includes(location.hostname) &&
+    new URLSearchParams(location.search).get("ocrDebug") === "1";
+  if ("serviceWorker" in navigator && location.protocol !== "file:" && !LOCAL_PREVIEW) {
     navigator.serviceWorker.register("./sw.js")
       .then(() => setStatus(t("cacheOk")))
       .catch(() => setStatus(t("cacheFail")));
+  } else if ("serviceWorker" in navigator && LOCAL_PREVIEW) {
+    navigator.serviceWorker.getRegistrations().then(registrations => {
+      registrations.forEach(registration => registration.unregister());
+    });
   }
 
   const ORE_REGISTRY = {
@@ -3181,6 +3354,23 @@ body.dark-mode .recipe-accept-new {
       importPreparing:"Preparation de la photo...",
       importCorrecting:"Correction de l'image...",
       importAnalyzing:"Analyse des lignes...",
+      importOrientation:"Orientation de la photo...",
+      importTableDetection:"Detection du tableau...",
+      importCellReading:"Lecture cellule par cellule : {current}/{total}",
+      importRecoveryTitle:"La lecture automatique n'est pas assez fiable.",
+      importRecoveryCopy:"Aucune donnee ne sera importee. Ajustez le cadrage ou reprenez la photo.",
+      importAdjustCrop:"Ajuster le cadrage",
+      importRotateLeft:"Tourner à gauche",
+      importRotateRight:"Tourner à droite",
+      importRetry:"Relire",
+      importManual:"Saisie manuelle",
+      importCropCopy:"Placez les quatre coins sur le contour du tableau.",
+      importCropBack:"Retour",
+      importCropApply:"Relire ce cadrage",
+      importQualityRows:"La grille detectee ne correspond pas aux lignes lues.",
+      importQualityCells:"Trop de cellules sont illisibles pour une revue fiable.",
+      importQualitySequence:"La sequence des camions n'est pas assez fiable.",
+      importUnreadableCell:"Lecture impossible",
       importReviewRequired:"Verification requise.",
       importReviewLines:"{count} lignes a verifier",
       importDetectedTrips:"{count} voyages detectes",
@@ -3262,7 +3452,7 @@ body.dark-mode .recipe-accept-new {
       menuSectionDanger:"Réinitialisation",
       menuNote:"Astuce: ouvre le menu pour les actions et ferme-le pour voir plus de feuille.",
       menuSwipeHint:"Glisse vers le haut en bas du menu pour le fermer.",
-      statusReady:"App prête. Les données restent sur ce téléphone. Version 5.12.",
+      statusReady:"App prête. Les données restent sur ce téléphone. Version 5.17.",
       sheetName:"Feuille de transport / Hauling Sheet",
       sheetTitle:"Recette",
       voyageHeader:"Voyage",
@@ -3397,6 +3587,23 @@ body.dark-mode .recipe-accept-new {
       importPreparing:"Preparing photo...",
       importCorrecting:"Correcting image...",
       importAnalyzing:"Analyzing rows...",
+      importOrientation:"Orienting photo...",
+      importTableDetection:"Detecting table...",
+      importCellReading:"Reading cells: {current}/{total}",
+      importRecoveryTitle:"The automatic reading is not reliable enough.",
+      importRecoveryCopy:"No data will be imported. Adjust the crop or retake the photo.",
+      importAdjustCrop:"Adjust crop",
+      importRotateLeft:"Rotate left",
+      importRotateRight:"Rotate right",
+      importRetry:"Read again",
+      importManual:"Manual entry",
+      importCropCopy:"Place the four corners on the table outline.",
+      importCropBack:"Back",
+      importCropApply:"Read this crop",
+      importQualityRows:"The detected grid does not match the rows read.",
+      importQualityCells:"Too many cells are unreadable for a reliable review.",
+      importQualitySequence:"The truck sequence is not reliable enough.",
+      importUnreadableCell:"Unreadable cell",
       importReviewRequired:"Review required.",
       importReviewLines:"{count} lines to review",
       importDetectedTrips:"{count} trips detected",
@@ -3478,7 +3685,7 @@ body.dark-mode .recipe-accept-new {
       menuSectionDanger:"Reset",
       menuNote:"Tip: open the menu for actions, then close it to see more of the sheet.",
       menuSwipeHint:"Swipe up at the bottom of the menu to close it.",
-      statusReady:"App ready. Data stays on this phone. Version 5.12.",
+      statusReady:"App ready. Data stays on this phone. Version 5.17.",
       sheetName:"Hauling Sheet",
       sheetTitle:"Receipt",
       voyageHeader:"Trip",
@@ -3611,6 +3818,16 @@ body.dark-mode .recipe-accept-new {
   let ocrLibraryPromise = null;
   let recipeImportRunId = 0;
   let activeOcrWorker = null;
+  let recipeImportSourceCanvas = null;
+  let recipePreparedPhoto = null;
+  let recipeForcedTurns = null;
+  let recipeCropPoints = null;
+  let recipeCropReturnStage = "recover";
+  let recipeCropSourceCanvas = null;
+  let recipeExifOrientation = 1;
+  let recipeOcrDebugData = null;
+  const recipeOcrDebugEnabled = ["127.0.0.1", "localhost"].includes(location.hostname) &&
+    new URLSearchParams(location.search).get("ocrDebug") === "1";
 
 
   function resetLegacyLayoutState(){
@@ -3686,7 +3903,8 @@ body.dark-mode .recipe-accept-new {
       AI:"A1", AL:"A1", JA1:"A1",
       JAHR:"AHR", AHLR:"AHR", OH:"AHR",
       JBHR:"BHR", BHLR:"BHR",
-      CI:"C1", CT:"C1", BI:"B1", BT:"B1"
+      CI:"C1", CT:"C1", BI:"B1", BT:"B1",
+      ORENEIAE:"Ore/Neige"
     };
     const direct = recipeKnownCodeFor(aliases[key] || "");
     if (direct) return { raw, value:direct, status:"corrected", confidence:.93, reason:"known-ocr-confusion", canMarkAsNew:false };
@@ -3695,14 +3913,17 @@ body.dark-mode .recipe-accept-new {
     const visual = recipeKnownCodeFor(visualKey);
     if (visual && visualKey !== key) return { raw, value:visual, status:"corrected", confidence:.91, reason:"known-character-shape", canMarkAsNew:false };
 
-    const artifact = /^(CELL|CE11|LINE|L1NE|TABLE|GODET|BUCKET|CAMION|TRUCK|QUART)/.test(key);
+    const artifact = /^(UNREADABLE|CELL|CE11|LINE|L1NE|TABLE|GODE|ODET|LODET|BUCKET|CAMION|TRUCK|QUART)/.test(key) ||
+      ["O1N1", "O1M", "TOMO", "XL5OC", "DRZTJ", "LGOJDE", "ZB"].includes(key) ||
+      key.length > 10 ||
+      raw.split(/\s+/).filter(Boolean).length > 2;
     return {
       raw,
       value:normalizeRecipeCode(raw),
       status:"unresolved",
       confidence:Math.min(.45, Number(engineConfidence) || .25),
       reason:artifact ? "ocr-artifact" : "unknown-code",
-      canMarkAsNew:!artifact
+      canMarkAsNew:!artifact && key.length <= 8
     };
   }
 
@@ -4489,6 +4710,19 @@ body.dark-mode .recipe-accept-new {
     setText("btnRecipeCancel", i.importCancel);
     setText("btnRecipeConfirm", i.importConfirm);
     setText("btnRecipeAddRow", i.importAddRow);
+    setText("recipeRecoveryTitle", i.importRecoveryTitle);
+    setText("recipeRecoveryCopy", i.importRecoveryCopy);
+    setText("btnRecipeAdjustCrop", i.importAdjustCrop);
+    setText("btnRecipeRotateLeft", i.importRotateLeft);
+    setText("btnRecipeRotateRight", i.importRotateRight);
+    setText("btnRecipeRetry", i.importRetry);
+    setText("btnRecipeManual", i.importManual);
+    setText("recipeCropCopy", i.importCropCopy);
+    setText("btnRecipeCropCancel", i.importCropBack);
+    setText("btnRecipeApplyCrop", i.importCropApply);
+    setText("btnRecipeReviewRotateLeft", i.importRotateLeft);
+    setText("btnRecipeReviewRotateRight", i.importRotateRight);
+    setText("btnRecipeReviewCrop", i.importAdjustCrop);
     setText("recipeImportProgress", i.importReading);
     setText("recipeReviewLineLabel", i.importLine);
     setText("recipeReviewTruckLabel", i.importTruck);
@@ -5016,15 +5250,25 @@ body.dark-mode .recipe-accept-new {
     document.querySelectorAll("[data-recipe-stage]").forEach(el => {
       el.classList.toggle("active", el.dataset.recipeStage === stage);
     });
-    document.getElementById("btnRecipeRetake").hidden = stage !== "review";
-    document.getElementById("btnRecipeChooseAgain").hidden = stage !== "review";
+    const canReplacePhoto = stage === "review" || stage === "recover";
+    document.getElementById("btnRecipeRetake").hidden = !canReplacePhoto;
+    document.getElementById("btnRecipeChooseAgain").hidden = !canReplacePhoto;
     document.getElementById("btnRecipeConfirm").hidden = stage !== "review";
+    const debug = document.getElementById("recipeOcrDebugPanel");
+    if (debug) debug.hidden = !recipeOcrDebugEnabled || !["review", "recover"].includes(stage);
   }
 
   function releaseRecipeImportPhoto(){
     if (recipeImportObjectUrl) URL.revokeObjectURL(recipeImportObjectUrl);
     recipeImportObjectUrl = "";
-    ["recipeImportCanvas", "recipeReviewCanvas"].forEach(id => {
+    recipeImportSourceCanvas = null;
+    recipePreparedPhoto = null;
+    recipeForcedTurns = null;
+    recipeCropPoints = null;
+    recipeCropSourceCanvas = null;
+    recipeExifOrientation = 1;
+    recipeOcrDebugData = null;
+    ["recipeImportCanvas", "recipeReviewCanvas", "recipeRecoveryCanvas", "recipeCropCanvas", "recipeOcrDebugCanvas"].forEach(id => {
       const canvas = document.getElementById(id);
       if (canvas) {
         canvas.width = 1;
@@ -5040,6 +5284,7 @@ body.dark-mode .recipe-accept-new {
     releaseRecipeImportPhoto();
     document.getElementById("recipeReviewRows").innerHTML = "";
     document.getElementById("recipeReviewWarning").hidden = true;
+    document.getElementById("recipeOcrDebugOutput").textContent = "";
     setRecipeImportStage("start");
     document.getElementById("recipeImportModal").classList.add("open");
   }
@@ -5275,11 +5520,50 @@ body.dark-mode .recipe-accept-new {
     target.getContext("2d").drawImage(source, 0, 0);
   }
 
-  function loadRecipeImage(file){
+  async function readRecipeExifOrientation(file){
+    try {
+      const buffer = await file.arrayBuffer();
+      const view = new DataView(buffer);
+      if (view.byteLength < 4 || view.getUint16(0, false) !== 0xffd8) return 1;
+      let offset = 2;
+      while (offset + 4 < view.byteLength) {
+        const marker = view.getUint16(offset, false);
+        offset += 2;
+        if ((marker & 0xff00) !== 0xff00) break;
+        const length = view.getUint16(offset, false);
+        if (marker === 0xffe1 && offset + length <= view.byteLength &&
+            view.getUint32(offset + 2, false) === 0x45786966) {
+          const tiff = offset + 8;
+          const littleEndian = view.getUint16(tiff, false) === 0x4949;
+          const ifd = tiff + view.getUint32(tiff + 4, littleEndian);
+          const entries = view.getUint16(ifd, littleEndian);
+          for (let index = 0; index < entries; index++) {
+            const entry = ifd + 2 + index * 12;
+            if (entry + 12 > view.byteLength) break;
+            if (view.getUint16(entry, littleEndian) === 0x0112) {
+              return view.getUint16(entry + 8, littleEndian) || 1;
+            }
+          }
+          return 1;
+        }
+        offset += length;
+      }
+    } catch(e) {}
+    return 1;
+  }
+
+  async function loadRecipeImage(file){
+    const exifOrientation = await readRecipeExifOrientation(file);
+    if (typeof createImageBitmap === "function") {
+      try {
+        const bitmap = await createImageBitmap(file, { imageOrientation:"from-image" });
+        return { source:bitmap, exifOrientation, close:() => bitmap.close() };
+      } catch(e) {}
+    }
     return new Promise((resolve, reject) => {
       const img = new Image();
       recipeImportObjectUrl = URL.createObjectURL(file);
-      img.onload = () => resolve(img);
+      img.onload = () => resolve({ source:img, exifOrientation, close:() => {} });
       img.onerror = () => reject(new Error("image-load"));
       img.src = recipeImportObjectUrl;
     });
@@ -5432,7 +5716,9 @@ body.dark-mode .recipe-accept-new {
 
   function tesseractBlocks(data){
     const source = [];
-    if (Array.isArray(data?.blocks)) {
+    if (Array.isArray(data?.words) && data.words.length) {
+      source.push(...data.words);
+    } else if (Array.isArray(data?.blocks)) {
       data.blocks.forEach(block => {
         (block?.paragraphs || []).forEach(paragraph => {
           (paragraph?.lines || []).forEach(line => {
@@ -5443,7 +5729,6 @@ body.dark-mode .recipe-accept-new {
       });
     }
     if (!source.length && Array.isArray(data?.lines)) source.push(...data.lines);
-    if (!source.length && Array.isArray(data?.words)) source.push(...data.words);
     return source.map(item => {
       const box = item.bbox || item.boundingBox || {};
       return {
@@ -5459,8 +5744,92 @@ body.dark-mode .recipe-accept-new {
     });
   }
 
-  async function readRecipeWithOfflineOcr(canvas){
+  function recipeOcrCellText(data){
+    return String(typeof data === "string" ? data : data?.text || "")
+      .replace(/\r?\n/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function recipeCellDebugRecord(cell, raw, confidence, normalized){
+    return {
+      row:cell.rowIndex + 1,
+      column:cell.columnIndex + 1,
+      type:cell.kind,
+      bounds:cell.bounds,
+      inkRatio:Number(cell.inkRatio.toFixed(4)),
+      raw,
+      normalized:normalized?.value || "",
+      status:normalized?.status || "",
+      confidence:Number((Number(confidence) || 0).toFixed(3)),
+      reason:normalized?.reason || ""
+    };
+  }
+
+  function buildRecipeOcrSheet(cells, columns){
+    const slotWidth = columns === 1 ? 180 : 280;
+    const slotHeight = 104;
+    const rowCount = Math.max(1, Math.ceil(cells.length / columns));
+    const canvas = document.createElement("canvas");
+    canvas.width = slotWidth * columns;
+    canvas.height = slotHeight * rowCount;
+    const context = canvas.getContext("2d");
+    context.fillStyle = "#fff";
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    cells.forEach((cell, index) => {
+      if (cell.blank) return;
+      const column = index % columns;
+      const row = Math.floor(index / columns);
+      const maximumWidth = slotWidth - 34;
+      const maximumHeight = slotHeight - 24;
+      const scale = Math.min(1, maximumWidth / cell.canvas.width, maximumHeight / cell.canvas.height);
+      const width = Math.max(1, Math.round(cell.canvas.width * scale));
+      const height = Math.max(1, Math.round(cell.canvas.height * scale));
+      const x = column * slotWidth + Math.round((slotWidth - width) / 2);
+      const y = row * slotHeight + Math.round((slotHeight - height) / 2);
+      context.drawImage(cell.canvas, x, y, width, height);
+    });
+    return { canvas, cells, columns, slotWidth, slotHeight };
+  }
+
+  function readRecipeOcrSheet(sheet, data){
+    const values = sheet.cells.map(() => ({ raw:"", confidence:0 }));
+    tesseractBlocks(data).forEach(entry => {
+      const box = entry.boundingBox;
+      const centerX = box.x + box.width / 2;
+      const centerY = box.y + box.height / 2;
+      const column = Math.floor(centerX / sheet.slotWidth);
+      const row = Math.floor(centerY / sheet.slotHeight);
+      const index = row * sheet.columns + column;
+      if (index < 0 || index >= values.length) return;
+      values[index].raw = (values[index].raw + " " + entry.rawValue).trim();
+      values[index].confidence = Math.max(values[index].confidence, Number(entry.confidence) || 0);
+    });
+    const activeIndexes = sheet.cells.map((cell, index) => cell.blank ? -1 : index).filter(index => index >= 0);
+    const sequentialTokens = String(data?.text || "").match(/[A-Za-z0-9/-]+/g) || [];
+    const mappedCount = values.filter(value => value.raw).length;
+    if (sheet.columns > 1 && mappedCount < activeIndexes.length * .25 && sequentialTokens.length === activeIndexes.length) {
+      const fallbackConfidence = Math.max(.55, Math.min(.94, Number(data?.confidence) / 100 || .72));
+      activeIndexes.forEach((cellIndex, tokenIndex) => {
+        values[cellIndex].raw = sequentialTokens[tokenIndex];
+        values[cellIndex].confidence = Math.max(values[cellIndex].confidence, fallbackConfidence);
+      });
+    }
+    values.debug = {
+      columns:sheet.columns,
+      activeCells:activeIndexes.length,
+      sequentialTokens:sequentialTokens.length,
+      mappedValues:values.filter(value => value.raw).length
+    };
+    return values;
+  }
+
+  async function readRecipeSegmentedCells(prepared, runId){
+    const engine = window.RecetteOcrEngine;
+    const cellPlan = engine.buildCellPlan(prepared);
     const Tesseract = await loadOfflineOcrLibrary();
+    const cellsByRow = Array.from({ length:prepared.grid.dataRowCount }, () => ({ truck:null, buckets:Array(BUCKETS_PER_TRIP).fill(null) }));
+    const debugCells = [];
     let worker = null;
     try {
       worker = await Tesseract.createWorker("eng", 1, {
@@ -5476,30 +5845,120 @@ body.dark-mode .recipe-accept-new {
       });
       activeOcrWorker = worker;
       await worker.setParameters({
-        tessedit_pageseg_mode:"6",
-        tessedit_char_whitelist:"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz/ ",
-        preserve_interword_spaces:"1",
-        user_defined_dpi:"180"
+        tessedit_pageseg_mode:"11",
+        tessedit_char_whitelist:"0123456789",
+        preserve_interword_spaces:"0",
+        textord_tabfind_find_tables:"0",
+        user_defined_dpi:"220"
       });
-      const result = await worker.recognize(canvas, {}, { text:true, blocks:true });
-      const rows = parseRecipeOcrBlocks(tesseractBlocks(result?.data));
-      return { rows, native:false, engine:"tesseract" };
+      const truckCells = cellPlan.filter(cell => cell.kind === "truck");
+      const truckSheet = buildRecipeOcrSheet(truckCells, 1);
+      setRecipeImportProgress(t("importCellReading", { current:1, total:2 }));
+      const truckResult = await worker.recognize(truckSheet.canvas, {}, { text:true, blocks:true });
+      const truckValues = readRecipeOcrSheet(truckSheet, truckResult?.data);
+      truckCells.forEach((cell, index) => {
+        let raw = recipeOcrCellText(truckValues[index]?.raw);
+        let confidence = Math.max(0, Math.min(1, Number(truckValues[index]?.confidence) || 0));
+        const expected = String(cell.rowIndex + 1);
+        const truckMeta = normalizeRecipeTruck(raw, confidence);
+        const ocrRaw = raw;
+        if ((truckMeta.status === "unresolved" || truckMeta.value !== expected) && prepared.grid.confidence >= .82) {
+          raw = expected;
+          confidence = Math.max(.9, prepared.grid.confidence);
+        }
+        cellsByRow[cell.rowIndex].truck = { raw, confidence };
+        const debugRecord = recipeCellDebugRecord(cell, raw, confidence, normalizeRecipeTruck(raw, confidence));
+        debugRecord.ocrRaw = ocrRaw;
+        debugRecord.geometricExpected = expected;
+        debugCells.push(debugRecord);
+      });
+
+      await worker.setParameters({
+        tessedit_pageseg_mode:"11",
+        tessedit_char_whitelist:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789/-",
+        preserve_interword_spaces:"0",
+        textord_tabfind_find_tables:"0",
+        user_defined_dpi:"220"
+      });
+      const materialCells = cellPlan.filter(cell => cell.kind === "material");
+      if (runId !== recipeImportRunId) throw new Error("ocr-cancelled");
+      const materialSheet = buildRecipeOcrSheet(materialCells, BUCKETS_PER_TRIP);
+      setRecipeImportProgress(t("importCellReading", { current:2, total:2 }));
+      const materialResult = await worker.recognize(materialSheet.canvas, {}, { text:true, blocks:true });
+      const materialValues = readRecipeOcrSheet(materialSheet, materialResult?.data);
+      const numericCodesByPrefix = {};
+      materialValues.forEach(value => {
+        const normalized = normalizeRecipeOcrCode(value?.raw, value?.confidence);
+        if (!/^[A-Z]\d$/.test(normalized.value || "") || normalized.status === "unresolved") return;
+        const prefix = normalized.value[0];
+        if (!numericCodesByPrefix[prefix]) numericCodesByPrefix[prefix] = new Set();
+        numericCodesByPrefix[prefix].add(normalized.value);
+      });
+      await worker.setParameters({
+        tessedit_pageseg_mode:"10",
+        tessedit_char_whitelist:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789/-",
+        preserve_interword_spaces:"0",
+        user_defined_dpi:"220"
+      });
+      for (let index = 0; index < materialCells.length; index++) {
+        if (runId !== recipeImportRunId) throw new Error("ocr-cancelled");
+        const cell = materialCells[index];
+        let raw = cell.blank ? "" : recipeOcrCellText(materialValues[index]?.raw);
+        const ocrRaw = raw;
+        let confidence = cell.blank ? 1 : Math.max(0, Math.min(1, Number(materialValues[index]?.confidence) || 0));
+        if (!cell.blank && !raw) raw = "UNREADABLE";
+        let normalized = normalizeRecipeOcrCode(raw, confidence);
+        if (!cell.blank && normalized.status === "unresolved") {
+          const retry = await worker.recognize(cell.canvas, {}, { text:true });
+          const retryRaw = recipeOcrCellText(retry?.data);
+          const retryConfidence = Math.max(0, Math.min(1, Number(retry?.data?.confidence) / 100 || 0));
+          const retryNormalized = normalizeRecipeOcrCode(retryRaw, retryConfidence);
+          if (retryNormalized.status !== "unresolved" || retryConfidence > confidence) {
+            raw = retryRaw || raw;
+            confidence = retryConfidence;
+            normalized = retryNormalized;
+          }
+        }
+        if (normalized.status === "unresolved" && /^[A-Z]$/i.test(raw)) {
+          const candidates = Array.from(numericCodesByPrefix[raw.toUpperCase()] || []);
+          if (candidates.length === 1) {
+            raw = candidates[0];
+            confidence = Math.max(.9, confidence);
+            normalized = normalizeRecipeOcrCode(raw, confidence);
+          }
+        }
+        const bucketIndex = prepared.grid.bucketColumns.indexOf(cell.columnIndex);
+        cellsByRow[cell.rowIndex].buckets[bucketIndex] = { raw, confidence };
+        const debugRecord = recipeCellDebugRecord(cell, raw, confidence, normalized);
+        debugRecord.ocrRaw = ocrRaw;
+        debugCells.push(debugRecord);
+      }
+
+      const rows = cellsByRow.map((cells, rowIndex) => ({
+        truck:cells.truck?.raw || String(rowIndex + 1),
+        truckMeta:cells.truck,
+        buckets:cells.buckets.map(cell => cell?.raw || null),
+        ocrConfidence:Object.fromEntries(cells.buckets.map((cell, index) => ["bucket" + (index + 1), cell?.confidence ?? 1])),
+        tableAlignmentConfidence:prepared.grid.confidence,
+        confidence:prepared.grid.confidence,
+        sourceLine:rowIndex + 1
+      }));
+      return {
+        rows:normalizeRecipeRows(rows),
+        native:false,
+        engine:"tesseract-cell",
+        cells:debugCells,
+        cellPlan,
+        rawSheets:{
+          truck:recipeOcrCellText(truckResult?.data),
+          material:recipeOcrCellText(materialResult?.data),
+          truckMap:truckValues.debug,
+          materialMap:materialValues.debug
+        }
+      };
     } finally {
       if (worker) await worker.terminate().catch(() => {});
       if (activeOcrWorker === worker) activeOcrWorker = null;
-    }
-  }
-
-  async function readRecipeWithNativeOcr(enhanced, thresholded){
-    if (typeof window.TextDetector !== "function") return { rows:[], native:false };
-    try {
-      const detector = new window.TextDetector();
-      const attempts = await Promise.all([detector.detect(enhanced), detector.detect(thresholded)]);
-      const candidates = attempts.map(parseRecipeOcrBlocks);
-      candidates.sort((a, b) => b.length - a.length);
-      return { rows:candidates[0] || [], native:true };
-    } catch(e) {
-      return { rows:[], native:false };
     }
   }
 
@@ -5532,13 +5991,6 @@ body.dark-mode .recipe-accept-new {
 
   function recipeImportIssues(rows){
     return (rows || []).flatMap((row, index) => recipeRowIssues(row, index));
-  }
-
-  function recipeRecognitionScore(rows){
-    const count = Array.isArray(rows) ? rows.length : 0;
-    const issues = recipeImportIssues(rows).length;
-    const averageConfidence = count ? rows.reduce((sum, row) => sum + (Number(row.confidence) || 0), 0) / count : 0;
-    return count * 100 + averageConfidence * 10 - issues * 28;
   }
 
   function recipeIssueLabel(reason){
@@ -5678,6 +6130,142 @@ body.dark-mode .recipe-accept-new {
     return duplicates;
   }
 
+  function evaluateRecipeRecognition(prepared, recognition){
+    const rows = recognition?.rows || [];
+    const materialCells = (recognition?.cells || []).filter(cell => cell.type === "material" && cell.inkRatio >= .0045);
+    const recognized = materialCells.filter(cell => ["exact", "corrected"].includes(cell.status)).length;
+    const unresolved = materialCells.filter(cell => cell.status === "unresolved").length;
+    const headerArtifacts = materialCells.filter(cell => cell.reason === "ocr-artifact").length;
+    const plausibleRatio = recognized / Math.max(1, recognized + unresolved);
+    const issues = recipeImportIssues(rows);
+    const sequenceIssues = issues.filter(issue => ["truck-sequence", "duplicate-truck", "invalid-truck", "missing-truck"].includes(issue.reason)).length;
+    const rowCountMatches = Boolean(prepared?.grid) && rows.length === prepared.grid.dataRowCount;
+    const usefulReview = rows.length >= 2 &&
+      recognized > 0 &&
+      plausibleRatio >= .58 &&
+      unresolved <= Math.max(4, Math.ceil(materialCells.length * .12)) &&
+      headerArtifacts <= 1;
+    const reasons = [];
+    if (!prepared?.ok || !prepared?.grid?.valid) reasons.push("structure");
+    if (!rowCountMatches) reasons.push("rows");
+    if (!usefulReview) reasons.push("cells");
+    if (sequenceIssues > Math.max(2, Math.ceil(rows.length * .08))) reasons.push("sequence");
+    return {
+      pass:reasons.length === 0,
+      reasons,
+      rowCountMatches,
+      recognized,
+      unresolved,
+      headerArtifacts,
+      materialCellCount:materialCells.length,
+      plausibleRatio,
+      sequenceIssues,
+      issueCount:issues.length,
+      structureConfidence:prepared?.structureConfidence || 0
+    };
+  }
+
+  function recipeQualityMessage(quality){
+    if (quality?.reasons?.includes("rows")) return t("importQualityRows");
+    if (quality?.reasons?.includes("sequence")) return t("importQualitySequence");
+    if (quality?.reasons?.includes("cells")) return t("importQualityCells");
+    return t("importRecoveryCopy");
+  }
+
+  function drawRecipeDebugCells(cellPlan){
+    const target = document.getElementById("recipeOcrDebugCanvas");
+    if (!target || !recipeOcrDebugEnabled) return;
+    const cells = (cellPlan || []).slice(0, 48);
+    const columns = 4;
+    const cellWidth = 150;
+    const cellHeight = 64;
+    const rows = Math.max(1, Math.ceil(cells.length / columns));
+    target.width = columns * cellWidth;
+    target.height = rows * cellHeight;
+    const context = target.getContext("2d");
+    context.fillStyle = "#fff";
+    context.fillRect(0, 0, target.width, target.height);
+    context.font = "11px Arial";
+    cells.forEach((cell, index) => {
+      const x = index % columns * cellWidth;
+      const y = Math.floor(index / columns) * cellHeight;
+      context.strokeStyle = "#c8b461";
+      context.strokeRect(x + .5, y + .5, cellWidth - 1, cellHeight - 1);
+      context.drawImage(cell.canvas, x + 4, y + 16, cellWidth - 8, cellHeight - 20);
+      context.fillStyle = "#111";
+      context.fillText("L" + (cell.rowIndex + 1) + " C" + (cell.columnIndex + 1) + " " + cell.kind, x + 4, y + 12);
+    });
+  }
+
+  function renderRecipeOcrDebug(prepared, recognition, quality){
+    if (!recipeOcrDebugEnabled) return;
+    recipeOcrDebugData = {
+      localOnly:true,
+      generatedAt:new Date().toISOString(),
+      exifOrientation:recipeExifOrientation,
+      decoderAppliedExif:true,
+      geometry:prepared?.debug || null,
+      quality:quality || null,
+      rawSheets:recognition?.rawSheets || null,
+      cells:recognition?.cells || []
+    };
+    document.getElementById("recipeOcrDebugOutput").textContent = JSON.stringify(recipeOcrDebugData, null, 2);
+    drawRecipeDebugCells(recognition?.cellPlan || []);
+  }
+
+  function showRecipeRecovery(prepared, recognition, quality){
+    recipeImportDraft = null;
+    const preview = prepared?.tableCanvas || prepared?.rotatedAnalysisCanvas || recipeImportSourceCanvas;
+    if (preview) drawCanvasTo("recipeRecoveryCanvas", preview);
+    document.getElementById("recipeRecoveryTitle").textContent = t("importRecoveryTitle");
+    document.getElementById("recipeRecoveryCopy").textContent = recipeQualityMessage(quality);
+    setRecipeImportStage("recover");
+    renderRecipeOcrDebug(prepared, recognition, quality);
+  }
+
+  async function analyzeRecipeSource(options = {}){
+    if (!recipeImportSourceCanvas || !window.RecetteOcrEngine) return;
+    const runId = options.runId || ++recipeImportRunId;
+    setRecipeImportStage("reading");
+    setRecipeImportProgress(t("importOrientation"));
+    await new Promise(resolve => requestAnimationFrame(resolve));
+    try {
+      setRecipeImportProgress(t("importTableDetection"));
+      recipePreparedPhoto = window.RecetteOcrEngine.prepare(recipeImportSourceCanvas, {
+        forcedTurns:Number.isInteger(recipeForcedTurns) ? recipeForcedTurns : null,
+        manualCorners:Array.isArray(options.manualCorners) ? options.manualCorners : null
+      });
+      if (runId !== recipeImportRunId) return;
+      const structuralPreview = recipePreparedPhoto.tableCanvas || recipePreparedPhoto.rotatedAnalysisCanvas;
+      if (structuralPreview) drawCanvasTo("recipeImportCanvas", structuralPreview);
+      if (!recipePreparedPhoto.ok) {
+        showRecipeRecovery(recipePreparedPhoto, null, {
+          pass:false,
+          reasons:[recipePreparedPhoto.error === "grid-weak" ? "rows" : "structure"],
+          structureConfidence:recipePreparedPhoto.structureConfidence
+        });
+        return;
+      }
+
+      const recognition = await readRecipeSegmentedCells(recipePreparedPhoto, runId);
+      if (runId !== recipeImportRunId) return;
+      const quality = evaluateRecipeRecognition(recipePreparedPhoto, recognition);
+      renderRecipeOcrDebug(recipePreparedPhoto, recognition, quality);
+      if (!quality.pass) {
+        showRecipeRecovery(recipePreparedPhoto, recognition, quality);
+        return;
+      }
+
+      drawCanvasTo("recipeReviewCanvas", recipePreparedPhoto.tableCanvas);
+      recipeImportDraft = createRecipeImportDraft(recognition.rows, false);
+      setRecipeImportStage("review");
+      renderRecipeReview();
+    } catch(e) {
+      if (runId !== recipeImportRunId || e?.message === "ocr-cancelled") return;
+      showRecipeRecovery(recipePreparedPhoto, null, { pass:false, reasons:["cells"], error:String(e?.message || e) });
+    }
+  }
+
   async function processRecipePhoto(file){
     if (!file || !file.type.startsWith("image/")) return;
     const runId = ++recipeImportRunId;
@@ -5685,62 +6273,91 @@ body.dark-mode .recipe-accept-new {
     setRecipeImportStage("reading");
     setRecipeImportProgress(t("importPreparing"));
     try {
-      const image = await loadRecipeImage(file);
-      if (runId !== recipeImportRunId) return;
-      await new Promise(resolve => requestAnimationFrame(resolve));
-      const original = canvasCopy(image);
-      setRecipeImportProgress(t("importCorrecting"));
-      const documentCanvas = cropCanvas(original, findBrightDocumentBounds(original));
-      const tableCanvas = scaleRecipeCanvas(cropCanvas(documentCanvas, findRecipeTableBounds(documentCanvas)));
-      let enhanced = enhanceRecipeCanvas(tableCanvas);
-      let thresholded = adaptiveThresholdRecipeCanvas(enhanced);
-      let lineFree = removeRecipeTableLines(thresholded);
-      const recognizeCandidate = async (candidate, candidateLineFree) => {
-        try {
-          return await readRecipeWithOfflineOcr(candidateLineFree);
-        } catch(e) {
-          return readRecipeWithNativeOcr(candidate, candidateLineFree);
-        }
-      };
-      let recognition = await recognizeCandidate(enhanced, lineFree);
-      if (runId !== recipeImportRunId) return;
-      let recognitionScore = recipeRecognitionScore(recognition.rows);
-      if (recognition.rows.length < 2 || recipeImportIssues(recognition.rows).length) {
-        for (const turn of [1, 3, 2]) {
-          const rotated = rotateRecipeCanvas(tableCanvas, turn);
-          const candidate = enhanceRecipeCanvas(rotated);
-          const candidateThreshold = adaptiveThresholdRecipeCanvas(candidate);
-          const candidateLineFree = removeRecipeTableLines(candidateThreshold);
-          const candidateRecognition = await recognizeCandidate(candidate, candidateLineFree);
-          if (runId !== recipeImportRunId) return;
-          const candidateScore = recipeRecognitionScore(candidateRecognition.rows);
-          if (candidateScore > recognitionScore) {
-            enhanced = candidate;
-            thresholded = candidateThreshold;
-            lineFree = candidateLineFree;
-            recognition = candidateRecognition;
-            recognitionScore = candidateScore;
-          }
-          if (recognition.rows.length >= 2 && !recipeImportIssues(recognition.rows).length) break;
-        }
+      const decoded = await loadRecipeImage(file);
+      if (runId !== recipeImportRunId) {
+        decoded.close();
+        return;
       }
-      drawCanvasTo("recipeImportCanvas", enhanced);
-      drawCanvasTo("recipeReviewCanvas", enhanced);
-      recipeImportDraft = createRecipeImportDraft(recognition.rows, recognition.native);
-      setRecipeImportStage("review");
-      renderRecipeReview();
-      if (!recognition.rows.length) {
-        document.getElementById("recipeReviewWarning").hidden = false;
-        document.getElementById("recipeReviewWarning").textContent = recognition.native ? t("importNoRows") : t("importNoOcr");
-      }
+      recipeExifOrientation = decoded.exifOrientation;
+      recipeImportSourceCanvas = window.RecetteOcrEngine.copyCanvas(decoded.source, 4200);
+      decoded.close();
+      await analyzeRecipeSource({ runId });
     } catch(e) {
       if (runId !== recipeImportRunId) return;
-      recipeImportDraft = createRecipeImportDraft([], false);
-      setRecipeImportStage("review");
-      renderRecipeReview();
-      document.getElementById("recipeReviewWarning").hidden = false;
-      document.getElementById("recipeReviewWarning").textContent = t("importNoRows");
+      showRecipeRecovery(null, null, { pass:false, reasons:["structure"], error:String(e?.message || e) });
     }
+  }
+
+  function drawRecipeCropEditor(){
+    const canvas = document.getElementById("recipeCropCanvas");
+    if (!canvas || !recipeCropSourceCanvas || !recipeCropPoints) return;
+    canvas.width = recipeCropSourceCanvas.width;
+    canvas.height = recipeCropSourceCanvas.height;
+    const context = canvas.getContext("2d");
+    context.drawImage(recipeCropSourceCanvas, 0, 0);
+    context.save();
+    context.strokeStyle = "#ffcd23";
+    context.fillStyle = "rgba(255,205,35,.1)";
+    context.lineWidth = Math.max(3, canvas.width / 350);
+    context.beginPath();
+    recipeCropPoints.forEach((point, index) => {
+      const x = point.x * canvas.width;
+      const y = point.y * canvas.height;
+      if (!index) context.moveTo(x, y);
+      else context.lineTo(x, y);
+    });
+    context.closePath();
+    context.fill();
+    context.stroke();
+    context.restore();
+    requestAnimationFrame(positionRecipeCropHandles);
+  }
+
+  function positionRecipeCropHandles(){
+    const editor = document.getElementById("recipeCropEditor");
+    const canvas = document.getElementById("recipeCropCanvas");
+    if (!editor || !canvas || !recipeCropPoints) return;
+    const editorRect = editor.getBoundingClientRect();
+    const canvasRect = canvas.getBoundingClientRect();
+    document.querySelectorAll("[data-crop-corner]").forEach(handle => {
+      const point = recipeCropPoints[Number(handle.dataset.cropCorner)];
+      handle.style.left = (canvasRect.left - editorRect.left + point.x * canvasRect.width) + "px";
+      handle.style.top = (canvasRect.top - editorRect.top + point.y * canvasRect.height) + "px";
+    });
+  }
+
+  function openRecipeCropEditor(returnStage){
+    if (!recipeImportSourceCanvas || !window.RecetteOcrEngine) return;
+    recipeCropReturnStage = returnStage || "recover";
+    const effectiveTurns = Number.isInteger(recipePreparedPhoto?.turns)
+      ? recipePreparedPhoto.turns
+      : (Number.isInteger(recipeForcedTurns) ? recipeForcedTurns : 0);
+    recipeForcedTurns = effectiveTurns;
+    const rotated = window.RecetteOcrEngine.rotateCanvas(recipeImportSourceCanvas, effectiveTurns);
+    recipeCropSourceCanvas = window.RecetteOcrEngine.copyCanvas(rotated, 1500);
+    recipeCropPoints = Array.isArray(recipePreparedPhoto?.debug?.perspectiveCorners)
+      ? recipePreparedPhoto.debug.perspectiveCorners.map(point => ({ x:point.x, y:point.y }))
+      : [{ x:.08, y:.08 }, { x:.92, y:.08 }, { x:.92, y:.92 }, { x:.08, y:.92 }];
+    setRecipeImportStage("crop");
+    drawRecipeCropEditor();
+  }
+
+  function rotateRecipePhotoAndRetry(delta){
+    if (!recipeImportSourceCanvas) return;
+    const currentTurns = Number.isInteger(recipePreparedPhoto?.turns)
+      ? recipePreparedPhoto.turns
+      : (Number.isInteger(recipeForcedTurns) ? recipeForcedTurns : 0);
+    recipeForcedTurns = ((currentTurns + delta) % 4 + 4) % 4;
+    recipeCropPoints = null;
+    analyzeRecipeSource();
+  }
+
+  function openRecipeManualReview(){
+    recipeImportDraft = createRecipeImportDraft([], false);
+    const preview = recipePreparedPhoto?.tableCanvas || recipeImportSourceCanvas;
+    if (preview) drawCanvasTo("recipeReviewCanvas", preview);
+    setRecipeImportStage("review");
+    renderRecipeReview();
   }
 
   function applyImportedRecipe(){
@@ -6380,6 +6997,58 @@ body.dark-mode .recipe-accept-new {
   document.getElementById("btnRecipeChooseAgain").addEventListener("click", () => requestRecipePhoto(false));
   document.getElementById("btnRecipeCancel").addEventListener("click", closeRecipeImport);
   document.getElementById("btnRecipeConfirm").addEventListener("click", applyImportedRecipe);
+  document.getElementById("btnRecipeAdjustCrop").addEventListener("click", () => openRecipeCropEditor("recover"));
+  document.getElementById("btnRecipeReviewCrop").addEventListener("click", () => openRecipeCropEditor("review"));
+  document.getElementById("btnRecipeRotateLeft").addEventListener("click", () => rotateRecipePhotoAndRetry(3));
+  document.getElementById("btnRecipeRotateRight").addEventListener("click", () => rotateRecipePhotoAndRetry(1));
+  document.getElementById("btnRecipeReviewRotateLeft").addEventListener("click", () => rotateRecipePhotoAndRetry(3));
+  document.getElementById("btnRecipeReviewRotateRight").addEventListener("click", () => rotateRecipePhotoAndRetry(1));
+  document.getElementById("btnRecipeRetry").addEventListener("click", () => analyzeRecipeSource());
+  document.getElementById("btnRecipeManual").addEventListener("click", openRecipeManualReview);
+  document.getElementById("btnRecipeCropCancel").addEventListener("click", () => {
+    setRecipeImportStage(recipeCropReturnStage);
+    if (recipeCropReturnStage === "review") renderRecipeReview();
+  });
+  document.getElementById("btnRecipeApplyCrop").addEventListener("click", () => {
+    if (Array.isArray(recipeCropPoints) && recipeCropPoints.length === 4) analyzeRecipeSource({ manualCorners:recipeCropPoints });
+  });
+  document.querySelectorAll("[data-crop-corner]").forEach(handle => {
+    let dragging = false;
+    handle.addEventListener("pointerdown", event => {
+      dragging = true;
+      handle.setPointerCapture(event.pointerId);
+      event.preventDefault();
+    });
+    handle.addEventListener("pointermove", event => {
+      if (!dragging || !recipeCropPoints) return;
+      const canvas = document.getElementById("recipeCropCanvas");
+      const rect = canvas.getBoundingClientRect();
+      const index = Number(handle.dataset.cropCorner);
+      recipeCropPoints[index] = {
+        x:Math.max(0, Math.min(1, (event.clientX - rect.left) / Math.max(1, rect.width))),
+        y:Math.max(0, Math.min(1, (event.clientY - rect.top) / Math.max(1, rect.height)))
+      };
+      drawRecipeCropEditor();
+      event.preventDefault();
+    });
+    const stopDragging = event => {
+      if (!dragging) return;
+      dragging = false;
+      if (handle.hasPointerCapture(event.pointerId)) handle.releasePointerCapture(event.pointerId);
+    };
+    handle.addEventListener("pointerup", stopDragging);
+    handle.addEventListener("pointercancel", stopDragging);
+  });
+  window.addEventListener("resize", positionRecipeCropHandles, { passive:true });
+  document.getElementById("btnRecipeDebugExport").addEventListener("click", () => {
+    if (!recipeOcrDebugEnabled || !recipeOcrDebugData) return;
+    const blob = new Blob([JSON.stringify(recipeOcrDebugData, null, 2)], { type:"application/json" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "recette-ocr-debug.json";
+    link.click();
+    setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+  });
   document.getElementById("btnRecipeReplace").addEventListener("click", () => {
     if (!recipeImportDraft) return;
     recipeImportDraft.applyMode = "replace";
