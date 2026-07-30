@@ -1,4 +1,4 @@
-const CACHE_NAME = "recette-touch-v5.14.0-offline-ocr-registry-37t";
+const CACHE_NAME = "recette-touch-v5.15.0-partial-recipe-totals";
 const ASSETS = [
   "./",
   "./index.html",

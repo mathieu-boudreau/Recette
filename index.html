@@ -1259,7 +1259,7 @@ tfoot td,
 
 .recipe-import-summary {
   display:none;
-  align-items:center;
+  grid-template-columns:repeat(4, minmax(0, 1fr));
   gap:8px;
   margin:0 0 4px;
   padding:5px 8px;
@@ -1272,11 +1272,31 @@ tfoot td,
 }
 
 .recipe-import-summary.show {
-  display:flex;
+  display:grid;
 }
 
-.recipe-import-summary strong {
+.recipe-import-summary-item {
+  min-width:0;
+}
+
+.recipe-import-summary-item strong {
+  display:block;
   color:#111;
+  font-size:10px;
+  text-transform:uppercase;
+}
+
+.recipe-import-summary-item span {
+  display:block;
+  font-size:13px;
+  font-variant-numeric:tabular-nums;
+}
+
+@media (max-width:767px) {
+  .recipe-import-summary {
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+    gap:5px 8px;
+  }
 }
 
 .recipe-import-panel {
@@ -1506,6 +1526,15 @@ tfoot td,
   color:#a33416;
 }
 
+.recipe-partial-note {
+  display:block;
+  margin-top:3px;
+  color:#736000;
+  font-size:10px;
+  font-weight:800;
+  line-height:1.2;
+}
+
 .recipe-remove-row {
   min-width:32px;
   min-height:34px;
@@ -1519,26 +1548,6 @@ tfoot td,
 .time-value {
   display:block;
   min-height:16px;
-}
-
-.imported-code-preview {
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:center;
-  gap:2px;
-  margin-top:2px;
-}
-
-.imported-code-preview span {
-  display:inline-block;
-  padding:1px 2px;
-  border:1px solid #b89d19;
-  border-radius:2px;
-  background:#fff6c9;
-  color:#332800;
-  font-size:8px;
-  line-height:1.1;
-  font-weight:900;
 }
 
 body.dark-mode .sheet {
@@ -1829,17 +1838,15 @@ body.dark-mode .recipe-review-table tr.low-confidence td {
   background:#302713;
 }
 
+body.dark-mode .recipe-partial-note {
+  color:#ffdc75;
+}
+
 body.dark-mode .recipe-review-table input {
   background:#111;
   color:#f4f1e8;
   -webkit-text-fill-color:#f4f1e8;
   border-color:#777;
-}
-
-body.dark-mode .imported-code-preview span {
-  background:#332b0d;
-  color:#fff5c2;
-  border-color:#927d18;
 }
 
 @media (min-width:820px) {
@@ -2312,9 +2319,25 @@ body.dark-mode .imported-code-preview span {
   .modal,
   .menu-toggle,
   .screen-sheet-header,
-  .recipe-import-summary,
   .menu-help-details {
     display:none !important;
+  }
+
+  .recipe-import-summary.show {
+    display:grid !important;
+    grid-template-columns:repeat(4, minmax(0, 1fr));
+    margin:1.5mm 0 !important;
+    padding:1.2mm 1.6mm !important;
+    border:1px solid #777 !important;
+    border-left:2mm solid #ffcd23 !important;
+    background:#fff !important;
+    color:#000 !important;
+    font-size:8pt !important;
+  }
+
+  .recipe-import-summary-item strong,
+  .recipe-import-summary-item span {
+    color:#000 !important;
   }
 
   .app {
@@ -2530,13 +2553,6 @@ body.dark-mode .imported-code-preview span {
     page-break-inside:avoid !important;
     break-inside:avoid-page !important;
     background:#fffdf8 !important;
-  }
-
-  .imported-code-preview span {
-    background:#fff !important;
-    color:#000 !important;
-    -webkit-text-fill-color:#000 !important;
-    border-color:#000 !important;
   }
 
   #sheetTable thead,
@@ -2877,8 +2893,8 @@ body.dark-mode .imported-code-preview span {
 
     <div class="page-print-label" id="pagePrintLabel">Page 1/1</div>
     <div class="foot">
-      <label><span id="labelPoids">Poids :</span> <input id="metaPoids" autocomplete="off" readonly></label>
-      <label><span id="labelVoyage"># de voyage :</span> <input id="metaVoyage" autocomplete="off" readonly></label>
+      <label><span id="labelPoids">Poids relevé du voyage :</span> <input id="metaPoids" autocomplete="off" inputmode="decimal"></label>
+      <label><span id="labelVoyage">No du voyage pesé :</span> <input id="metaVoyage" autocomplete="off" inputmode="numeric"></label>
     </div>
     <div class="note" id="weightNote">(Le relevé du poids doit être fait 1 fois par shift)</div>
     </div>
@@ -3164,9 +3180,19 @@ body.dark-mode .imported-code-preview span {
       importNoOcr:"Cette photo ne peut pas etre lue automatiquement sur cet appareil. Ajoutez ou corrigez les lignes dans la revue.",
       importDuplicateTruck:"Le camion {truck} apparait plus d'une fois. Corrigez ou retirez le doublon avant l'import.",
       importTooMany:"La recette contient plus de {count} voyages. Ajoutez une nouvelle page avant d'importer.",
-      importInvalid:"Chaque ligne doit contenir un camion et trois godets avant l'import.",
+      importInvalid:"Chaque ligne doit contenir un camion et au moins un godet valide avant l'import.",
       importDone:"Recette officielle importee : {count} voyages prets. Ajoutez seulement les heures de chargement.",
       importSummary:"Recette importee : {planned} voyages prevus, {tonnes} tonnes prevues, {complete} termines.",
+      importPartialTrip:"Voyage partiel valide",
+      importPlannedBuckets:"{count} godet(s) prevu(s)",
+      importConfirmedEmpty:"Cellule vide confirmee",
+      importRecipeRows:"Voyages prevus",
+      importFullTripEquivalent:"Equivalent voyages complets",
+      importStartedTrips:"Voyages commences",
+      importCompletedTrips:"Voyages termines",
+      importDoneBuckets:"Godets realises",
+      importDoneTonnes:"Tonnage realise",
+      importRemainingTonnes:"Tonnage restant",
       importLine:"Ligne",
       importTruck:"Camion",
       importBucket1:"Godet 1",
@@ -3295,6 +3321,8 @@ body.dark-mode .imported-code-preview span {
       save:"Sauver",
       poids:"Poids :",
       voyage:"# de voyage :",
+      weightSample:"Poids releve du voyage :",
+      weighedTripNo:"No du voyage pese :",
       note:"(Le relevé du poids doit être fait 1 fois par shift)",
       pageWord:"Page",
       total:"TOTAL",
@@ -3360,9 +3388,19 @@ body.dark-mode .imported-code-preview span {
       importNoOcr:"This photo cannot be read automatically on this device. Add or correct the rows in the review.",
       importDuplicateTruck:"Truck {truck} appears more than once. Correct or remove the duplicate before importing.",
       importTooMany:"This recipe has more than {count} trips. Add a new page before importing.",
-      importInvalid:"Every line needs a truck and three buckets before import.",
+      importInvalid:"Every line needs a truck and at least one valid bucket before import.",
       importDone:"Official recipe imported: {count} trips are ready. Only add loading times.",
       importSummary:"Imported recipe: {planned} planned trips, {tonnes} planned tonnes, {complete} complete.",
+      importPartialTrip:"Valid partial trip",
+      importPlannedBuckets:"{count} planned bucket(s)",
+      importConfirmedEmpty:"Confirmed empty cell",
+      importRecipeRows:"Planned trips",
+      importFullTripEquivalent:"Full-trip equivalent",
+      importStartedTrips:"Trips started",
+      importCompletedTrips:"Trips completed",
+      importDoneBuckets:"Buckets completed",
+      importDoneTonnes:"Completed tonnage",
+      importRemainingTonnes:"Remaining tonnage",
       importLine:"Line",
       importTruck:"Truck",
       importBucket1:"Bucket 1",
@@ -3491,6 +3529,8 @@ body.dark-mode .imported-code-preview span {
       save:"Save",
       poids:"Weight:",
       voyage:"# of trips:",
+      weightSample:"Recorded trip weight:",
+      weighedTripNo:"Weighed trip no.:",
       note:"(Weight reading must be done once per shift)",
       pageWord:"Page",
       total:"TOTAL",
@@ -3597,6 +3637,50 @@ body.dark-mode .imported-code-preview span {
     return aliases[key] || compact.toUpperCase();
   }
 
+  function normalizeRecipeBuckets(buckets){
+    const source = Array.isArray(buckets) ? buckets : [];
+    return Array.from({ length:BUCKETS_PER_TRIP }, (_, index) => {
+      const normalized = normalizeRecipeCode(source[index]);
+      return normalized || null;
+    });
+  }
+
+  function recipeBucketValues(buckets){
+    return normalizeRecipeBuckets(buckets).filter(Boolean);
+  }
+
+  function plannedBucketCountForRecipeRow(row){
+    const inferred = recipeBucketValues(row?.buckets).length;
+    if (!inferred) return 0;
+    const persisted = Number(row?.plannedBucketCount);
+    return Number.isInteger(persisted) && persisted >= 1 && persisted <= BUCKETS_PER_TRIP
+      ? Math.min(inferred, persisted)
+      : inferred;
+  }
+
+  function normalizeRecipeImportRow(row){
+    const buckets = normalizeRecipeBuckets(row?.buckets);
+    const plannedBucketCount = recipeBucketValues(buckets).length;
+    const confidence = Math.max(0, Math.min(1, Number(row?.confidence) || 0));
+    return {
+      quarter:String(row?.quarter || "").trim(),
+      truck:String(row?.truck || "").trim(),
+      buckets,
+      plannedBucketCount,
+      isPartialTrip:plannedBucketCount > 0 && plannedBucketCount < BUCKETS_PER_TRIP,
+      confirmedPartialTrip:plannedBucketCount > 0 && plannedBucketCount < BUCKETS_PER_TRIP
+        ? row?.confirmedPartialTrip !== false
+        : false,
+      ocrConfidence:{
+        bucket1:Math.max(0, Math.min(1, Number(row?.ocrConfidence?.bucket1) || confidence)),
+        bucket2:Math.max(0, Math.min(1, Number(row?.ocrConfidence?.bucket2) || confidence)),
+        bucket3:Math.max(0, Math.min(1, Number(row?.ocrConfidence?.bucket3) || confidence))
+      },
+      confidence,
+      sourceLine:Number(row?.sourceLine) || 0
+    };
+  }
+
   function normalizeImportedRecipes(recipes){
     if (!Array.isArray(recipes)) return [];
     return recipes.slice(-30).map(recipe => ({
@@ -3608,12 +3692,7 @@ body.dark-mode .imported-code-preview span {
       source: "photo",
       assignments: Object.fromEntries(Object.entries(recipe?.assignments || {}).filter(([, value]) => ["anuri", "qaki", "mine8", "other"].includes(value))),
       rowIndexes: Array.isArray(recipe?.rowIndexes) ? recipe.rowIndexes.map(index => Math.max(0, Number(index) || 0)).slice(0, ROWS) : [],
-      rows: Array.isArray(recipe?.rows) ? recipe.rows.slice(0, ROWS).map(row => ({
-        quarter: String(row?.quarter || "").trim(),
-        truck: String(row?.truck || "").trim(),
-        buckets: Array.isArray(row?.buckets) ? row.buckets.slice(0, BUCKETS_PER_TRIP).map(normalizeRecipeCode) : [],
-        confidence: Math.max(0, Math.min(1, Number(row?.confidence) || 0))
-      })) : []
+      rows: Array.isArray(recipe?.rows) ? recipe.rows.slice(0, ROWS).map(normalizeRecipeImportRow) : []
     })).filter(recipe => recipe.rows.length);
   }
 
@@ -3648,15 +3727,25 @@ body.dark-mode .imported-code-preview span {
   }
 
   function createRecipeImportDraft(rows, native = false){
+    const normalizedRows = (rows || []).map(normalizeRecipeImportRow);
     const assignments = {};
-    recipeUnknownCodes(rows).forEach(code => {
+    recipeUnknownCodes(normalizedRows).forEach(code => {
       if (userRecipeCodeMappings[code]) assignments[code] = userRecipeCodeMappings[code];
     });
-    return { rows, assignments, native, importedAt:new Date().toISOString() };
+    return { rows:normalizedRows, assignments, native, importedAt:new Date().toISOString() };
   }
 
   function recipeCodesForRow(row){
-    return Array.isArray(row?.importedRecipe) ? row.importedRecipe.filter(Boolean).slice(0, BUCKETS_PER_TRIP) : [];
+    return Array.isArray(row?.importedRecipe) ? recipeBucketValues(row.importedRecipe) : [];
+  }
+
+  function plannedBucketCountForRow(row){
+    const imported = recipeCodesForRow(row).length;
+    if (!imported) return BUCKETS_PER_TRIP;
+    const persisted = Number(row?.plannedBucketCount);
+    return Number.isInteger(persisted) && persisted >= 1 && persisted <= BUCKETS_PER_TRIP
+      ? Math.min(imported, persisted)
+      : imported;
   }
 
   function mappedOreForRecipeCode(code){
@@ -4223,8 +4312,8 @@ body.dark-mode .imported-code-preview span {
     setText("labelTruckNo", i.truckNo);
     setText("labelName", i.name);
     setText("labelTruckType", i.truckType);
-    setText("labelPoids", i.poids);
-    setText("labelVoyage", i.voyage);
+    setText("labelPoids", i.weightSample);
+    setText("labelVoyage", i.weighedTripNo);
     setText("weightNote", i.note);
     setText("loaderPlanSheetName", i.loaderPlanSheetName);
     setText("loaderSheetTitle", i.loaderSheetTitle);
@@ -4324,7 +4413,7 @@ body.dark-mode .imported-code-preview span {
   function blankRow(){
     const ores = {};
     ALL_ORES.forEach(o => ores[o] = 0);
-    return { time:"", ores, loader:"", dest:"", importedRecipe:[], recipeTruck:"", recipeQuarter:"" };
+    return { time:"", ores, loader:"", dest:"", importedRecipe:[], plannedBucketCount:null, recipeTruck:"", recipeQuarter:"" };
   }
 
   function blankPage(){
@@ -4350,8 +4439,12 @@ body.dark-mode .imported-code-preview span {
       row.loader = row.loader || "";
       row.dest = row.dest || "";
       row.importedRecipe = Array.isArray(row.importedRecipe)
-        ? row.importedRecipe.slice(0, BUCKETS_PER_TRIP).map(normalizeRecipeCode).filter(Boolean)
+        ? normalizeRecipeBuckets(row.importedRecipe)
         : [];
+      const importedCount = recipeCodesForRow(row).length;
+      row.plannedBucketCount = importedCount
+        ? Math.min(importedCount, Math.max(1, Number(row.plannedBucketCount) || importedCount))
+        : null;
       row.recipeTruck = String(row.recipeTruck || "").trim();
       row.recipeQuarter = String(row.recipeQuarter || "").trim();
     }
@@ -4452,7 +4545,7 @@ body.dark-mode .imported-code-preview span {
 
   function rowCompleteForNext(row){
     if (!row) return false;
-    return Boolean(row.time && rowBucketTotalFromRow(row) >= BUCKETS_PER_TRIP);
+    return Boolean(row.time && rowBucketTotalFromRow(row) >= plannedBucketCountForRow(row));
   }
 
   function nextRealRowIndex(){
@@ -4489,7 +4582,8 @@ body.dark-mode .imported-code-preview span {
     const missing = [];
     if (!row.time) missing.push(t("missingHour"));
     const buckets = rowBucketTotalFromRow(row);
-    if (buckets < BUCKETS_PER_TRIP) missing.push(t("missingBuckets", { count: BUCKETS_PER_TRIP - buckets }));
+    const targetBuckets = plannedBucketCountForRow(row);
+    if (buckets < targetBuckets) missing.push(t("missingBuckets", { count: targetBuckets - buckets }));
 
     flashBlockedLine(r);
     setSelected(next, "time", "time");
@@ -4509,70 +4603,65 @@ body.dark-mode .imported-code-preview span {
     return false;
   }
 
+  function activeMaterialTotalsFromRows(rows){
+    const totals = {};
+    ORES.forEach(o => totals[o] = 0);
+    (rows || []).forEach(row => {
+      ORES.forEach(o => {
+        const v = row.ores[o] || 0;
+        totals[o] += v;
+      });
+    });
+    return totals;
+  }
+
+  function activeMaterialTotalsFromRecipe(recipe){
+    const totals = {};
+    ORES.forEach(o => totals[o] = 0);
+    (recipe?.rows || []).forEach(recipeRow => {
+      recipeBucketValues(recipeRow.buckets).forEach(code => {
+        const ore = mappedOreForRecipeCode(code);
+        if (ore) totals[ore] += 1;
+      });
+    });
+    return totals;
+  }
+
   function calculateColumnTotals(){
-    const totals = {};
-    ORES.forEach(o => totals[o] = 0);
-    let silo = 0;
-    let crPad = 0;
-    let voyageCount = 0;
-
-    page().rows.forEach(row => {
-      let hasEntry = false;
-      ORES.forEach(o => {
-        const v = row.ores[o] || 0;
-        totals[o] += v;
-        if (v > 0) hasEntry = true;
-      });
-      if (row.time && rowBucketTotalFromRow(row) >= 3) voyageCount++;
-      if (row.dest === "Silo") silo++;
-      if (row.dest === "Cr-Pad") crPad++;
-    });
-
-    const totalBuckets = page().rows.reduce((sum, row) => sum + rowBucketTotalFromRow(row), 0);
-    const estimatedTonnage = voyageCount * TONNES_PER_TRIP;
-    return { totals, silo, crPad, voyageCount, totalBuckets, estimatedTonnage };
+    return pageSummaryFor(page(), currentPage);
   }
 
-  function pageSummaryFor(p){
-    const totals = {};
-    ORES.forEach(o => totals[o] = 0);
-    let silo = 0;
-    let crPad = 0;
-    let voyageCount = 0;
-
-    p.rows.forEach(row => {
-      let hasEntry = false;
-      ORES.forEach(o => {
-        const v = row.ores[o] || 0;
-        totals[o] += v;
-        if (v > 0) hasEntry = true;
-      });
-      if (row.time && rowBucketTotalFromRow(row) >= 3) voyageCount++;
-      if (row.dest === "Silo") silo++;
-      if (row.dest === "Cr-Pad") crPad++;
-    });
-
-    const totalBuckets = p.rows.reduce((sum, row) => sum + rowBucketTotalFromRow(row), 0);
-    const estimatedTonnage = voyageCount * TONNES_PER_TRIP;
-    return { totals, silo, crPad, voyageCount, totalBuckets, estimatedTonnage };
-  }
-
-  function importedRecipeForCurrentPage(){
+  function importedRecipeForPage(pageIndex){
     const recipes = Array.isArray(state.importedRecipes) ? state.importedRecipes : [];
-    const matches = recipes.filter(recipe => recipe.pageIndex === currentPage);
+    const matches = recipes.filter(recipe => recipe.pageIndex === pageIndex);
     return matches.length ? matches[matches.length - 1] : null;
   }
 
-  function importedRecipeProgress(recipe){
-    const result = { plannedTrips:0, completeTrips:0, plannedBuckets:0, completedBuckets:0, materials:{} };
+  function importedRecipeForCurrentPage(){
+    return importedRecipeForPage(currentPage);
+  }
+
+  function importedRecipeProgress(recipe, sourcePage = page()){
+    const result = {
+      plannedTrips:0,
+      startedTrips:0,
+      completeTrips:0,
+      plannedBuckets:0,
+      completedBuckets:0,
+      remainingBuckets:0,
+      materials:{}
+    };
     if (!recipe || !Array.isArray(recipe.rows)) return result;
     recipe.rows.forEach((recipeRow, index) => {
-      const codes = Array.isArray(recipeRow.buckets) ? recipeRow.buckets.filter(Boolean).slice(0, BUCKETS_PER_TRIP) : [];
-      if (!codes.length) return;
+      const codes = recipeBucketValues(recipeRow.buckets);
+      const plannedBucketCount = plannedBucketCountForRecipeRow(recipeRow);
+      if (!plannedBucketCount) return;
       result.plannedTrips++;
-      result.plannedBuckets += codes.length;
-      const haulingRow = page().rows[recipe.rowIndexes?.[index] ?? index];
-      const tripComplete = Boolean(haulingRow?.time && rowBucketTotalFromRow(haulingRow) >= BUCKETS_PER_TRIP);
+      result.plannedBuckets += plannedBucketCount;
+      const haulingRow = sourcePage?.rows?.[recipe.rowIndexes?.[index] ?? index];
+      const tripStarted = Boolean(haulingRow?.time);
+      const tripComplete = Boolean(tripStarted && rowBucketTotalFromRow(haulingRow) >= plannedBucketCount);
+      if (tripStarted) result.startedTrips++;
       if (tripComplete) result.completeTrips++;
       codes.forEach(code => {
         const entry = result.materials[code] || { buckets:0, completedBuckets:0 };
@@ -4580,9 +4669,46 @@ body.dark-mode .imported-code-preview span {
         if (tripComplete) entry.completedBuckets++;
         result.materials[code] = entry;
       });
+      if (tripComplete) result.completedBuckets += plannedBucketCount;
     });
-    result.completedBuckets = result.completeTrips * BUCKETS_PER_TRIP;
+    result.remainingBuckets = Math.max(0, result.plannedBuckets - result.completedBuckets);
+    result.fullTripEquivalent = result.plannedBuckets / BUCKETS_PER_TRIP;
+    result.plannedTonnage = result.plannedBuckets * TONNES_PER_TRIP / BUCKETS_PER_TRIP;
+    result.completedTonnage = result.completedBuckets * TONNES_PER_TRIP / BUCKETS_PER_TRIP;
+    result.remainingTonnage = result.remainingBuckets * TONNES_PER_TRIP / BUCKETS_PER_TRIP;
     return result;
+  }
+
+  function pageSummaryFor(p, pageIndex = currentPage){
+    const recipe = importedRecipeForPage(pageIndex);
+    const recipeProgress = recipe ? importedRecipeProgress(recipe, p) : null;
+    const totalBuckets = recipeProgress
+      ? recipeProgress.plannedBuckets
+      : (p.rows || []).reduce((sum, row) => sum + rowBucketTotalFromRow(row), 0);
+    const completedRows = (p.rows || []).filter(row => rowCompleteForNext(row));
+    const completedBuckets = recipeProgress
+      ? recipeProgress.completedBuckets
+      : completedRows.reduce((sum, row) => sum + plannedBucketCountForRow(row), 0);
+    const startedTrips = recipeProgress
+      ? recipeProgress.startedTrips
+      : (p.rows || []).filter(row => Boolean(row.time)).length;
+    const voyageCount = recipeProgress ? recipeProgress.completeTrips : completedRows.length;
+    const silo = (p.rows || []).filter(row => row.dest === "Silo").length;
+    const crPad = (p.rows || []).filter(row => row.dest === "Cr-Pad").length;
+    return {
+      totals: recipe ? activeMaterialTotalsFromRecipe(recipe) : activeMaterialTotalsFromRows(p.rows),
+      silo,
+      crPad,
+      voyageCount,
+      startedTrips,
+      totalBuckets,
+      completedBuckets,
+      fullTripEquivalent:totalBuckets / BUCKETS_PER_TRIP,
+      plannedTonnage:totalBuckets * TONNES_PER_TRIP / BUCKETS_PER_TRIP,
+      estimatedTonnage:completedBuckets * TONNES_PER_TRIP / BUCKETS_PER_TRIP,
+      remainingTonnage:Math.max(0, totalBuckets - completedBuckets) * TONNES_PER_TRIP / BUCKETS_PER_TRIP,
+      plannedTrips:recipeProgress?.plannedTrips || 0
+    };
   }
 
   function renderRecipeImportSummary(){
@@ -4595,13 +4721,29 @@ body.dark-mode .imported-code-preview span {
       return;
     }
     const progress = importedRecipeProgress(recipe);
-    const tonnes = (progress.plannedTrips * TONNES_PER_TRIP).toFixed(1).replace(/\.0$/, "");
-    const materialDetail = Object.entries(progress.materials)
-      .map(([code, item]) => code + ": " + item.buckets + " b, " + (item.buckets * TONNES_PER_TRIP / BUCKETS_PER_TRIP).toFixed(1).replace(/\.0$/, "") + " t")
-      .join(" | ");
     el.classList.add("show");
-    el.title = materialDetail;
-    el.innerHTML = "<strong>" + t("importRecipeShort") + "</strong><span>" + t("importSummary", { planned:progress.plannedTrips, tonnes, complete:progress.completeTrips }) + "</span>";
+    el.innerHTML = "";
+    const items = [
+      [t("importRecipeRows"), progress.plannedTrips],
+      [t("importBuckets"), progress.plannedBuckets],
+      [t("importFullTripEquivalent"), progress.fullTripEquivalent.toFixed(2)],
+      [t("importPlannedTonnes"), progress.plannedTonnage.toFixed(1) + " t"],
+      [t("importStartedTrips"), progress.startedTrips],
+      [t("importCompletedTrips"), progress.completeTrips],
+      [t("importDoneBuckets"), progress.completedBuckets],
+      [t("importDoneTonnes"), progress.completedTonnage.toFixed(1) + " t"],
+      [t("importRemainingTonnes"), progress.remainingTonnage.toFixed(1) + " t"]
+    ];
+    items.forEach(([label, value]) => {
+      const item = document.createElement("div");
+      item.className = "recipe-import-summary-item";
+      const title = document.createElement("strong");
+      title.textContent = label;
+      const number = document.createElement("span");
+      number.textContent = String(value);
+      item.append(title, number);
+      el.appendChild(item);
+    });
   }
 
   function renderTotals(){
@@ -4707,19 +4849,6 @@ body.dark-mode .imported-code-preview span {
       timeValue.className = "time-value";
       timeValue.textContent = row.time;
       time.appendChild(timeValue);
-      const importedCodes = recipeCodesForRow(row);
-      if (importedCodes.length) {
-        const preview = document.createElement("div");
-        preview.className = "imported-code-preview";
-        const label = [row.recipeTruck ? "T" + row.recipeTruck : "", ...importedCodes].filter(Boolean).join(" ");
-        preview.title = label;
-        importedCodes.forEach(code => {
-          const chip = document.createElement("span");
-          chip.textContent = code;
-          preview.appendChild(chip);
-        });
-        time.appendChild(preview);
-      }
       tr.appendChild(time);
 
       ORES.forEach(ore => {
@@ -5063,7 +5192,16 @@ body.dark-mode .imported-code-preview span {
       const codes = parseRecipeCodeTokens(codeValues).slice(0, BUCKETS_PER_TRIP);
       if (!truck || !codes.length) return;
       const confidence = cells.reduce((sum, cell) => sum + cell.confidence, 0) / cells.length;
-      rows.push({ quarter, truck, buckets:codes, confidence, sourceLine:groupIndex + 1 });
+      rows.push({
+        quarter,
+        truck,
+        buckets:normalizeRecipeBuckets(codes),
+        plannedBucketCount:codes.length,
+        isPartialTrip:codes.length < BUCKETS_PER_TRIP,
+        confirmedPartialTrip:codes.length < BUCKETS_PER_TRIP,
+        confidence,
+        sourceLine:groupIndex + 1
+      });
     });
     return rows;
   }
@@ -5264,6 +5402,7 @@ body.dark-mode .imported-code-preview span {
           input.dataset.recipeRow = String(index);
           input.dataset.recipeField = ["truck", "bucket1", "bucket2", "bucket3"][cellIndex - 1];
           input.autocomplete = "off";
+          if (cellIndex > 1 && !value && row.isPartialTrip) input.placeholder = t("importConfirmedEmpty");
           td.appendChild(input);
         }
         tr.appendChild(td);
@@ -5271,6 +5410,12 @@ body.dark-mode .imported-code-preview span {
       const confidence = document.createElement("td");
       confidence.className = "recipe-confidence" + (Number(row.confidence) < .9 ? " low" : "");
       confidence.textContent = Number(row.confidence) ? Math.round(Number(row.confidence) * 100) + "%" : t("importReadUnknown");
+      if (row.isPartialTrip) {
+        const partial = document.createElement("span");
+        partial.className = "recipe-partial-note";
+        partial.textContent = t("importPartialTrip") + " - " + t("importPlannedBuckets", { count:row.plannedBucketCount });
+        confidence.appendChild(partial);
+      }
       tr.appendChild(confidence);
       const remove = document.createElement("td");
       const removeButton = document.createElement("button");
@@ -5296,7 +5441,8 @@ body.dark-mode .imported-code-preview span {
   }
 
   function recipeRowIsComplete(row, draft = recipeImportDraft){
-    return Boolean(String(row?.truck || "").trim() && Array.isArray(row?.buckets) && row.buckets.length === BUCKETS_PER_TRIP && row.buckets.every(code => {
+    const codes = recipeBucketValues(row?.buckets);
+    return Boolean(String(row?.truck || "").trim() && codes.length && codes.every(code => {
       const normalized = normalizeRecipeCode(code);
       return normalized && (isKnownRecipeCode(normalized) || Boolean(assignmentForUnknownCode(normalized, draft)));
     }));
@@ -5391,7 +5537,11 @@ body.dark-mode .imported-code-preview span {
       return;
     }
     const rows = draft.applyMode === "merge"
-      ? page().rows.map(row => Object.assign({}, row, { ores:Object.assign({}, row.ores || {}), importedRecipe:recipeCodesForRow(row).slice() }))
+      ? page().rows.map(row => Object.assign({}, row, {
+        ores:Object.assign({}, row.ores || {}),
+        importedRecipe:Array.isArray(row.importedRecipe) ? normalizeRecipeBuckets(row.importedRecipe) : [],
+        plannedBucketCount:row.plannedBucketCount || null
+      }))
       : Array.from({ length:ROWS }, blankRow);
     const rowIndexes = [];
     let nextEmptyRow = 0;
@@ -5404,8 +5554,9 @@ body.dark-mode .imported-code-preview span {
       const row = blankRow();
       row.recipeQuarter = String(recipeRow.quarter || "").trim();
       row.recipeTruck = String(recipeRow.truck || "").trim();
-      row.importedRecipe = recipeRow.buckets.map(normalizeRecipeCode).filter(Boolean).slice(0, BUCKETS_PER_TRIP);
-      row.importedRecipe.forEach(code => {
+      row.importedRecipe = normalizeRecipeBuckets(recipeRow.buckets);
+      row.plannedBucketCount = plannedBucketCountForRecipeRow(recipeRow);
+      recipeCodesForRow(row).forEach(code => {
         const ore = mappedOreForRecipeCode(code);
         if (ore) row.ores[ore] = (row.ores[ore] || 0) + 1;
       });
@@ -5426,12 +5577,19 @@ body.dark-mode .imported-code-preview span {
       source:"photo",
       rowIndexes,
       assignments:Object.fromEntries(Object.entries(draft.assignments || {}).filter(([, value]) => ["anuri", "qaki", "mine8", "other"].includes(value))),
-      rows:draft.rows.map(row => ({
-        quarter:String(row.quarter || "").trim(),
-        truck:String(row.truck || "").trim(),
-        buckets:row.buckets.map(normalizeRecipeCode).filter(Boolean).slice(0, BUCKETS_PER_TRIP),
-        confidence:Number(row.confidence) || 0
-      }))
+      rows:draft.rows.map(row => {
+        const normalized = normalizeRecipeImportRow(row);
+        return {
+          quarter:normalized.quarter,
+          truck:normalized.truck,
+          buckets:normalized.buckets,
+          plannedBucketCount:normalized.plannedBucketCount,
+          isPartialTrip:normalized.isPartialTrip,
+          confirmedPartialTrip:normalized.confirmedPartialTrip,
+          ocrConfidence:normalized.ocrConfidence,
+          confidence:normalized.confidence
+        };
+      })
     };
     if (!Array.isArray(state.importedRecipes)) state.importedRecipes = [];
     state.importedRecipes.push(record);
@@ -5449,9 +5607,8 @@ body.dark-mode .imported-code-preview span {
     if (document.getElementById("screenMetaDate")) document.getElementById("screenMetaDate").value = state.meta.date || "";
     if (document.getElementById("screenMetaTruckNo")) document.getElementById("screenMetaTruckNo").value = state.meta.truckNo || "";
     if (document.getElementById("screenMetaName")) document.getElementById("screenMetaName").value = state.meta.name || "";
-    const summary = calculateColumnTotals();
-    document.getElementById("metaPoids").value = summary.voyageCount ? (summary.estimatedTonnage + " " + t("tonnes")) : "";
-    document.getElementById("metaVoyage").value = summary.voyageCount ? String(summary.voyageCount) : "";
+    document.getElementById("metaPoids").value = page().poids || "";
+    document.getElementById("metaVoyage").value = page().voyage || "";
     document.querySelectorAll(".truck-choice, .screen-truck-choice").forEach(el => {
       el.classList.toggle("active", el.dataset.truck === state.meta.truckType);
     });
@@ -5804,9 +5961,8 @@ body.dark-mode .imported-code-preview span {
   bindDateField("screenMetaDate");
   bindMeta("screenMetaTruckNo", "truckNo");
   bindMeta("screenMetaName", "name");
-  // Poids et # de voyage sont calculés automatiquement.
-  // 1 voyage complet operationnel = 37 tonnes.
-  // Ces champs ne sont plus saisis manuellement.
+  bindPageMeta("metaPoids", "poids");
+  bindPageMeta("metaVoyage", "voyage");
 
 
   ["loaderPlanDate","loaderPlanName","loaderPlanOperator","loaderPlanTarget","loaderPlanNotes"].forEach(id => {
@@ -6016,7 +6172,13 @@ body.dark-mode .imported-code-preview span {
       setStatus(t("importTooMany", { count:ROWS }));
       return;
     }
-    recipeImportDraft.rows.push({ quarter:"", truck:"", buckets:["", "", ""], confidence:0, sourceLine:recipeImportDraft.rows.length + 1 });
+    recipeImportDraft.rows.push(normalizeRecipeImportRow({
+      quarter:"",
+      truck:"",
+      buckets:[null, null, null],
+      confidence:0,
+      sourceLine:recipeImportDraft.rows.length + 1
+    }));
     renderRecipeReview();
     const inputs = document.querySelectorAll('#recipeReviewRows input[data-recipe-row="' + (recipeImportDraft.rows.length - 1) + '"]');
     if (inputs[0]) inputs[0].focus();
@@ -6030,9 +6192,14 @@ body.dark-mode .imported-code-preview span {
     if (field === "truck") row.truck = input.value.trim();
     else {
       const bucketIndex = Number(field.slice(-1)) - 1;
-      row.buckets[bucketIndex] = input.value.trim();
+      row.buckets[bucketIndex] = input.value.trim() || null;
+      Object.assign(row, normalizeRecipeImportRow(row));
     }
-    document.getElementById("btnRecipeConfirm").disabled = recipeImportDraft.rows.some(recipeRow => !recipeRowIsComplete(recipeRow));
+    const hasExistingData = page().rows.some(rowStarted);
+    document.getElementById("btnRecipeConfirm").disabled = !recipeImportDraft.rows.length ||
+      recipeImportDraft.rows.some(recipeRow => !recipeRowIsComplete(recipeRow)) ||
+      duplicateRecipeTrucks(recipeImportDraft.rows).size > 0 ||
+      (hasExistingData && !recipeImportDraft.applyMode);
   });
   document.getElementById("recipeReviewRows").addEventListener("change", event => {
     const input = event.target.closest("input[data-recipe-row]");
@@ -6041,7 +6208,8 @@ body.dark-mode .imported-code-preview span {
     if (!row) return;
     if (input.dataset.recipeField !== "truck") {
       const bucketIndex = Number(input.dataset.recipeField.slice(-1)) - 1;
-      row.buckets[bucketIndex] = normalizeRecipeCode(row.buckets[bucketIndex]);
+      row.buckets[bucketIndex] = normalizeRecipeCode(row.buckets[bucketIndex]) || null;
+      Object.assign(row, normalizeRecipeImportRow(row));
     }
     renderRecipeReview();
   });
@@ -6189,10 +6357,18 @@ body.dark-mode .imported-code-preview span {
           row.dest === "Cr-Pad" ? "X" : ""
         ].map(csvSafe).join(";"));
       });
-      const summary = pageSummaryFor(p);
+      const summary = pageSummaryFor(p, pageIndex);
       lines.push(["TOTAL","","", ...ORES.map(o => summary.totals[o] || ""), "", summary.silo || "", summary.crPad || ""].map(csvSafe).join(";"));
+      const recipe = importedRecipeForPage(pageIndex);
+      if (recipe) {
+        const progress = importedRecipeProgress(recipe, p);
+        lines.push([t("importRecipeRows"), progress.plannedTrips, t("importBuckets"), progress.plannedBuckets].map(csvSafe).join(";"));
+        lines.push([t("importFullTripEquivalent"), progress.fullTripEquivalent.toFixed(2), t("importPlannedTonnes"), progress.plannedTonnage.toFixed(1) + " t"].map(csvSafe).join(";"));
+        lines.push([t("importStartedTrips"), progress.startedTrips, t("importCompletedTrips"), progress.completeTrips].map(csvSafe).join(";"));
+        lines.push([t("importDoneBuckets"), progress.completedBuckets, t("importDoneTonnes"), progress.completedTonnage.toFixed(1) + " t", t("importRemainingTonnes"), progress.remainingTonnage.toFixed(1) + " t"].map(csvSafe).join(";"));
+      }
       lines.push("");
-      lines.push(["Poids", summary.voyageCount ? (summary.estimatedTonnage + " " + t("tonnes")) : "", "# de voyage", summary.voyageCount || "", "(Le relevé du poids doit être fait 1 fois par shift)"].map(csvSafe).join(";"));
+      lines.push([t("weightSample"), p.poids || "", t("weighedTripNo"), p.voyage || "", t("note")].map(csvSafe).join(";"));
       lines.push("");
     });
     const blob = new Blob([lines.join("\n")], { type:"text/csv;charset=utf-8" });
