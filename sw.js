@@ -1,4 +1,4 @@
-const CACHE_NAME = "recette-touch-v5.15.0-partial-recipe-totals";
+const CACHE_NAME = "recette-touch-v5.16.0-accurate-recipe-ocr";
 const ASSETS = [
   "./",
   "./index.html",

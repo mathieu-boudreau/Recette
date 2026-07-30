@@ -27,31 +27,56 @@ function sourceOf(name) {
 }
 
 const recipeFunctions = Function("BUCKETS_PER_TRIP", "TONNES_PER_TRIP", "ORES", "ALL_ORES", [
+  "recipeCodeKey",
+  "recipeKnownCodeFor",
   "normalizeRecipeCode",
+  "normalizeRecipeOcrCode",
+  "normalizeRecipeTruck",
   "normalizeRecipeBuckets",
   "recipeBucketValues",
   "plannedBucketCountForRecipeRow",
+  "recipeCellMeta",
+  "recipeCellIsResolved",
+  "refreshRecipeRowConfidence",
   "normalizeRecipeImportRow",
+  "numericRecipeTruck",
+  "markRecipeTruckUnresolved",
+  "normalizeRecipeTruckSequence",
+  "normalizeRecipeRows",
   "recipeCodesForRow",
   "plannedBucketCountForRow",
   "rowBucketTotalFromRow",
   "rowCompleteForNext",
   "recipeDraftSummary",
-  "importedRecipeProgress"
-].map(sourceOf).join("\n") + "\nreturn { normalizeRecipeCode, normalizeRecipeBuckets, recipeBucketValues, plannedBucketCountForRecipeRow, normalizeRecipeImportRow, recipeCodesForRow, plannedBucketCountForRow, rowBucketTotalFromRow, rowCompleteForNext, recipeDraftSummary, importedRecipeProgress };")(BUCKETS_PER_TRIP, TONNES_PER_TRIP, ALL_ORES, ALL_ORES);
+  "importedRecipeProgress",
+  "recipeRowIssues",
+  "recipeImportIssues",
+  "recipeOcrEntries",
+  "groupRecipeOcrRows",
+  "medianRecipeValue",
+  "recipeHeaderColumnAnchors",
+  "fallbackRecipeColumnAnchors",
+  "assignRecipeColumns",
+  "parseRecipeOcrBlocks"
+].map(sourceOf).join("\n") + "\nreturn { recipeCodeKey, recipeKnownCodeFor, normalizeRecipeCode, normalizeRecipeOcrCode, normalizeRecipeTruck, normalizeRecipeBuckets, recipeBucketValues, plannedBucketCountForRecipeRow, recipeCellMeta, recipeCellIsResolved, refreshRecipeRowConfidence, normalizeRecipeImportRow, numericRecipeTruck, markRecipeTruckUnresolved, normalizeRecipeTruckSequence, normalizeRecipeRows, recipeCodesForRow, plannedBucketCountForRow, rowBucketTotalFromRow, rowCompleteForNext, recipeDraftSummary, importedRecipeProgress, recipeRowIssues, recipeImportIssues, recipeOcrEntries, groupRecipeOcrRows, medianRecipeValue, recipeHeaderColumnAnchors, fallbackRecipeColumnAnchors, assignRecipeColumns, parseRecipeOcrBlocks };")(BUCKETS_PER_TRIP, TONNES_PER_TRIP, ALL_ORES, ALL_ORES);
 
 const {
   normalizeRecipeCode,
+  normalizeRecipeOcrCode,
+  normalizeRecipeTruck,
   normalizeRecipeBuckets,
   recipeBucketValues,
   plannedBucketCountForRecipeRow,
+  normalizeRecipeRows,
   normalizeRecipeImportRow,
   recipeCodesForRow,
   plannedBucketCountForRow,
   rowBucketTotalFromRow,
   rowCompleteForNext,
   recipeDraftSummary,
-  importedRecipeProgress
+  importedRecipeProgress,
+  recipeImportIssues,
+  parseRecipeOcrBlocks
 } = recipeFunctions;
 
 const fixture = [
@@ -119,4 +144,86 @@ assert.equal(progress.completedTonnage.toFixed(1), "12.3");
 assert.equal(progress.remainingTonnage.toFixed(1), "1295.0");
 assert.equal(html.includes("imported-code-preview"), false, "Imported material labels must not render in loading-time cells");
 
-console.log("recipe import fixture: PASS");
+[
+  ["A1", "A1"], ["AI", "A1"], ["Al", "A1"], ["A I", "A1"], ["JA1", "A1"],
+  ["AHR", "AHR"], ["A H R", "AHR"], ["JAHR", "AHR"], ["OH", "AHR"],
+  ["C1", "C1"], ["CI", "C1"], ["CT", "C1"], ["B Hl R", "BHR"]
+].forEach(([raw, expected]) => {
+  const result = normalizeRecipeOcrCode(raw, .52);
+  assert.equal(result.value, expected, raw + " should normalize to " + expected);
+  assert.notEqual(result.status, "unresolved", raw + " must not remain unresolved");
+});
+
+assert.equal(normalizeRecipeOcrCode("CELL...").status, "unresolved");
+assert.equal(normalizeRecipeOcrCode("XYZ").status, "unresolved");
+assert.equal(normalizeRecipeOcrCode("XYZ").canMarkAsNew, true);
+
+const correctedTrucks = normalizeRecipeRows([
+  { truck:"1", buckets:["A1", "C1", "C1"] },
+  { truck:"2", buckets:["A1", "C1", "C1"] },
+  { truck:"3", buckets:["A1", "C1", "C1"] },
+  { truck:"41", buckets:["A1", "C1", "C1"] },
+  { truck:"5", buckets:["A1", "C1", "C1"] }
+]);
+assert.deepEqual(correctedTrucks.map(row => row.truck), ["1", "2", "3", "4", "5"]);
+assert.equal(correctedTrucks[3].truckMeta.status, "corrected");
+
+const correctedMiddleTruck = normalizeRecipeRows([
+  { truck:"5", buckets:["A1", "C1", "C1"] },
+  { truck:"61", buckets:["A1", "C1", "C1"] },
+  { truck:"7", buckets:["A1", "C1", "C1"] }
+]);
+assert.equal(correctedMiddleTruck[1].truck, "6");
+
+function ocrBlock(text, x, y, confidence = .51) {
+  return { rawValue:text, confidence, boundingBox:{ x, y, width:24, height:14 } };
+}
+
+const segmentedRows = parseRecipeOcrBlocks([
+  ocrBlock("Quart", 0, 0), ocrBlock("Camion", 62, 0), ocrBlock("Godet", 122, 0), ocrBlock("Godet", 182, 0), ocrBlock("Godet", 242, 0),
+  ocrBlock("1", 0, 36), ocrBlock("1", 62, 36), ocrBlock("JA1", 122, 36), ocrBlock("CT", 182, 36), ocrBlock("CT", 242, 36),
+  ocrBlock("1", 0, 62), ocrBlock("2", 62, 62), ocrBlock("JAHR", 122, 62), ocrBlock("B1", 182, 62), ocrBlock("BI", 242, 62),
+  ocrBlock("1", 0, 88), ocrBlock("3", 62, 88), ocrBlock("A1", 122, 88), ocrBlock("A1", 182, 88), ocrBlock("C1", 242, 88),
+  ocrBlock("1", 0, 114), ocrBlock("41", 62, 114), ocrBlock("A1", 122, 114), ocrBlock("C1", 182, 114), ocrBlock("C1", 242, 114),
+  ocrBlock("1", 0, 140), ocrBlock("5", 62, 140), ocrBlock("A1", 122, 140), ocrBlock("C1", 182, 140), ocrBlock("C1", 242, 140)
+]);
+assert.deepEqual(segmentedRows.map(row => row.truck), ["1", "2", "3", "4", "5"]);
+assert.deepEqual(segmentedRows[0].buckets, ["A1", "C1", "C1"]);
+assert.deepEqual(segmentedRows[1].buckets, ["AHR", "B1", "B1"]);
+assert.equal(recipeImportIssues(segmentedRows).length, 0);
+
+const unresolvedRecipe = normalizeRecipeRows([{ truck:"1", buckets:["CELL", "C1", "C1"] }]);
+assert.equal(recipeImportIssues(unresolvedRecipe).length > 0, true, "Unresolved OCR artifacts must block import");
+const validPartialRecipe = normalizeRecipeRows([{ truck:"1", buckets:["C1", null, null] }]);
+assert.equal(recipeImportIssues(validPartialRecipe).length, 0, "Confirmed empty bucket cells are valid partial trips");
+
+const reference21 = [
+  ["JA1", "CT", "CT"], ["JAHR", "B1", "BI"], ["A1", "AI", "C1"],
+  ["A1", "C1", "C1"], ["AHR", "B1", "B1"], ["A1", "C1", "C1"],
+  ["A1", "C1", "C1"], ["A1", "A1", "C1"], ["A1", "A1", "AHR"],
+  ["A1", "C1", "C1"], ["A1", "C1", "C1"], ["A1", "A1", "AHR"],
+  ["A1", "A1", "A1"], ["A1", "C1", "C1"], ["A1", "C1", "C1"],
+  ["A1", "A1", "AHR"], ["A1", "C1", "C1"], ["A1", "A1", "A1"],
+  ["A1", "A1", "AHR"], ["A1", "C1", "C1"], ["A1", "C1", "C1"]
+].map((buckets, index) => ({
+  truck:String(index === 3 ? 41 : index === 5 ? 61 : index + 1),
+  buckets,
+  confidence:.51
+}));
+const normalizedReference21 = normalizeRecipeRows(reference21);
+const referenceSummary = recipeDraftSummary(normalizedReference21);
+assert.deepEqual(normalizedReference21.map(row => row.truck), Array.from({ length:21 }, (_, index) => String(index + 1)));
+assert.equal(recipeImportIssues(normalizedReference21).length, 0);
+assert.deepEqual(referenceSummary.materials, { A1:29, C1:24, AHR:6, B1:4 });
+assert.equal(referenceSummary.trips, 21);
+assert.equal(referenceSummary.buckets, 63);
+assert.equal(referenceSummary.plannedTonnes, 777);
+assert.equal((29 / 63 * 100).toFixed(1), "46.0");
+assert.equal((6 / 63 * 100).toFixed(1), "9.5");
+assert.equal((4 / 63 * 100).toFixed(1), "6.3");
+assert.equal((24 / 63 * 100).toFixed(1), "38.1");
+normalizedReference21.forEach(row => row.bucketMeta.forEach(cell => {
+  if (cell.status !== "empty") assert.notEqual(cell.status, "unresolved", "Reference recipe must not retain unresolved OCR values");
+}));
+
+console.log("recipe import fixtures: PASS");
