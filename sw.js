@@ -1,8 +1,8 @@
-const CACHE_NAME = "recette-touch-v5.18.0-table-boundary-fix";
+const CACHE_NAME = "recette-touch-v5.19.0-post-crop-confidence";
 const ASSETS = [
   "./",
   "./index.html",
-  "./recipe-ocr-engine.js?v=5.18.0",
+  "./recipe-ocr-engine.js?v=5.19.0",
   "./manifest.webmanifest",
   "./sw.js",
   "./icon-192.png",

@@ -517,6 +517,19 @@
     return Math.hypot(second.x - first.x, second.y - first.y);
   }
 
+  function perspectiveDimensions(corners){
+    const sourceWidth = Math.max(pointDistance(corners[0], corners[1]), pointDistance(corners[3], corners[2]));
+    const sourceHeight = Math.max(pointDistance(corners[0], corners[3]), pointDistance(corners[1], corners[2]));
+    const pixelScale = Math.min(1, Math.sqrt(MAX_TABLE_PIXELS / Math.max(1, sourceWidth * sourceHeight)));
+    return {
+      sourceWidth,
+      sourceHeight,
+      pixelScale,
+      outputWidth:Math.max(80, Math.round(sourceWidth * pixelScale)),
+      outputHeight:Math.max(120, Math.round(sourceHeight * pixelScale))
+    };
+  }
+
   function solveLinearSystem(matrix, values){
     const size = values.length;
     const augmented = matrix.map((row, index) => row.slice().concat(values[index]));
@@ -555,11 +568,9 @@
   }
 
   function warpPerspective(source, corners){
-    let width = Math.max(pointDistance(corners[0], corners[1]), pointDistance(corners[3], corners[2]));
-    let height = Math.max(pointDistance(corners[0], corners[3]), pointDistance(corners[1], corners[2]));
-    const pixelScale = Math.min(1, Math.sqrt(MAX_TABLE_PIXELS / Math.max(1, width * height)));
-    width = Math.max(80, Math.round(width * pixelScale));
-    height = Math.max(120, Math.round(height * pixelScale));
+    const dimensions = perspectiveDimensions(corners);
+    const width = dimensions.outputWidth;
+    const height = dimensions.outputHeight;
     const scaledCorners = corners.map(point => ({ x:point.x, y:point.y }));
     const destination = [
       { x:0, y:0 },
@@ -774,15 +785,17 @@
     }
 
     const sourceCornersNormalized = normalizedCorners(cornerResult.corners, rotatedSource.width, rotatedSource.height);
+    const perspective = perspectiveDimensions(cornerResult.corners);
     const structureConfidence = clamp(
-      analysis.confidence * .35 +
-      cornerResult.confidence * .2 +
-      (grid?.confidence || 0) * .45,
+      cornerResult.manual
+        ? analysis.confidence * .12 + cornerResult.confidence * .2 + (grid?.confidence || 0) * .68
+        : analysis.confidence * .35 + cornerResult.confidence * .2 + (grid?.confidence || 0) * .45,
       0,
       1
     );
+    const minimumStructureConfidence = cornerResult.manual ? .5 : .55;
     return {
-      ok:Boolean(tableCanvas && grid?.valid && structureConfidence >= .55),
+      ok:Boolean(tableCanvas && grid?.valid && structureConfidence >= minimumStructureConfidence),
       error,
       turns:orientation.turns,
       rotatedSource,
@@ -793,6 +806,7 @@
       debug:{
         originalDimensions:{ width:source.width, height:source.height },
         analysisDimensions:{ width:analysisCanvas.width, height:analysisCanvas.height },
+        rotatedSourceDimensions:{ width:rotatedSource.width, height:rotatedSource.height },
         selectedRotation:orientation.turns * 90,
         orientationCandidates:orientation.candidates,
         tableBounds:analysis.bounds,
@@ -800,12 +814,22 @@
         perspectiveConfidence:cornerResult.confidence,
         perspectiveResidual:cornerResult.residual,
         manualCrop:Boolean(cornerResult.manual),
+        croppedImageDimensions:{
+          width:Math.round(perspective.sourceWidth),
+          height:Math.round(perspective.sourceHeight)
+        },
+        perspectiveCorrectedDimensions:tableCanvas ? { width:tableCanvas.width, height:tableCanvas.height } : null,
+        perspectiveOutputScale:Number(perspective.pixelScale.toFixed(4)),
+        perspectiveWasDownscaled:perspective.pixelScale < .999,
         horizontalLines:grid?.horizontalLines || [],
         verticalLines:grid?.verticalLines || [],
         rowCount:grid?.dataRowCount || 0,
         columnCount:grid?.columnCount || 0,
+        medianCellHeight:grid?.rowHeightMedian || 0,
+        rowHeightDeviation:grid?.rowHeightDeviation || 0,
         gridConfidence:grid?.confidence || 0,
-        structureConfidence
+        structureConfidence,
+        minimumStructureConfidence
       }
     };
   }
@@ -862,6 +886,8 @@
       columnIndex,
       kind,
       bounds,
+      rawDimensions:{ width:rawCanvas.width, height:rawCanvas.height },
+      enhancedDimensions:{ width:enhanced.canvas.width, height:enhanced.canvas.height },
       rawCanvas,
       canvas:enhanced.canvas,
       inkRatio:enhanced.inkRatio,

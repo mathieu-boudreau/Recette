@@ -1575,6 +1575,11 @@ tfoot td,
   background:#fff6d9;
 }
 
+.recipe-review-table td.low-confidence-cell {
+  background:#fff0bc;
+  box-shadow:inset 0 0 0 2px #c58100;
+}
+
 .recipe-review-table input {
   width:100%;
   min-width:54px;
@@ -1935,6 +1940,11 @@ body.dark-mode .recipe-review-table td {
 
 body.dark-mode .recipe-review-table tr.low-confidence td {
   background:#302713;
+}
+
+body.dark-mode .recipe-review-table td.low-confidence-cell {
+  background:#392c11;
+  box-shadow:inset 0 0 0 2px #ffcd23;
 }
 
 body.dark-mode .recipe-partial-note {
@@ -2896,7 +2906,7 @@ body.dark-mode .recipe-accept-new {
 
       <section class="menu-section menu-status full-span">
         <h3 class="menu-title" id="menuSectionStatus">Statut</h3>
-        <div class="status" id="status">App prête. Les données restent sur ce téléphone. Version 5.18.</div>
+        <div class="status" id="status">App prête. Les données restent sur ce téléphone. Version 5.19.</div>
         <div class="menu-note" id="menuNote">Astuce: ouvre le menu pour les actions et ferme-le pour voir plus de feuille.</div>
         <details class="menu-help-details" id="menuHelpDetails">
           <summary id="menuHelpSummary">Aide rapide</summary>
@@ -3289,7 +3299,7 @@ body.dark-mode .recipe-accept-new {
   </div>
 </div>
 
-<script src="./recipe-ocr-engine.js?v=5.18.0"></script>
+<script src="./recipe-ocr-engine.js?v=5.19.0"></script>
 <script>
 (function(){
   "use strict";
@@ -3452,7 +3462,7 @@ body.dark-mode .recipe-accept-new {
       menuSectionDanger:"Réinitialisation",
       menuNote:"Astuce: ouvre le menu pour les actions et ferme-le pour voir plus de feuille.",
       menuSwipeHint:"Glisse vers le haut en bas du menu pour le fermer.",
-      statusReady:"App prête. Les données restent sur ce téléphone. Version 5.18.",
+      statusReady:"App prête. Les données restent sur ce téléphone. Version 5.19.",
       sheetName:"Feuille de transport / Hauling Sheet",
       sheetTitle:"Recette",
       voyageHeader:"Voyage",
@@ -3685,7 +3695,7 @@ body.dark-mode .recipe-accept-new {
       menuSectionDanger:"Reset",
       menuNote:"Tip: open the menu for actions, then close it to see more of the sheet.",
       menuSwipeHint:"Swipe up at the bottom of the menu to close it.",
-      statusReady:"App ready. Data stays on this phone. Version 5.18.",
+      statusReady:"App ready. Data stays on this phone. Version 5.19.",
       sheetName:"Hauling Sheet",
       sheetTitle:"Receipt",
       voyageHeader:"Trip",
@@ -3927,6 +3937,24 @@ body.dark-mode .recipe-accept-new {
     };
   }
 
+  function recipeFinalCellConfidence(normalized, rawConfidence = 0, evidence){
+    evidence = evidence || {};
+    const raw = Math.max(0, Math.min(1, Number(rawConfidence) || 0));
+    const exactRegistryMatch = normalized?.status === "exact" && Boolean(recipeKnownCodeFor(normalized.value));
+    const normalizedRegistryMatch = normalized?.status === "corrected" && Boolean(recipeKnownCodeFor(normalized.value));
+    let score = raw * .28;
+    if (exactRegistryMatch) score += .57;
+    else if (normalizedRegistryMatch) score += .56;
+    else if (normalized?.status === "new") score += .28;
+    if (evidence.correctColumn) score += .08;
+    if (evidence.validRowAlignment) score += .07;
+    if (evidence.truckSequence) score += .04;
+    if (evidence.repeatedCode) score += .04;
+    if (normalized?.status === "empty" && evidence.validRowAlignment) score = Math.max(score, .92);
+    if (normalized?.status === "unresolved") score = Math.min(score, .68);
+    return Math.max(0, Math.min(1, score));
+  }
+
   function normalizeRecipeTruck(rawValue, engineConfidence = 0){
     const raw = String(rawValue ?? "").replace(/\s+/g, "").trim();
     if (!raw) return { raw:"", value:"", status:"unresolved", confidence:0, reason:"missing-truck" };
@@ -3983,7 +4011,14 @@ body.dark-mode .recipe-accept-new {
       if (previous.acceptedAsNew && normalized.status === "unresolved" && normalized.canMarkAsNew) {
         return Object.assign(normalized, { status:"new", confidence:.9, reason:"new-code", acceptedAsNew:true });
       }
-      return normalized;
+      const rawConfidence = Number(previous.rawConfidence);
+      if (!Number.isFinite(rawConfidence)) return normalized;
+      const evidence = previous.evidence || {};
+      return Object.assign(normalized, {
+        rawConfidence,
+        confidence:recipeFinalCellConfidence(normalized, rawConfidence, evidence),
+        evidence
+      });
     });
     const truckSource = row?.truckMeta?.raw ?? row?.truck;
     const truckMeta = normalizeRecipeTruck(truckSource, row?.truckMeta?.confidence ?? row?.confidence);
@@ -5751,18 +5786,26 @@ body.dark-mode .recipe-accept-new {
       .trim();
   }
 
-  function recipeCellDebugRecord(cell, raw, confidence, normalized){
+  function recipeCellDebugRecord(cell, raw, rawConfidence, normalized, evidence = {}){
+    const finalConfidence = Number(normalized?.confidence) || 0;
     return {
       row:cell.rowIndex + 1,
       column:cell.columnIndex + 1,
       type:cell.kind,
       bounds:cell.bounds,
+      rawCropDimensions:cell.rawDimensions || null,
+      enhancedCropDimensions:cell.enhancedDimensions || null,
       inkRatio:Number(cell.inkRatio.toFixed(4)),
-      raw,
-      normalized:normalized?.value || "",
+      rawOcrText:raw,
+      rawConfidence:Number((Number(rawConfidence) || 0).toFixed(3)),
+      normalizedCode:normalized?.value || "",
       status:normalized?.status || "",
-      confidence:Number((Number(confidence) || 0).toFixed(3)),
-      reason:normalized?.reason || ""
+      finalConfidence:Number(finalConfidence.toFixed(3)),
+      evidence,
+      normalizationReason:normalized?.reason || "",
+      rejectionReason:normalized?.status === "unresolved"
+        ? normalized?.reason || "unresolved"
+        : finalConfidence < .9 ? "review-below-90" : ""
     };
   }
 
@@ -5858,7 +5901,8 @@ body.dark-mode .recipe-accept-new {
       const truckValues = readRecipeOcrSheet(truckSheet, truckResult?.data);
       truckCells.forEach((cell, index) => {
         let raw = recipeOcrCellText(truckValues[index]?.raw);
-        let confidence = Math.max(0, Math.min(1, Number(truckValues[index]?.confidence) || 0));
+        const rawConfidence = Math.max(0, Math.min(1, Number(truckValues[index]?.confidence) || 0));
+        let confidence = rawConfidence;
         const expected = String(cell.rowIndex + 1);
         const truckMeta = normalizeRecipeTruck(raw, confidence);
         const ocrRaw = raw;
@@ -5866,8 +5910,20 @@ body.dark-mode .recipe-accept-new {
           raw = expected;
           confidence = Math.max(.9, prepared.grid.confidence);
         }
-        cellsByRow[cell.rowIndex].truck = { raw, confidence };
-        const debugRecord = recipeCellDebugRecord(cell, raw, confidence, normalizeRecipeTruck(raw, confidence));
+        const normalizedTruck = normalizeRecipeTruck(raw, confidence);
+        const truckEvidence = {
+          correctColumn:cell.columnIndex === prepared.grid.truckColumn,
+          validRowAlignment:prepared.grid.rowHeightDeviation < .42,
+          truckSequence:normalizedTruck.value === expected,
+          geometricSubstitution:ocrRaw !== raw
+        };
+        cellsByRow[cell.rowIndex].truck = {
+          raw,
+          confidence:normalizedTruck.confidence,
+          rawConfidence,
+          evidence:truckEvidence
+        };
+        const debugRecord = recipeCellDebugRecord(cell, raw, rawConfidence, normalizedTruck, truckEvidence);
         debugRecord.ocrRaw = ocrRaw;
         debugRecord.geometricExpected = expected;
         debugCells.push(debugRecord);
@@ -5887,12 +5943,18 @@ body.dark-mode .recipe-accept-new {
       const materialResult = await worker.recognize(materialSheet.canvas, {}, { text:true, blocks:true });
       const materialValues = readRecipeOcrSheet(materialSheet, materialResult?.data);
       const numericCodesByPrefix = {};
+      const normalizedCodeCounts = {};
       materialValues.forEach(value => {
         const normalized = normalizeRecipeOcrCode(value?.raw, value?.confidence);
         if (!/^[A-Z]\d$/.test(normalized.value || "") || normalized.status === "unresolved") return;
         const prefix = normalized.value[0];
         if (!numericCodesByPrefix[prefix]) numericCodesByPrefix[prefix] = new Set();
         numericCodesByPrefix[prefix].add(normalized.value);
+      });
+      materialValues.forEach(value => {
+        const normalized = normalizeRecipeOcrCode(value?.raw, value?.confidence);
+        if (!["exact", "corrected"].includes(normalized.status) || !normalized.value) return;
+        normalizedCodeCounts[normalized.value] = (normalizedCodeCounts[normalized.value] || 0) + 1;
       });
       await worker.setParameters({
         tessedit_pageseg_mode:"10",
@@ -5905,31 +5967,65 @@ body.dark-mode .recipe-accept-new {
         const cell = materialCells[index];
         let raw = cell.blank ? "" : recipeOcrCellText(materialValues[index]?.raw);
         const ocrRaw = raw;
-        let confidence = cell.blank ? 1 : Math.max(0, Math.min(1, Number(materialValues[index]?.confidence) || 0));
+        let rawConfidence = cell.blank ? 1 : Math.max(0, Math.min(1, Number(materialValues[index]?.confidence) || 0));
         if (!cell.blank && !raw) raw = "UNREADABLE";
-        let normalized = normalizeRecipeOcrCode(raw, confidence);
-        if (!cell.blank && normalized.status === "unresolved") {
+        const bucketIndex = prepared.grid.bucketColumns.indexOf(cell.columnIndex);
+        const evidenceFor = normalized => ({
+          correctColumn:bucketIndex >= 0,
+          validRowAlignment:prepared.grid.rowHeightDeviation < .42 && prepared.grid.confidence >= .65,
+          truckSequence:cellsByRow[cell.rowIndex].truck?.raw === String(cell.rowIndex + 1),
+          repeatedCode:Boolean(normalized?.value && normalizedCodeCounts[normalized.value] > 1)
+        });
+        let normalized = normalizeRecipeOcrCode(raw, rawConfidence);
+        let evidence = evidenceFor(normalized);
+        normalized = Object.assign(normalized, {
+          rawConfidence,
+          confidence:recipeFinalCellConfidence(normalized, rawConfidence, evidence),
+          evidence
+        });
+        if (!cell.blank && (normalized.status === "unresolved" || normalized.confidence < .9)) {
           const retry = await worker.recognize(cell.canvas, {}, { text:true });
           const retryRaw = recipeOcrCellText(retry?.data);
           const retryConfidence = Math.max(0, Math.min(1, Number(retry?.data?.confidence) / 100 || 0));
-          const retryNormalized = normalizeRecipeOcrCode(retryRaw, retryConfidence);
-          if (retryNormalized.status !== "unresolved" || retryConfidence > confidence) {
+          let retryNormalized = normalizeRecipeOcrCode(retryRaw, retryConfidence);
+          const retryEvidence = evidenceFor(retryNormalized);
+          retryNormalized = Object.assign(retryNormalized, {
+            rawConfidence:retryConfidence,
+            confidence:recipeFinalCellConfidence(retryNormalized, retryConfidence, retryEvidence),
+            evidence:retryEvidence
+          });
+          if (
+            (normalized.status === "unresolved" && retryNormalized.status !== "unresolved") ||
+            retryNormalized.confidence > normalized.confidence
+          ) {
             raw = retryRaw || raw;
-            confidence = retryConfidence;
+            rawConfidence = retryConfidence;
             normalized = retryNormalized;
+            evidence = retryEvidence;
           }
         }
         if (normalized.status === "unresolved" && /^[A-Z]$/i.test(raw)) {
           const candidates = Array.from(numericCodesByPrefix[raw.toUpperCase()] || []);
           if (candidates.length === 1) {
             raw = candidates[0];
-            confidence = Math.max(.9, confidence);
-            normalized = normalizeRecipeOcrCode(raw, confidence);
+            rawConfidence = Math.max(.72, rawConfidence);
+            normalized = normalizeRecipeOcrCode(raw, rawConfidence);
+            evidence = evidenceFor(normalized);
+            normalized = Object.assign(normalized, {
+              rawConfidence,
+              confidence:recipeFinalCellConfidence(normalized, rawConfidence, evidence),
+              evidence
+            });
           }
         }
-        const bucketIndex = prepared.grid.bucketColumns.indexOf(cell.columnIndex);
-        cellsByRow[cell.rowIndex].buckets[bucketIndex] = { raw, confidence };
-        const debugRecord = recipeCellDebugRecord(cell, raw, confidence, normalized);
+        cellsByRow[cell.rowIndex].buckets[bucketIndex] = {
+          raw,
+          confidence:normalized.confidence,
+          rawConfidence,
+          evidence,
+          meta:normalized
+        };
+        const debugRecord = recipeCellDebugRecord(cell, raw, rawConfidence, normalized, evidence);
         debugRecord.ocrRaw = ocrRaw;
         debugCells.push(debugRecord);
       }
@@ -5938,6 +6034,7 @@ body.dark-mode .recipe-accept-new {
         truck:cells.truck?.raw || String(rowIndex + 1),
         truckMeta:cells.truck,
         buckets:cells.buckets.map(cell => cell?.raw || null),
+        bucketMeta:cells.buckets.map(cell => cell?.meta || null),
         ocrConfidence:Object.fromEntries(cells.buckets.map((cell, index) => ["bucket" + (index + 1), cell?.confidence ?? 1])),
         tableAlignmentConfidence:prepared.grid.confidence,
         confidence:prepared.grid.confidence,
@@ -6066,6 +6163,7 @@ body.dark-mode .recipe-accept-new {
         if (cellIndex && !value && row.isPartialTrip) input.placeholder = t("importConfirmedEmpty");
         td.appendChild(input);
         const cell = fieldMeta[cellIndex];
+        if (cell?.status !== "empty" && Number(cell?.confidence) < .9) td.classList.add("low-confidence-cell");
         if (cell?.status === "corrected") {
           const note = document.createElement("span");
           note.className = "recipe-cell-note corrected";
@@ -6135,31 +6233,39 @@ body.dark-mode .recipe-accept-new {
     const materialCells = (recognition?.cells || []).filter(cell => cell.type === "material" && cell.inkRatio >= .0045);
     const recognized = materialCells.filter(cell => ["exact", "corrected"].includes(cell.status)).length;
     const unresolved = materialCells.filter(cell => cell.status === "unresolved").length;
-    const headerArtifacts = materialCells.filter(cell => cell.reason === "ocr-artifact").length;
+    const lowConfidence = materialCells.filter(cell => Number(cell.finalConfidence) < .9).length;
+    const headerArtifacts = materialCells.filter(cell => cell.normalizationReason === "ocr-artifact").length;
     const plausibleRatio = recognized / Math.max(1, recognized + unresolved);
     const issues = recipeImportIssues(rows);
     const sequenceIssues = issues.filter(issue => ["truck-sequence", "duplicate-truck", "invalid-truck", "missing-truck"].includes(issue.reason)).length;
     const rowCountMatches = Boolean(prepared?.grid) && rows.length === prepared.grid.dataRowCount;
+    const strongGeometry = Boolean(prepared?.grid?.valid) &&
+      prepared.grid.confidence >= .68 &&
+      prepared.grid.rowHeightDeviation < .42;
     const usefulReview = rows.length >= 2 &&
-      recognized > 0 &&
-      plausibleRatio >= .58 &&
-      unresolved <= Math.max(4, Math.ceil(materialCells.length * .12)) &&
-      headerArtifacts <= 1;
+      recognized >= Math.max(3, Math.ceil(materialCells.length * .45)) &&
+      plausibleRatio >= .45 &&
+      headerArtifacts <= Math.max(2, Math.ceil(materialCells.length * .08));
+    const sequenceIsUsable = sequenceIssues <= Math.max(3, Math.ceil(rows.length * .3));
     const reasons = [];
     if (!prepared?.ok || !prepared?.grid?.valid) reasons.push("structure");
     if (!rowCountMatches) reasons.push("rows");
     if (!usefulReview) reasons.push("cells");
-    if (sequenceIssues > Math.max(2, Math.ceil(rows.length * .08))) reasons.push("sequence");
+    if (!sequenceIsUsable) reasons.push("sequence");
     return {
       pass:reasons.length === 0,
+      outcome:reasons.length === 0 ? "review" : "recovery",
       reasons,
       rowCountMatches,
+      strongGeometry,
       recognized,
       unresolved,
+      lowConfidence,
       headerArtifacts,
       materialCellCount:materialCells.length,
       plausibleRatio,
       sequenceIssues,
+      sequenceIsUsable,
       issueCount:issues.length,
       structureConfidence:prepared?.structureConfidence || 0
     };
@@ -6204,8 +6310,16 @@ body.dark-mode .recipe-accept-new {
       generatedAt:new Date().toISOString(),
       exifOrientation:recipeExifOrientation,
       decoderAppliedExif:true,
+      sourceImageDimensions:recipeImportSourceCanvas
+        ? { width:recipeImportSourceCanvas.width, height:recipeImportSourceCanvas.height }
+        : null,
       geometry:prepared?.debug || null,
       quality:quality || null,
+      decision:{
+        outcome:quality?.pass ? "review" : "recovery",
+        rejectionReasons:quality?.pass ? [] : quality?.reasons || ["unknown"],
+        uncertainCells:(recognition?.cells || []).filter(cell => cell.type === "material" && Number(cell.finalConfidence) < .9).length
+      },
       rawSheets:recognition?.rawSheets || null,
       cells:recognition?.cells || []
     };

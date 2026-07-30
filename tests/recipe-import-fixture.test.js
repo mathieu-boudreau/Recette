@@ -32,6 +32,7 @@ const recipeFunctions = Function("BUCKETS_PER_TRIP", "TONNES_PER_TRIP", "ORES", 
   "recipeKnownCodeFor",
   "normalizeRecipeCode",
   "normalizeRecipeOcrCode",
+  "recipeFinalCellConfidence",
   "normalizeRecipeTruck",
   "normalizeRecipeBuckets",
   "recipeBucketValues",
@@ -51,12 +52,14 @@ const recipeFunctions = Function("BUCKETS_PER_TRIP", "TONNES_PER_TRIP", "ORES", 
   "recipeDraftSummary",
   "importedRecipeProgress",
   "recipeRowIssues",
-  "recipeImportIssues"
-].map(sourceOf).join("\n") + "\nreturn { recipeCodeKey, recipeKnownCodeFor, normalizeRecipeCode, normalizeRecipeOcrCode, normalizeRecipeTruck, normalizeRecipeBuckets, recipeBucketValues, plannedBucketCountForRecipeRow, recipeCellMeta, recipeCellIsResolved, refreshRecipeRowConfidence, normalizeRecipeImportRow, numericRecipeTruck, markRecipeTruckUnresolved, normalizeRecipeTruckSequence, normalizeRecipeRows, recipeCodesForRow, plannedBucketCountForRow, rowBucketTotalFromRow, rowCompleteForNext, recipeDraftSummary, importedRecipeProgress, recipeRowIssues, recipeImportIssues };")(BUCKETS_PER_TRIP, TONNES_PER_TRIP, ALL_ORES, ALL_ORES);
+  "recipeImportIssues",
+  "evaluateRecipeRecognition"
+].map(sourceOf).join("\n") + "\nreturn { recipeCodeKey, recipeKnownCodeFor, normalizeRecipeCode, normalizeRecipeOcrCode, recipeFinalCellConfidence, normalizeRecipeTruck, normalizeRecipeBuckets, recipeBucketValues, plannedBucketCountForRecipeRow, recipeCellMeta, recipeCellIsResolved, refreshRecipeRowConfidence, normalizeRecipeImportRow, numericRecipeTruck, markRecipeTruckUnresolved, normalizeRecipeTruckSequence, normalizeRecipeRows, recipeCodesForRow, plannedBucketCountForRow, rowBucketTotalFromRow, rowCompleteForNext, recipeDraftSummary, importedRecipeProgress, recipeRowIssues, recipeImportIssues, evaluateRecipeRecognition };")(BUCKETS_PER_TRIP, TONNES_PER_TRIP, ALL_ORES, ALL_ORES);
 
 const {
   normalizeRecipeCode,
   normalizeRecipeOcrCode,
+  recipeFinalCellConfidence,
   normalizeRecipeTruck,
   normalizeRecipeBuckets,
   recipeBucketValues,
@@ -69,7 +72,8 @@ const {
   rowCompleteForNext,
   recipeDraftSummary,
   importedRecipeProgress,
-  recipeImportIssues
+  recipeImportIssues,
+  evaluateRecipeRecognition
 } = recipeFunctions;
 
 const fixture = [
@@ -246,5 +250,84 @@ assert.equal((24 / 63 * 100).toFixed(1), "38.1");
 normalizedReference21.forEach(row => row.bucketMeta.forEach(cell => {
   if (cell.status !== "empty") assert.notEqual(cell.status, "unresolved", "Reference recipe must not retain unresolved OCR values");
 }));
+
+const strongCellEvidence = {
+  correctColumn:true,
+  validRowAlignment:true,
+  truckSequence:true,
+  repeatedCode:true
+};
+const moderateExact = normalizeRecipeOcrCode("A1", .4);
+assert.equal(
+  recipeFinalCellConfidence(moderateExact, .4, strongCellEvidence) >= .9,
+  true,
+  "An exact registry code in an aligned cell must be accepted despite moderate raw OCR confidence"
+);
+assert.equal(
+  recipeFinalCellConfidence(normalizeRecipeOcrCode("Al", .4), .4, strongCellEvidence) >= .9,
+  true,
+  "A proven normalized registry match must benefit from repeated aligned-cell evidence"
+);
+assert.equal(
+  recipeFinalCellConfidence(normalizeRecipeOcrCode("LGOJDE", .8), .8, strongCellEvidence) < .9,
+  true,
+  "Context must not turn an OCR artifact into a trusted code"
+);
+
+const qualityRows = normalizedReference21;
+const preparedQualityFixture = {
+  ok:true,
+  structureConfidence:.92,
+  grid:{
+    valid:true,
+    confidence:.91,
+    rowHeightDeviation:.08,
+    dataRowCount:qualityRows.length
+  }
+};
+const reviewWithUncertainCells = evaluateRecipeRecognition(preparedQualityFixture, {
+  rows:qualityRows,
+  cells:[
+    ...Array.from({ length:53 }, () => ({
+      type:"material",
+      inkRatio:.04,
+      status:"exact",
+      finalConfidence:.96,
+      normalizationReason:"registry"
+    })),
+    ...Array.from({ length:10 }, () => ({
+      type:"material",
+      inkRatio:.04,
+      status:"unresolved",
+      finalConfidence:.42,
+      normalizationReason:"unknown-code"
+    }))
+  ]
+});
+assert.equal(reviewWithUncertainCells.pass, true, "A few uncertain cells must open review instead of rejecting the full table");
+assert.equal(reviewWithUncertainCells.outcome, "review");
+assert.equal(reviewWithUncertainCells.lowConfidence, 10);
+
+const unusableRecognition = evaluateRecipeRecognition(preparedQualityFixture, {
+  rows:qualityRows,
+  cells:[
+    ...Array.from({ length:10 }, () => ({
+      type:"material",
+      inkRatio:.04,
+      status:"exact",
+      finalConfidence:.96,
+      normalizationReason:"registry"
+    })),
+    ...Array.from({ length:53 }, () => ({
+      type:"material",
+      inkRatio:.04,
+      status:"unresolved",
+      finalConfidence:.2,
+      normalizationReason:"ocr-artifact"
+    }))
+  ]
+});
+assert.equal(unusableRecognition.pass, false, "A mostly unreadable table must still be rejected safely");
+assert.equal(unusableRecognition.outcome, "recovery");
 
 console.log("recipe import fixtures: PASS");
