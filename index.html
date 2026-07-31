@@ -1606,6 +1606,171 @@ tfoot td,
   font-weight:800;
 }
 
+.recipe-order-strip {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin:8px 0;
+  padding:8px 10px;
+  border-left:4px solid var(--yellow);
+  background:#f5f3eb;
+  color:#171717;
+  font-size:12px;
+  font-weight:900;
+}
+
+.recipe-order-strip input {
+  width:76px;
+  min-height:38px;
+  border:1px solid #847b64;
+  border-radius:4px;
+  background:#fff;
+  color:#111;
+  text-align:center;
+  font-size:16px;
+  font-weight:950;
+}
+
+.recipe-focus-review {
+  display:grid;
+  gap:9px;
+  margin:9px 0;
+  padding:12px;
+  border:1px solid #bfa63c;
+  border-radius:6px;
+  background:#fffdf5;
+}
+
+.recipe-focus-review[hidden] { display:none; }
+
+.recipe-focus-head,
+.recipe-focus-nav,
+.recipe-focus-shortcuts {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:7px;
+}
+
+.recipe-focus-progress {
+  color:#564500;
+  font-size:12px;
+  font-weight:950;
+}
+
+.recipe-focus-context {
+  color:#171717;
+  font-size:14px;
+  font-weight:900;
+}
+
+.recipe-cell-preview {
+  display:grid;
+  place-items:center;
+  min-height:86px;
+  overflow:hidden;
+  border:1px solid #b9b29f;
+  border-radius:4px;
+  background:#fff;
+}
+
+.recipe-cell-preview[hidden] { display:none; }
+
+.recipe-cell-preview img {
+  display:block;
+  width:auto;
+  max-width:100%;
+  height:auto;
+  max-height:120px;
+  image-rendering:auto;
+}
+
+.recipe-candidate-list,
+.recipe-known-code-grid {
+  display:grid;
+  grid-template-columns:repeat(4, minmax(0, 1fr));
+  gap:7px;
+}
+
+.recipe-candidate-list button,
+.recipe-known-code-grid button {
+  min-width:0;
+  min-height:48px;
+  padding:7px 5px;
+  border:1px solid #b89d25;
+  background:#fff;
+  color:#111;
+  font-size:14px;
+  font-weight:950;
+}
+
+.recipe-candidate-list button.primary-choice {
+  border-color:#111;
+  background:var(--yellow);
+}
+
+.recipe-known-picker {
+  margin:0;
+}
+
+.recipe-local-registry {
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr auto;
+  gap:7px;
+  margin-top:9px;
+  padding-top:9px;
+  border-top:1px solid #d8c980;
+}
+
+.recipe-local-registry[hidden] { display:none; }
+
+.recipe-local-registry input,
+.recipe-local-registry select {
+  min-width:0;
+  min-height:42px;
+  border:1px solid #8e846c;
+  border-radius:4px;
+  background:#fff;
+  color:#111;
+  font-size:13px;
+  font-weight:800;
+}
+
+.recipe-local-registry-note {
+  grid-column:1 / -1;
+  margin:0;
+  color:#62592d;
+  font-size:11px;
+  font-weight:800;
+}
+
+.recipe-known-picker summary,
+.recipe-full-review summary {
+  min-height:40px;
+  cursor:pointer;
+  color:#302600;
+  font-size:12px;
+  font-weight:900;
+}
+
+.recipe-full-review {
+  margin-top:8px;
+}
+
+.recipe-review-table select {
+  width:100%;
+  min-width:72px;
+  min-height:36px;
+  border:1px solid #999;
+  border-radius:4px;
+  background:#fff;
+  color:#111;
+  font-size:13px;
+  font-weight:800;
+}
+
 .recipe-review-wrap {
   overflow:auto;
   max-height:42dvh;
@@ -1679,23 +1844,8 @@ tfoot td,
   line-height:1.2;
 }
 
-.recipe-cell-note.corrected {
-  color:#5d5100;
-}
-
 .recipe-cell-note.unresolved {
   color:#a33416;
-}
-
-.recipe-accept-new {
-  min-height:26px;
-  margin-top:4px;
-  padding:3px 5px;
-  border-color:#976719;
-  background:#fff6c9;
-  color:#382a00;
-  font-size:10px;
-  line-height:1.1;
 }
 
 .recipe-review-table .recipe-confidence {
@@ -2013,6 +2163,40 @@ body.dark-mode .recipe-review-warning {
   color:#ffd1c3;
 }
 
+body.dark-mode .recipe-order-strip,
+body.dark-mode .recipe-focus-review {
+  border-color:#8d7620;
+  background:#242424;
+  color:#f5f5f5;
+}
+
+body.dark-mode .recipe-focus-context,
+body.dark-mode .recipe-known-picker summary,
+body.dark-mode .recipe-full-review summary {
+  color:#f5f5f5;
+}
+
+body.dark-mode .recipe-focus-progress { color:#ffda4f; }
+
+body.dark-mode .recipe-cell-preview,
+body.dark-mode .recipe-candidate-list button,
+body.dark-mode .recipe-known-code-grid button,
+body.dark-mode .recipe-review-table select,
+body.dark-mode .recipe-order-strip input,
+body.dark-mode .recipe-local-registry input,
+body.dark-mode .recipe-local-registry select {
+  background:#111;
+  color:#fff;
+}
+
+body.dark-mode .recipe-local-registry-note { color:#e7d98d; }
+
+@media (max-width:620px) {
+  .recipe-local-registry { grid-template-columns:1fr 1fr; }
+  .recipe-candidate-list,
+  .recipe-known-code-grid { grid-template-columns:repeat(3, minmax(0, 1fr)); }
+}
+
 body.dark-mode .recipe-review-summary div {
   background:#1b1b1b;
   color:#f4f1e8;
@@ -2061,18 +2245,8 @@ body.dark-mode .recipe-review-badge.low {
   color:#ffd3c6;
 }
 
-body.dark-mode .recipe-cell-note.corrected {
-  color:#ffdc75;
-}
-
 body.dark-mode .recipe-cell-note.unresolved {
   color:#ffb8a5;
-}
-
-body.dark-mode .recipe-accept-new {
-  border-color:#b78927;
-  background:#30230c;
-  color:#fff1b0;
 }
 
 @media (min-width:820px) {
@@ -3403,6 +3577,43 @@ body.dark-mode .recipe-accept-new {
       <div class="recipe-review-meta" id="recipeReviewMeta"></div>
       <div class="recipe-review-summary" id="recipeReviewSummary"></div>
       <div class="recipe-review-warning" id="recipeReviewWarning" hidden></div>
+      <label class="recipe-order-strip">
+        <span id="recipeStartTruckLabel">Premier camion</span>
+        <input id="recipeStartTruck" type="number" inputmode="numeric" min="1" max="999" value="1">
+      </label>
+      <section class="recipe-focus-review" id="recipeFocusReview" hidden aria-live="polite">
+        <div class="recipe-focus-head">
+          <strong id="recipeFocusTitle">Cellule à confirmer</strong>
+          <span class="recipe-focus-progress" id="recipeFocusProgress"></span>
+        </div>
+        <div class="recipe-focus-context" id="recipeFocusContext"></div>
+        <div class="recipe-cell-preview" id="recipeCellPreviewWrap"><img id="recipeCellPreview" alt=""></div>
+        <div class="recipe-candidate-list" id="recipeCandidateList"></div>
+        <details class="recipe-known-picker" id="recipeKnownPicker">
+          <summary id="recipeKnownPickerLabel">Autre matériau connu</summary>
+          <div class="recipe-known-code-grid" id="recipeKnownCodeGrid"></div>
+          <button type="button" id="btnRecipeShowLocalRegistry">Ajouter un code local</button>
+          <div class="recipe-local-registry" id="recipeLocalRegistryForm" hidden>
+            <input id="recipeLocalCodeInput" type="text" maxlength="10" autocapitalize="characters" autocomplete="off" placeholder="Code">
+            <select id="recipeLocalGroupSelect" aria-label="Groupe"></select>
+            <select id="recipeLocalMappingSelect" aria-label="Colonne"></select>
+            <button type="button" id="btnRecipeSaveLocalCode">Ajouter</button>
+            <p class="recipe-local-registry-note" id="recipeLocalRegistryNote"></p>
+          </div>
+        </details>
+        <div class="recipe-focus-shortcuts">
+          <button type="button" id="btnRecipeSamePrevious">Même ligne précédente</button>
+          <button type="button" id="btnRecipeDuplicatePrevious">Répéter le godet précédent</button>
+          <button type="button" id="btnRecipeClearRow">Vider la ligne</button>
+        </div>
+        <div class="recipe-focus-nav">
+          <button type="button" id="btnRecipeUndo">Annuler correction</button>
+          <span>
+            <button type="button" id="btnRecipeIssuePrevious">Précédent</button>
+            <button type="button" id="btnRecipeIssueNext">Suivant</button>
+          </span>
+        </div>
+      </section>
       <div class="recipe-review-warning" id="recipeImportConflict" hidden>
         <span id="recipeImportConflictText"></span>
         <div class="panel-row">
@@ -3410,8 +3621,10 @@ body.dark-mode .recipe-accept-new {
           <button type="button" id="btnRecipeMerge">Ajouter aux lignes vides</button>
         </div>
       </div>
-      <div class="recipe-review-wrap">
-        <table class="recipe-review-table" aria-label="Revue de la recette importee">
+      <details class="recipe-full-review" id="recipeFullReviewDetails">
+        <summary id="recipeFullReviewLabel">Modifier tout le tableau</summary>
+        <div class="recipe-review-wrap">
+          <table class="recipe-review-table" aria-label="Revue de la recette importee">
           <thead>
             <tr>
               <th id="recipeReviewTruckLabel">Camion</th>
@@ -3423,9 +3636,9 @@ body.dark-mode .recipe-accept-new {
             </tr>
           </thead>
           <tbody id="recipeReviewRows"></tbody>
-        </table>
-      </div>
-      <datalist id="recipeKnownCodes"></datalist>
+          </table>
+        </div>
+      </details>
       <div class="panel-row">
         <button type="button" id="btnRecipeAddRow">Ajouter une ligne</button>
       </div>
@@ -3447,7 +3660,7 @@ body.dark-mode .recipe-accept-new {
   </div>
 </div>
 
-<script src="./recipe-ocr-engine.js?v=5.20.0"></script>
+<script src="./recipe-ocr-engine.js?v=5.21.0"></script>
 <script>
 (function(){
   "use strict";
@@ -3474,6 +3687,15 @@ body.dark-mode .recipe-accept-new {
   };
   const ORES = ORE_REGISTRY.groups.filter(group => group.enabled).flatMap(group => group.codes);
   const ALL_ORES = ORE_REGISTRY.groups.flatMap(group => group.codes);
+  const CUSTOM_MATERIAL_REGISTRY_KEY = "recette_touch_custom_material_registry_v1";
+  let customMaterialRegistry = [];
+  try {
+    const storedCustomRegistry = JSON.parse(localStorage.getItem(CUSTOM_MATERIAL_REGISTRY_KEY) || "[]");
+    if (Array.isArray(storedCustomRegistry)) {
+      customMaterialRegistry = storedCustomRegistry.filter(entry => entry && typeof entry.code === "string" &&
+        ["anuri", "qaki", "mine8"].includes(entry.groupId) && ALL_ORES.includes(entry.mapsTo)).slice(0, 20);
+    }
+  } catch(error) {}
   const LOADER_PLAN_ITEMS = [...ORES, "Boulder"];
   const ROWS = 60;
   const BUCKETS_PER_TRIP = 3;
@@ -3508,6 +3730,31 @@ body.dark-mode .recipe-accept-new {
       importCancel:"Annuler",
       importConfirm:"Confirmer l'import",
       importAddRow:"Ajouter une ligne",
+      importStartTruck:"Premier camion",
+      importResolveTitle:"Cellule a confirmer",
+      importResolveProgress:"{current} sur {total}",
+      importResolveContext:"Camion {truck} - Godet {bucket}",
+      importOtherKnown:"Autre materiau connu",
+      importAddLocalCode:"Ajouter un code local",
+      importLocalCode:"Code",
+      importLocalGroup:"Groupe",
+      importLocalColumn:"Colonne feuille",
+      importLocalAdd:"Ajouter",
+      importLocalNote:"Le code et son association restent seulement sur cet appareil.",
+      importLocalInvalid:"Entre un code court valide et choisis son groupe et sa colonne.",
+      importLocalSaved:"Code local {code} ajoute au registre.",
+      importConfirmedEmptyAction:"Vide",
+      importSamePrevious:"Meme ligne precedente",
+      importDuplicatePrevious:"Repeter le godet precedent",
+      importClearRow:"Vider la ligne",
+      importUndoCorrection:"Annuler correction",
+      importPrevious:"Precedent",
+      importNext:"Suivant",
+      importFullReview:"Modifier tout le tableau",
+      importRecognizedCount:"{count} reconnues",
+      importEmptyCount:"{count} vides",
+      importConfirmCount:"{count} a confirmer",
+      importTotalsLocked:"Les totaux seront disponibles apres la confirmation de chaque cellule.",
       importReading:"Lecture de la recette...",
       importPreparing:"Preparation de la photo...",
       importCorrecting:"Correction de l'image...",
@@ -3573,19 +3820,13 @@ body.dark-mode .recipe-accept-new {
       importKnown:"Revue prete",
       importProvisional:"Resultats provisoires",
       importUnresolved:"{count} cellule(s) doit/doivent etre corrigee(s) avant l'import.",
-      importCorrection:"Correction proposee : {raw} -> {value}",
-      importNewCode:"Marquer nouveau code",
       importReasonUnknown:"Code non reconnu",
       importReasonArtifact:"Artefact OCR a corriger",
       importReasonTruck:"Numero de camion incertain",
       importReasonSequence:"Sequence de camions a corriger",
-      importUnknownCodes:"Codes inconnus a classer",
-      importUnknownGroup:"Groupe",
-      importUnknownMissing:"Classez chaque code inconnu avant l'import.",
       importGroupAnuri:"Anuri",
       importGroupQaki:"Qaki",
       importGroupMine8:"Pad crusher Mine 8",
-      importGroupOther:"Autre",
       importTrips:"Voyages",
       importBuckets:"Buckets",
       importPlannedTonnes:"Tonnes prevues",
@@ -3752,6 +3993,31 @@ body.dark-mode .recipe-accept-new {
       importCancel:"Cancel",
       importConfirm:"Confirm import",
       importAddRow:"Add row",
+      importStartTruck:"First truck",
+      importResolveTitle:"Cell to confirm",
+      importResolveProgress:"{current} of {total}",
+      importResolveContext:"Truck {truck} - Bucket {bucket}",
+      importOtherKnown:"Other known material",
+      importAddLocalCode:"Add local code",
+      importLocalCode:"Code",
+      importLocalGroup:"Group",
+      importLocalColumn:"Sheet column",
+      importLocalAdd:"Add",
+      importLocalNote:"The code and its mapping stay on this device only.",
+      importLocalInvalid:"Enter a valid short code and choose its group and sheet column.",
+      importLocalSaved:"Local code {code} added to the registry.",
+      importConfirmedEmptyAction:"Empty",
+      importSamePrevious:"Same as previous row",
+      importDuplicatePrevious:"Repeat previous bucket",
+      importClearRow:"Clear row",
+      importUndoCorrection:"Undo correction",
+      importPrevious:"Previous",
+      importNext:"Next",
+      importFullReview:"Edit full table",
+      importRecognizedCount:"{count} recognized",
+      importEmptyCount:"{count} empty",
+      importConfirmCount:"{count} to confirm",
+      importTotalsLocked:"Totals will be available after every cell is confirmed.",
       importReading:"Reading the recipe...",
       importPreparing:"Preparing photo...",
       importCorrecting:"Correcting image...",
@@ -3817,19 +4083,13 @@ body.dark-mode .recipe-accept-new {
       importKnown:"Review ready",
       importProvisional:"Provisional results",
       importUnresolved:"{count} cell(s) must be corrected before import.",
-      importCorrection:"Proposed correction: {raw} -> {value}",
-      importNewCode:"Mark as new code",
       importReasonUnknown:"Unrecognized code",
       importReasonArtifact:"OCR artifact to correct",
       importReasonTruck:"Uncertain truck number",
       importReasonSequence:"Truck sequence to correct",
-      importUnknownCodes:"Unknown codes to classify",
-      importUnknownGroup:"Group",
-      importUnknownMissing:"Classify each unknown code before importing.",
       importGroupAnuri:"Anuri",
       importGroupQaki:"Qaki",
       importGroupMine8:"Pad crusher Mine 8",
-      importGroupOther:"Other",
       importTrips:"Trips",
       importBuckets:"Buckets",
       importPlannedTonnes:"Planned tonnes",
@@ -4054,7 +4314,10 @@ body.dark-mode .recipe-accept-new {
   function recipeKnownCodeFor(value){
     const key = recipeCodeKey(value);
     if (!key) return "";
-    return ALL_ORES.find(code => recipeCodeKey(code) === key) || "";
+    const shared = ALL_ORES.find(code => recipeCodeKey(code) === key);
+    if (shared) return shared;
+    const customEntries = typeof customMaterialRegistry !== "undefined" ? customMaterialRegistry : [];
+    return customEntries.find(entry => recipeCodeKey(entry.code) === key)?.code || "";
   }
 
   function normalizeRecipeCode(value){
@@ -4074,54 +4337,36 @@ body.dark-mode .recipe-accept-new {
     const raw = String(rawValue ?? "").replace(/\s+/g, " ").trim();
     const key = recipeCodeKey(raw);
     if (!key) return { raw:"", value:null, status:"empty", confidence:1, reason:"empty", canMarkAsNew:false };
-
-    const exact = recipeKnownCodeFor(key);
-    if (exact) return { raw, value:exact, status:"exact", confidence:Math.max(.96, Number(engineConfidence) || 0), reason:"registry", canMarkAsNew:false };
-
-    // This is intentionally bounded to proven OCR confusions for the Mine Raglan registry.
-    const aliases = {
-      AI:"A1", AL:"A1", JA1:"A1",
-      JAHR:"AHR", AHLR:"AHR", OH:"AHR",
-      JBHR:"BHR", BHLR:"BHR",
-      CI:"C1", CT:"C1", BI:"B1", BT:"B1",
-      ORENEIAE:"Ore/Neige"
-    };
-    const direct = recipeKnownCodeFor(aliases[key] || "");
-    if (direct) return { raw, value:direct, status:"corrected", confidence:.93, reason:"known-ocr-confusion", canMarkAsNew:false };
-
-    const visualKey = key.replace(/^J(?=[A-Z0-9])/, "").replace(/[ILT]/g, "1").replace(/HLR/g, "HR");
-    const visual = recipeKnownCodeFor(visualKey);
-    if (visual && visualKey !== key) return { raw, value:visual, status:"corrected", confidence:.91, reason:"known-character-shape", canMarkAsNew:false };
-
+    const direct = ORES.find(code => String(code).toUpperCase() === raw.toUpperCase());
+    if (direct) return { raw, value:direct, status:"recognized", confidence:Math.max(.96, Number(engineConfidence) || 0), reason:"exact-registry", canMarkAsNew:false };
+    const normalized = ORES.find(code => recipeCodeKey(code) === key);
+    if (normalized) return { raw, value:normalized, status:"recognized", confidence:Math.max(.9, Number(engineConfidence) || 0), reason:"normalized-registry", canMarkAsNew:false };
     const artifact = /^(UNREADABLE|CELL|CE11|LINE|L1NE|TABLE|GODE|ODET|LODET|BUCKET|CAMION|TRUCK|QUART)/.test(key) ||
-      ["O1N1", "O1M", "TOMO", "XL5OC", "DRZTJ", "LGOJDE", "ZB"].includes(key) ||
-      key.length > 10 ||
-      raw.split(/\s+/).filter(Boolean).length > 2;
+      key.length > 8 || raw.split(/\s+/).filter(Boolean).length > 2;
     return {
       raw,
-      value:normalizeRecipeCode(raw),
-      status:"unresolved",
-      confidence:Math.min(.45, Number(engineConfidence) || .25),
-      reason:artifact ? "ocr-artifact" : "unknown-code",
-      canMarkAsNew:!artifact && key.length <= 8
+      value:null,
+      status:"uncertain",
+      confidence:Math.min(.35, Number(engineConfidence) || .15),
+      reason:artifact ? "likely-artifact" : "unreadable",
+      canMarkAsNew:false,
+      candidates:[]
     };
   }
 
   function recipeFinalCellConfidence(normalized, rawConfidence = 0, evidence){
     evidence = evidence || {};
     const raw = Math.max(0, Math.min(1, Number(rawConfidence) || 0));
-    const exactRegistryMatch = normalized?.status === "exact" && Boolean(recipeKnownCodeFor(normalized.value));
-    const normalizedRegistryMatch = normalized?.status === "corrected" && Boolean(recipeKnownCodeFor(normalized.value));
+    const exactRegistryMatch = normalized?.status === "recognized" && normalized?.reason === "exact-registry" && Boolean(recipeKnownCodeFor(normalized.value));
+    const normalizedRegistryMatch = normalized?.status === "recognized" && normalized?.reason === "normalized-registry" && Boolean(recipeKnownCodeFor(normalized.value));
     let score = raw * .28;
     if (exactRegistryMatch) score += .57;
     else if (normalizedRegistryMatch) score += .56;
-    else if (normalized?.status === "new") score += .28;
     if (evidence.correctColumn) score += .08;
     if (evidence.validRowAlignment) score += .07;
     if (evidence.rowOrder) score += .04;
-    if (evidence.repeatedCode) score += .04;
     if (normalized?.status === "empty" && evidence.validRowAlignment) score = Math.max(score, .92);
-    if (normalized?.status === "unresolved") score = Math.min(score, .68);
+    if (normalized?.status === "uncertain") score = Math.min(score, .68);
     return Math.max(0, Math.min(1, score));
   }
 
@@ -4153,7 +4398,7 @@ body.dark-mode .recipe-accept-new {
   }
 
   function recipeCellIsResolved(cell){
-    return Boolean(cell && (cell.status === "empty" || cell.status === "new" || recipeKnownCodeFor(cell.value)));
+    return Boolean(cell && (cell.status === "empty" || (["recognized", "manual"].includes(cell.status) && recipeKnownCodeFor(cell.value))));
   }
 
   function refreshRecipeRowConfidence(row){
@@ -4163,29 +4408,53 @@ body.dark-mode .recipe-accept-new {
     return row;
   }
 
-  function normalizeRecipeImportRow(row, generatedIndex = null){
+  function normalizeRecipeImportRow(row, generatedIndex = null, startTruck = 1){
     const sourceBuckets = Array.isArray(row?.buckets) ? row.buckets : [];
     const previousCells = Array.isArray(row?.bucketMeta) ? row.bucketMeta : [];
     const bucketMeta = Array.from({ length:BUCKETS_PER_TRIP }, (_, index) => {
       const previous = previousCells[index] || {};
       const raw = Object.prototype.hasOwnProperty.call(previous, "raw") ? previous.raw : sourceBuckets[index];
-      const normalized = normalizeRecipeOcrCode(raw, previous.confidence ?? row?.ocrConfidence?.["bucket" + (index + 1)] ?? row?.confidence);
-      if (previous.acceptedAsNew && normalized.status === "unresolved" && normalized.canMarkAsNew) {
-        return Object.assign(normalized, { status:"new", confidence:.9, reason:"new-code", acceptedAsNew:true });
+      if (previous.status === "uncertain") {
+        return {
+          raw:String(raw || ""),
+          value:null,
+          status:"uncertain",
+          confidence:Math.max(0, Math.min(.89, Number(previous.confidence) || 0)),
+          rawConfidence:Math.max(0, Math.min(1, Number(previous.rawConfidence) || 0)),
+          reason:previous.reason || "unreadable",
+          candidates:Array.isArray(previous.candidates) ? previous.candidates.slice(0, 5) : [],
+          evidence:previous.evidence || {},
+          previewDataUrl:previous.previewDataUrl || ""
+        };
       }
+      const persistedValue = recipeKnownCodeFor(previous.value || sourceBuckets[index]);
+      const normalized = persistedValue
+        ? {
+            raw:String(raw || persistedValue),
+            value:persistedValue,
+            status:previous.status === "manual" ? "manual" : "recognized",
+            confidence:Math.max(Number(previous.confidence) || 0, previous.status === "manual" ? 1 : .9),
+            reason:previous.reason || (previous.status === "manual" ? "operator-confirmed" : "registry"),
+            candidates:Array.isArray(previous.candidates) ? previous.candidates.slice(0, 5) : [],
+            previewDataUrl:previous.previewDataUrl || ""
+          }
+        : normalizeRecipeOcrCode(raw, previous.confidence ?? row?.ocrConfidence?.["bucket" + (index + 1)] ?? row?.confidence);
+      if (previous.status === "empty") return Object.assign(normalized, { raw:"", value:null, status:"empty", confidence:1, reason:"operator-empty", candidates:[], previewDataUrl:previous.previewDataUrl || "" });
       const rawConfidence = Number(previous.rawConfidence);
       if (!Number.isFinite(rawConfidence)) return normalized;
       const evidence = previous.evidence || {};
       return Object.assign(normalized, {
         rawConfidence,
-        confidence:recipeFinalCellConfidence(normalized, rawConfidence, evidence),
-        evidence
+        confidence:Number.isFinite(Number(previous.confidence)) ? Number(previous.confidence) : recipeFinalCellConfidence(normalized, rawConfidence, evidence),
+        evidence,
+        candidates:Array.isArray(previous.candidates) ? previous.candidates.slice(0, 5) : normalized.candidates || [],
+        previewDataUrl:previous.previewDataUrl || ""
       });
     });
     const buckets = bucketMeta.map(cell => cell.status === "empty" ? null : cell.value || null);
     const plannedBucketCount = buckets.filter(Boolean).length;
     const generatedTruck = Number.isInteger(generatedIndex)
-      ? String(generatedIndex + 1)
+      ? String(Math.max(1, Number(startTruck) || 1) + generatedIndex)
       : String(row?.truck || "").trim();
     const normalized = {
       truck:generatedTruck,
@@ -4211,8 +4480,16 @@ body.dark-mode .recipe-accept-new {
     return refreshRecipeRowConfidence(normalized);
   }
 
-  function normalizeRecipeRows(rows){
-    return (rows || []).map((row, index) => normalizeRecipeImportRow(row, index));
+  function recipeStartingTruck(rows, preferred){
+    const explicit = Number(preferred);
+    if (Number.isInteger(explicit) && explicit > 0) return explicit;
+    const first = Number(rows?.[0]?.truck);
+    return Number.isInteger(first) && first > 0 ? first : 1;
+  }
+
+  function normalizeRecipeRows(rows, preferredStart){
+    const startTruck = recipeStartingTruck(rows, preferredStart);
+    return (rows || []).map((row, index) => normalizeRecipeImportRow(row, index, startTruck));
   }
 
   function normalizeImportedRecipes(recipes){
@@ -4230,9 +4507,10 @@ body.dark-mode .recipe-accept-new {
     })).filter(recipe => recipe.rows.length);
   }
 
-  function createRecipeImportDraft(rows, native = false){
-    const normalizedRows = normalizeRecipeRows(rows || []);
-    return { rows:normalizedRows, native, importedAt:new Date().toISOString() };
+  function createRecipeImportDraft(rows, native = false, preferredStart){
+    const startTruck = recipeStartingTruck(rows, preferredStart);
+    const normalizedRows = normalizeRecipeRows(rows || [], startTruck);
+    return { rows:normalizedRows, native, startTruck, importedAt:new Date().toISOString(), reviewCursor:0, history:[] };
   }
 
   function recipeCodesForRow(row){
@@ -4250,12 +4528,17 @@ body.dark-mode .recipe-accept-new {
 
   function mappedOreForRecipeCode(code){
     const normalized = normalizeRecipeCode(code);
-    return ORES.find(ore => ore.toUpperCase() === normalized.toUpperCase()) || "";
+    const shared = ORES.find(ore => ore.toUpperCase() === normalized.toUpperCase());
+    if (shared) return shared;
+    return customMaterialRegistry.find(entry => recipeCodeKey(entry.code) === recipeCodeKey(normalized))?.mapsTo || "";
   }
 
   function registryGroupForCode(code){
     const normalized = recipeKnownCodeFor(code);
-    return ORE_REGISTRY.groups.find(group => group.codes.includes(normalized)) || null;
+    const shared = ORE_REGISTRY.groups.find(group => group.codes.includes(normalized));
+    if (shared) return shared;
+    const custom = customMaterialRegistry.find(entry => recipeCodeKey(entry.code) === recipeCodeKey(normalized));
+    return custom ? ORE_REGISTRY.groups.find(group => group.id === custom.groupId) || null : null;
   }
 
   function isKnownRecipeCode(code){
@@ -4888,6 +5171,7 @@ body.dark-mode .recipe-accept-new {
     updateMetaUI();
     renderRecipeImportSummary();
     renderOperationalTotals();
+    if (recipeImportDraft) renderRecipeReview();
     renderLoaderPlan();
   }
 
@@ -5851,7 +6135,7 @@ body.dark-mode .recipe-accept-new {
       finalConfidence:Number(finalConfidence.toFixed(3)),
       evidence,
       normalizationReason:normalized?.reason || "",
-      rejectionReason:normalized?.status === "unresolved"
+      rejectionReason:normalized?.status === "uncertain"
         ? normalized?.reason || "unresolved"
         : finalConfidence < .9 ? "review-below-90" : ""
     };
@@ -5919,115 +6203,165 @@ body.dark-mode .recipe-accept-new {
     return Array.isArray(bucketCells) && bucketCells.some(cell => cell && !cell.blank);
   }
 
+  let recipeMaterialTemplateLibrary = null;
+
+  function activeRecipeCodes(){
+    return ORE_REGISTRY.groups.filter(group => group.enabled).flatMap(group => group.codes)
+      .concat(customMaterialRegistry.map(entry => entry.code));
+  }
+
+  function materialTemplateLibrary(){
+    if (!recipeMaterialTemplateLibrary) {
+      recipeMaterialTemplateLibrary = window.RecetteOcrEngine.buildMaterialTemplateLibrary(activeRecipeCodes());
+    }
+    return recipeMaterialTemplateLibrary;
+  }
+
+  function constrainedOcrEvidence(rawValue){
+    const raw = recipeOcrCellText(rawValue);
+    if (!raw) return { raw:"", code:"", kind:"none" };
+    const direct = activeRecipeCodes().find(code => String(code).toUpperCase() === raw.toUpperCase());
+    if (direct) return { raw, code:direct, kind:"exact" };
+    const key = recipeCodeKey(raw);
+    const normalized = activeRecipeCodes().find(code => recipeCodeKey(code) === key);
+    if (normalized) return { raw, code:normalized, kind:"normalized" };
+    const shapeKey = /^[A-D][ILT]$/.test(key) ? key[0] + "1" : "";
+    const shapeMatch = shapeKey && activeRecipeCodes().find(code => recipeCodeKey(code) === shapeKey);
+    if (shapeMatch) return { raw, code:shapeMatch, kind:"normalized-shape" };
+    const longOneCharacterMatch = key.length >= 5 && activeRecipeCodes().find(code => {
+      const candidateKey = recipeCodeKey(code);
+      if (candidateKey.length !== key.length) return false;
+      let differences = 0;
+      for (let index = 0; index < key.length; index++) {
+        if (key[index] !== candidateKey[index]) differences++;
+      }
+      return differences === 1;
+    });
+    return longOneCharacterMatch
+      ? { raw, code:longOneCharacterMatch, kind:"normalized-one-character" }
+      : { raw, code:"", kind:"unknown" };
+  }
+
+  function classifyRecipeMaterialCell(cell, rawOcr, rawConfidence, structureEvidence){
+    const previewDataUrl = cell.rawCanvas?.toDataURL ? cell.rawCanvas.toDataURL("image/jpeg", .82) : "";
+    if (cell.blank) {
+      return {
+        raw:"",
+        value:null,
+        status:"empty",
+        confidence:1,
+        rawConfidence:1,
+        reason:"visual-empty",
+        candidates:[],
+        evidence:structureEvidence,
+        previewDataUrl
+      };
+    }
+    const ranked = window.RecetteOcrEngine.rankMaterialCandidates(cell.canvas, materialTemplateLibrary());
+    const ocr = constrainedOcrEvidence(rawOcr);
+    const candidates = ranked.candidates.map(candidate => {
+      const ocrBoost = ocr.code === candidate.code
+        ? (ocr.kind === "exact" ? .28 : .2) * (.65 + Math.max(0, Math.min(1, rawConfidence)) * .35)
+        : 0;
+      return {
+        code:candidate.code,
+        visualScore:candidate.score,
+        score:Math.min(1, candidate.score * .78 + ocrBoost)
+      };
+    }).sort((left, right) => right.score - left.score);
+    const top = candidates[0] || { code:"", score:0, visualScore:0 };
+    const second = candidates[1] || { score:0 };
+    const margin = top.score - second.score;
+    const exactSupportsTop = ocr.kind === "exact" && ocr.code === top.code && top.visualScore >= .18;
+    const normalizedSupportsTop = ["normalized", "normalized-shape", "normalized-one-character"].includes(ocr.kind) && ocr.code === top.code && top.visualScore >= .18;
+    const visualDecision = (top.visualScore >= .9 && margin >= .018) || (top.score >= .67 && margin >= .045);
+    const recognized = Boolean(top.code && (visualDecision || exactSupportsTop || normalizedSupportsTop));
+    const calibratedConfidence = recognized
+      ? Math.min(.99, Math.max(.9, .86 + top.score * .1 + margin * .35))
+      : Math.min(.89, Math.max(.15, top.score));
+    return {
+      raw:ocr.raw,
+      value:recognized ? top.code : null,
+      status:recognized ? "recognized" : "uncertain",
+      confidence:calibratedConfidence,
+      rawConfidence:Math.max(0, Math.min(1, Number(rawConfidence) || 0)),
+      reason:recognized
+        ? (exactSupportsTop ? "visual-plus-exact-registry" : normalizedSupportsTop ? "visual-plus-normalized-registry" : "visual-template")
+        : (ocr.kind === "unknown" ? "unreadable" : "ambiguous-visual-match"),
+      candidates:candidates.slice(0, 5).map(candidate => ({ code:candidate.code, score:Number(candidate.score.toFixed(3)), visualScore:Number(candidate.visualScore.toFixed(3)) })),
+      evidence:Object.assign({}, structureEvidence, { ocrKind:ocr.kind, visualMargin:Number(margin.toFixed(3)) }),
+      previewDataUrl
+    };
+  }
+
   async function readRecipeSegmentedCells(prepared, runId){
     const engine = window.RecetteOcrEngine;
     const cellPlan = engine.buildCellPlan(prepared);
-    const Tesseract = await loadOfflineOcrLibrary();
+    const materialCells = cellPlan.filter(cell => cell.kind === "material");
     const cellsByRow = Array.from({ length:prepared.grid.dataRowCount }, () => ({ buckets:Array(BUCKETS_PER_TRIP).fill(null) }));
     const debugCells = [];
     let worker = null;
+    let materialResult = null;
+    let materialValues = materialCells.map(() => ({ raw:"", confidence:0 }));
+    const evidenceForCell = cell => ({
+      correctColumn:prepared.grid.bucketColumns.includes(cell.columnIndex),
+      validRowAlignment:prepared.grid.rowHeightDeviation < .42 && prepared.grid.confidence >= .65,
+      rowOrder:true
+    });
+    const visualClassifications = materialCells.map(cell => classifyRecipeMaterialCell(cell, "", 0, evidenceForCell(cell)));
+    const ocrIndexes = visualClassifications.map((result, index) => result.status === "uncertain" ? index : -1).filter(index => index >= 0);
+    materialValues.debug = {
+      optionalOcr:false,
+      activeCells:materialCells.filter(cell => !cell.blank).length,
+      visualResolved:visualClassifications.filter(result => result.status !== "uncertain").length,
+      ocrRequested:ocrIndexes.length,
+      mappedValues:0
+    };
     try {
-      worker = await Tesseract.createWorker("eng", 1, {
-        workerPath:absoluteOcrUrl(OCR_ASSETS.worker),
-        corePath:absoluteOcrUrl(OCR_ASSETS.core),
-        langPath:absoluteOcrUrl(OCR_ASSETS.language),
-        workerBlobURL:false,
-        logger:message => {
-          if (message?.status === "recognizing text") setRecipeImportProgress(t("importAnalyzing"));
-          else if (message?.status === "loading language traineddata") setRecipeImportProgress(t("importReading"));
-          else if (message?.status === "loading tesseract core") setRecipeImportProgress(t("importCorrecting"));
-        }
-      });
-      activeOcrWorker = worker;
-      await worker.setParameters({
-        tessedit_pageseg_mode:"11",
-        tessedit_char_whitelist:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789/-",
-        preserve_interword_spaces:"0",
-        textord_tabfind_find_tables:"0",
-        user_defined_dpi:"220"
-      });
-      const materialCells = cellPlan.filter(cell => cell.kind === "material");
       if (runId !== recipeImportRunId) throw new Error("ocr-cancelled");
-      const materialSheet = buildRecipeOcrSheet(materialCells, BUCKETS_PER_TRIP);
-      setRecipeImportProgress(t("importCellReading", { current:1, total:1 }));
-      const materialResult = await worker.recognize(materialSheet.canvas, {}, { text:true, blocks:true });
-      const materialValues = readRecipeOcrSheet(materialSheet, materialResult?.data);
-      const numericCodesByPrefix = {};
-      const normalizedCodeCounts = {};
-      materialValues.forEach(value => {
-        const normalized = normalizeRecipeOcrCode(value?.raw, value?.confidence);
-        if (!/^[A-Z]\d$/.test(normalized.value || "") || normalized.status === "unresolved") return;
-        const prefix = normalized.value[0];
-        if (!numericCodesByPrefix[prefix]) numericCodesByPrefix[prefix] = new Set();
-        numericCodesByPrefix[prefix].add(normalized.value);
-      });
-      materialValues.forEach(value => {
-        const normalized = normalizeRecipeOcrCode(value?.raw, value?.confidence);
-        if (!["exact", "corrected"].includes(normalized.status) || !normalized.value) return;
-        normalizedCodeCounts[normalized.value] = (normalizedCodeCounts[normalized.value] || 0) + 1;
-      });
-      await worker.setParameters({
-        tessedit_pageseg_mode:"10",
-        tessedit_char_whitelist:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789/-",
-        preserve_interword_spaces:"0",
-        user_defined_dpi:"220"
-      });
+      try {
+        if (!ocrIndexes.length) throw new Error("ocr-not-needed");
+        const Tesseract = await loadOfflineOcrLibrary();
+        worker = await Tesseract.createWorker("eng", 1, {
+          workerPath:absoluteOcrUrl(OCR_ASSETS.worker),
+          corePath:absoluteOcrUrl(OCR_ASSETS.core),
+          langPath:absoluteOcrUrl(OCR_ASSETS.language),
+          workerBlobURL:false,
+          logger:message => {
+            if (message?.status === "recognizing text") setRecipeImportProgress(t("importAnalyzing"));
+            else if (message?.status === "loading language traineddata") setRecipeImportProgress(t("importReading"));
+            else if (message?.status === "loading tesseract core") setRecipeImportProgress(t("importCorrecting"));
+          }
+        });
+        activeOcrWorker = worker;
+        await worker.setParameters({
+          tessedit_pageseg_mode:"11",
+          tessedit_char_whitelist:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789/-",
+          preserve_interword_spaces:"0",
+          textord_tabfind_find_tables:"0",
+          user_defined_dpi:"220"
+        });
+        const ocrCells = ocrIndexes.map(index => materialCells[index]);
+        const materialSheet = buildRecipeOcrSheet(ocrCells, Math.min(BUCKETS_PER_TRIP, ocrCells.length));
+        setRecipeImportProgress(t("importCellReading", { current:1, total:1 }));
+        materialResult = await worker.recognize(materialSheet.canvas, {}, { text:true, blocks:true });
+        const ocrValues = readRecipeOcrSheet(materialSheet, materialResult?.data);
+        ocrIndexes.forEach((cellIndex, valueIndex) => { materialValues[cellIndex] = ocrValues[valueIndex]; });
+        materialValues.debug = Object.assign(materialValues.debug, ocrValues.debug, { optionalOcr:true, ocrRequested:ocrIndexes.length });
+      } catch(error) {
+        if (runId !== recipeImportRunId || error?.message === "ocr-cancelled") throw error;
+        if (error?.message !== "ocr-not-needed") materialValues.debug.error = String(error?.message || error);
+      }
       for (let index = 0; index < materialCells.length; index++) {
         if (runId !== recipeImportRunId) throw new Error("ocr-cancelled");
         const cell = materialCells[index];
-        let raw = cell.blank ? "" : recipeOcrCellText(materialValues[index]?.raw);
-        const ocrRaw = raw;
-        let rawConfidence = cell.blank ? 1 : Math.max(0, Math.min(1, Number(materialValues[index]?.confidence) || 0));
-        if (!cell.blank && !raw) raw = "UNREADABLE";
+        const raw = cell.blank ? "" : recipeOcrCellText(materialValues[index]?.raw);
+        const rawConfidence = cell.blank ? 1 : Math.max(0, Math.min(1, Number(materialValues[index]?.confidence) || 0));
         const bucketIndex = prepared.grid.bucketColumns.indexOf(cell.columnIndex);
-        const evidenceFor = normalized => ({
-          correctColumn:bucketIndex >= 0,
-          validRowAlignment:prepared.grid.rowHeightDeviation < .42 && prepared.grid.confidence >= .65,
-          rowOrder:true,
-          repeatedCode:Boolean(normalized?.value && normalizedCodeCounts[normalized.value] > 1)
-        });
-        let normalized = normalizeRecipeOcrCode(raw, rawConfidence);
-        let evidence = evidenceFor(normalized);
-        normalized = Object.assign(normalized, {
-          rawConfidence,
-          confidence:recipeFinalCellConfidence(normalized, rawConfidence, evidence),
-          evidence
-        });
-        if (!cell.blank && (normalized.status === "unresolved" || normalized.confidence < .9)) {
-          const retry = await worker.recognize(cell.canvas, {}, { text:true });
-          const retryRaw = recipeOcrCellText(retry?.data);
-          const retryConfidence = Math.max(0, Math.min(1, Number(retry?.data?.confidence) / 100 || 0));
-          let retryNormalized = normalizeRecipeOcrCode(retryRaw, retryConfidence);
-          const retryEvidence = evidenceFor(retryNormalized);
-          retryNormalized = Object.assign(retryNormalized, {
-            rawConfidence:retryConfidence,
-            confidence:recipeFinalCellConfidence(retryNormalized, retryConfidence, retryEvidence),
-            evidence:retryEvidence
-          });
-          if (
-            (normalized.status === "unresolved" && retryNormalized.status !== "unresolved") ||
-            retryNormalized.confidence > normalized.confidence
-          ) {
-            raw = retryRaw || raw;
-            rawConfidence = retryConfidence;
-            normalized = retryNormalized;
-            evidence = retryEvidence;
-          }
-        }
-        if (normalized.status === "unresolved" && /^[A-Z]$/i.test(raw)) {
-          const candidates = Array.from(numericCodesByPrefix[raw.toUpperCase()] || []);
-          if (candidates.length === 1) {
-            raw = candidates[0];
-            rawConfidence = Math.max(.72, rawConfidence);
-            normalized = normalizeRecipeOcrCode(raw, rawConfidence);
-            evidence = evidenceFor(normalized);
-            normalized = Object.assign(normalized, {
-              rawConfidence,
-              confidence:recipeFinalCellConfidence(normalized, rawConfidence, evidence),
-              evidence
-            });
-          }
-        }
+        const evidence = evidenceForCell(cell);
+        const normalized = raw || visualClassifications[index].status === "uncertain"
+          ? classifyRecipeMaterialCell(cell, raw, rawConfidence, evidence)
+          : visualClassifications[index];
         cellsByRow[cell.rowIndex].buckets[bucketIndex] = {
           raw,
           confidence:normalized.confidence,
@@ -6037,14 +6371,15 @@ body.dark-mode .recipe-accept-new {
           blank:cell.blank
         };
         const debugRecord = recipeCellDebugRecord(cell, raw, rawConfidence, normalized, evidence);
-        debugRecord.ocrRaw = ocrRaw;
+        debugRecord.candidates = normalized.candidates;
+        debugRecord.visualMargin = normalized.evidence.visualMargin;
         debugCells.push(debugRecord);
       }
 
       const detectedRows = cellsByRow.map((cells, rowIndex) => ({ cells, rowIndex }))
         .filter(({ cells }) => recipeDetectedRowHasContent(cells.buckets));
       const rows = detectedRows.map(({ cells, rowIndex }) => ({
-        buckets:cells.buckets.map(cell => cell?.raw || null),
+        buckets:cells.buckets.map(cell => cell?.meta?.value || null),
         bucketMeta:cells.buckets.map(cell => cell?.meta || null),
         ocrConfidence:Object.fromEntries(cells.buckets.map((cell, index) => ["bucket" + (index + 1), cell?.confidence ?? 1])),
         tableAlignmentConfidence:prepared.grid.confidence,
@@ -6054,7 +6389,7 @@ body.dark-mode .recipe-accept-new {
       return {
         rows:normalizeRecipeRows(rows),
         native:false,
-        engine:"tesseract-cell",
+        engine:"structured-template-classifier",
         cells:debugCells,
         cellPlan,
         scannedRowCount:cellsByRow.length,
@@ -6099,8 +6434,135 @@ body.dark-mode .recipe-accept-new {
   }
 
   function recipeIssueLabel(reason){
-    if (reason === "ocr-artifact") return t("importReasonArtifact");
+    if (["ocr-artifact", "likely-artifact"].includes(reason)) return t("importReasonArtifact");
     return t("importReasonUnknown");
+  }
+
+  function recipeReviewIssues(){
+    return recipeImportIssues(recipeImportDraft?.rows || []).filter(issue => issue.field.startsWith("bucket"));
+  }
+
+  function updateRecipeCell(rowIndex, bucketIndex, value, status = "manual"){
+    const row = recipeImportDraft?.rows?.[rowIndex];
+    if (!row) return;
+    const previous = Object.assign({}, recipeCellMeta(row, bucketIndex));
+    recipeImportDraft.history = Array.isArray(recipeImportDraft.history) ? recipeImportDraft.history : [];
+    recipeImportDraft.history.push({ rowIndex, bucketIndex, previous });
+    recipeImportDraft.history = recipeImportDraft.history.slice(-30);
+    const previewDataUrl = previous.previewDataUrl || "";
+    row.bucketMeta[bucketIndex] = value
+      ? { raw:value, value, status, confidence:1, reason:"operator-confirmed", candidates:previous.candidates || [], previewDataUrl }
+      : { raw:"", value:null, status:"empty", confidence:1, reason:"operator-empty", candidates:[], previewDataUrl };
+    row.buckets[bucketIndex] = value || null;
+    row.plannedBucketCount = row.buckets.filter(Boolean).length;
+    row.isPartialTrip = row.plannedBucketCount > 0 && row.plannedBucketCount < BUCKETS_PER_TRIP;
+    refreshRecipeRowConfidence(row);
+  }
+
+  function updateRecipeRowChoices(rowIndex, values){
+    const row = recipeImportDraft?.rows?.[rowIndex];
+    if (!row) return;
+    values.slice(0, BUCKETS_PER_TRIP).forEach((value, bucketIndex) => updateRecipeCell(rowIndex, bucketIndex, recipeKnownCodeFor(value) || null));
+  }
+
+  function renderLocalRegistryControls(){
+    const groupSelect = document.getElementById("recipeLocalGroupSelect");
+    const mappingSelect = document.getElementById("recipeLocalMappingSelect");
+    if (!groupSelect || !mappingSelect) return;
+    const previousGroup = groupSelect.value;
+    groupSelect.innerHTML = "";
+    ORE_REGISTRY.groups.filter(group => group.enabled).forEach(group => {
+      const option = document.createElement("option");
+      option.value = group.id;
+      option.textContent = group.label;
+      groupSelect.appendChild(option);
+    });
+    if (Array.from(groupSelect.options).some(option => option.value === previousGroup)) groupSelect.value = previousGroup;
+    const group = ORE_REGISTRY.groups.find(candidate => candidate.id === groupSelect.value && candidate.enabled);
+    mappingSelect.innerHTML = "";
+    (group?.codes || []).forEach(code => {
+      const option = document.createElement("option");
+      option.value = code;
+      option.textContent = code;
+      mappingSelect.appendChild(option);
+    });
+    document.getElementById("btnRecipeShowLocalRegistry").textContent = t("importAddLocalCode");
+    document.getElementById("recipeLocalCodeInput").placeholder = t("importLocalCode");
+    groupSelect.setAttribute("aria-label", t("importLocalGroup"));
+    mappingSelect.setAttribute("aria-label", t("importLocalColumn"));
+    document.getElementById("btnRecipeSaveLocalCode").textContent = t("importLocalAdd");
+    document.getElementById("recipeLocalRegistryNote").textContent = t("importLocalNote");
+  }
+
+  function renderRecipeFocusedReview(){
+    const panel = document.getElementById("recipeFocusReview");
+    const issues = recipeReviewIssues();
+    panel.hidden = !issues.length;
+    if (!issues.length) return;
+    recipeImportDraft.reviewCursor = Math.max(0, Math.min(Number(recipeImportDraft.reviewCursor) || 0, issues.length - 1));
+    const issue = issues[recipeImportDraft.reviewCursor];
+    const row = recipeImportDraft.rows[issue.row];
+    const bucketIndex = Number(issue.field.slice(-1)) - 1;
+    const cell = recipeCellMeta(row, bucketIndex);
+    document.getElementById("recipeFocusTitle").textContent = t("importResolveTitle");
+    document.getElementById("recipeFocusProgress").textContent = t("importResolveProgress", { current:recipeImportDraft.reviewCursor + 1, total:issues.length });
+    document.getElementById("recipeFocusContext").textContent = t("importResolveContext", { truck:row.truck, bucket:bucketIndex + 1 });
+    const preview = document.getElementById("recipeCellPreview");
+    preview.src = cell.previewDataUrl || "";
+    document.getElementById("recipeCellPreviewWrap").hidden = !cell.previewDataUrl;
+    preview.alt = t("importResolveContext", { truck:row.truck, bucket:bucketIndex + 1 });
+    const candidates = document.getElementById("recipeCandidateList");
+    candidates.innerHTML = "";
+    const shown = new Set();
+    (cell.candidates || []).slice(0, 3).forEach((candidate, index) => {
+      const code = recipeKnownCodeFor(candidate.code);
+      if (!code || shown.has(code)) return;
+      shown.add(code);
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = index === 0 ? "primary-choice" : "";
+      button.dataset.resolveRecipeCell = code;
+      button.dataset.recipeRow = String(issue.row);
+      button.dataset.recipeBucket = String(bucketIndex);
+      button.textContent = code;
+      candidates.appendChild(button);
+    });
+    const empty = document.createElement("button");
+    empty.type = "button";
+    empty.dataset.resolveRecipeCell = "";
+    empty.dataset.recipeRow = String(issue.row);
+    empty.dataset.recipeBucket = String(bucketIndex);
+    empty.textContent = t("importConfirmedEmptyAction");
+    candidates.appendChild(empty);
+
+    document.getElementById("recipeKnownPickerLabel").textContent = t("importOtherKnown");
+    renderLocalRegistryControls();
+    const grid = document.getElementById("recipeKnownCodeGrid");
+    grid.innerHTML = "";
+    activeRecipeCodes().forEach(code => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.dataset.resolveRecipeCell = code;
+      button.dataset.recipeRow = String(issue.row);
+      button.dataset.recipeBucket = String(bucketIndex);
+      button.textContent = code;
+      grid.appendChild(button);
+    });
+    document.getElementById("btnRecipeSamePrevious").textContent = t("importSamePrevious");
+    document.getElementById("btnRecipeSamePrevious").disabled = issue.row === 0;
+    document.getElementById("btnRecipeSamePrevious").dataset.recipeRow = String(issue.row);
+    document.getElementById("btnRecipeDuplicatePrevious").textContent = t("importDuplicatePrevious");
+    document.getElementById("btnRecipeDuplicatePrevious").disabled = bucketIndex === 0 || !recipeKnownCodeFor(row.buckets[bucketIndex - 1]);
+    document.getElementById("btnRecipeDuplicatePrevious").dataset.recipeRow = String(issue.row);
+    document.getElementById("btnRecipeDuplicatePrevious").dataset.recipeBucket = String(bucketIndex);
+    document.getElementById("btnRecipeClearRow").textContent = t("importClearRow");
+    document.getElementById("btnRecipeClearRow").dataset.recipeRow = String(issue.row);
+    document.getElementById("btnRecipeUndo").textContent = t("importUndoCorrection");
+    document.getElementById("btnRecipeUndo").disabled = !recipeImportDraft.history?.length;
+    document.getElementById("btnRecipeIssuePrevious").textContent = t("importPrevious");
+    document.getElementById("btnRecipeIssuePrevious").disabled = recipeImportDraft.reviewCursor <= 0;
+    document.getElementById("btnRecipeIssueNext").textContent = t("importNext");
+    document.getElementById("btnRecipeIssueNext").disabled = recipeImportDraft.reviewCursor >= issues.length - 1;
   }
 
   function renderRecipeReview(){
@@ -6109,7 +6571,6 @@ body.dark-mode .recipe-accept-new {
     const meta = document.getElementById("recipeReviewMeta");
     const confirm = document.getElementById("btnRecipeConfirm");
     const conflict = document.getElementById("recipeImportConflict");
-    const knownCodes = document.getElementById("recipeKnownCodes");
     body.innerHTML = "";
     const rows = recipeImportDraft?.rows || [];
     const issues = recipeImportIssues(rows);
@@ -6118,12 +6579,9 @@ body.dark-mode .recipe-accept-new {
     conflict.hidden = !hasExistingData;
     document.getElementById("btnRecipeReplace").classList.toggle("active", recipeImportDraft?.applyMode === "replace");
     document.getElementById("btnRecipeMerge").classList.toggle("active", recipeImportDraft?.applyMode === "merge");
-    knownCodes.innerHTML = "";
-    ALL_ORES.forEach(code => {
-      const option = document.createElement("option");
-      option.value = code;
-      knownCodes.appendChild(option);
-    });
+    document.getElementById("recipeStartTruckLabel").textContent = t("importStartTruck");
+    document.getElementById("recipeStartTruck").value = String(recipeImportDraft?.startTruck || 1);
+    document.getElementById("recipeFullReviewLabel").textContent = t("importFullReview");
 
     meta.innerHTML = "";
     [[t("importDetectedTrips", { count:rows.length }), ""], [issues.length ? t("importUnresolved", { count:issues.length }) : t("importKnown"), issues.length ? "low" : ""]].forEach(([label, tone]) => {
@@ -6138,17 +6596,27 @@ body.dark-mode .recipe-accept-new {
     averageBadge.textContent = t("importAverageConfidence", { percent:averageConfidence });
     meta.appendChild(averageBadge);
 
-    const draftSummary = recipeDraftSummary(rows);
     const summary = document.getElementById("recipeReviewSummary");
-    const materialDetail = Object.entries(draftSummary.materials).map(([code, count]) => {
-      const percentage = draftSummary.buckets ? (count / draftSummary.buckets * 100).toFixed(1).replace(/\.0$/, "") : "0";
-      const tripEquivalent = (count / BUCKETS_PER_TRIP).toFixed(2).replace(/0+$/, "").replace(/\.$/, "");
-      return code + ": " + count + " b, " + tripEquivalent + " v, " + percentage + "%";
-    }).join(" | ");
-    summary.innerHTML = "<div><strong>" + (issues.length ? t("importProvisional") + " - " : "") + t("importTrips") + "</strong>" + draftSummary.trips + "</div>" +
-      "<div><strong>" + t("importBuckets") + "</strong>" + draftSummary.buckets + "</div>" +
-      "<div><strong>" + t("importPlannedTonnes") + "</strong>" + draftSummary.plannedTonnes.toFixed(1).replace(/\.0$/, "") + " t</div>" +
-      "<div style=\"grid-column:1 / -1\"><strong>" + t("importMaterials") + "</strong>" + materialDetail + "</div>";
+    const allCells = rows.flatMap(row => Array.from({ length:BUCKETS_PER_TRIP }, (_, index) => recipeCellMeta(row, index)));
+    const recognizedCount = allCells.filter(cell => recipeCellIsResolved(cell) && cell.value).length;
+    const emptyCount = allCells.filter(cell => cell.status === "empty").length;
+    if (issues.length) {
+      summary.innerHTML = "<div><strong>" + t("importRecognizedCount", { count:recognizedCount }) + "</strong></div>" +
+        "<div><strong>" + t("importEmptyCount", { count:emptyCount }) + "</strong></div>" +
+        "<div><strong>" + t("importConfirmCount", { count:issues.length }) + "</strong></div>" +
+        "<div style=\"grid-column:1 / -1\"><strong>" + t("importTotalsLocked") + "</strong></div>";
+    } else {
+      const draftSummary = recipeDraftSummary(rows);
+      const materialDetail = Object.entries(draftSummary.materials).map(([code, count]) => {
+        const percentage = draftSummary.buckets ? (count / draftSummary.buckets * 100).toFixed(1).replace(/\.0$/, "") : "0";
+        const tripEquivalent = (count / BUCKETS_PER_TRIP).toFixed(2).replace(/0+$/, "").replace(/\.$/, "");
+        return code + ": " + count + " b, " + tripEquivalent + " v, " + percentage + "%";
+      }).join(" | ");
+      summary.innerHTML = "<div><strong>" + t("importTrips") + "</strong>" + draftSummary.trips + "</div>" +
+        "<div><strong>" + t("importBuckets") + "</strong>" + draftSummary.buckets + "</div>" +
+        "<div><strong>" + t("importPlannedTonnes") + "</strong>" + draftSummary.plannedTonnes.toFixed(1).replace(/\.0$/, "") + " t</div>" +
+        "<div style=\"grid-column:1 / -1\"><strong>" + t("importMaterials") + "</strong>" + materialDetail + "</div>";
+    }
 
     rows.forEach((row, index) => {
       const tr = document.createElement("tr");
@@ -6159,33 +6627,27 @@ body.dark-mode .recipe-accept-new {
       tr.appendChild(truck);
       Array.from({ length:BUCKETS_PER_TRIP }, (_, bucketIndex) => recipeCellMeta(row, bucketIndex)).forEach((cell, bucketIndex) => {
         const td = document.createElement("td");
-        const input = document.createElement("input");
-        input.value = cell.value || "";
-        input.dataset.recipeRow = String(index);
-        input.dataset.recipeField = "bucket" + (bucketIndex + 1);
-        input.autocomplete = "off";
-        input.setAttribute("list", "recipeKnownCodes");
-        if (!cell.value && row.isPartialTrip) input.placeholder = t("importConfirmedEmpty");
-        td.appendChild(input);
+        const select = document.createElement("select");
+        select.dataset.recipeRow = String(index);
+        select.dataset.recipeField = "bucket" + (bucketIndex + 1);
+        const emptyOption = document.createElement("option");
+        emptyOption.value = "";
+        emptyOption.textContent = t("importConfirmedEmptyAction");
+        select.appendChild(emptyOption);
+        activeRecipeCodes().forEach(code => {
+          const option = document.createElement("option");
+          option.value = code;
+          option.textContent = code;
+          select.appendChild(option);
+        });
+        select.value = recipeKnownCodeFor(cell.value) || "";
+        td.appendChild(select);
         if (cell?.status !== "empty" && Number(cell?.confidence) < .9) td.classList.add("low-confidence-cell");
-        if (cell?.status === "corrected") {
-          const note = document.createElement("span");
-          note.className = "recipe-cell-note corrected";
-          note.textContent = t("importCorrection", { raw:cell.raw, value:cell.value });
-          td.appendChild(note);
-        } else if (cell?.status === "unresolved") {
+        if (cell?.status === "uncertain") {
           const note = document.createElement("span");
           note.className = "recipe-cell-note unresolved";
           note.textContent = recipeIssueLabel(cell.reason);
           td.appendChild(note);
-          if (cell.canMarkAsNew) {
-            const accept = document.createElement("button");
-            accept.type = "button";
-            accept.className = "recipe-accept-new";
-            accept.dataset.acceptNewCode = String(index) + ":" + String(bucketIndex);
-            accept.textContent = t("importNewCode");
-            td.appendChild(accept);
-          }
         }
         tr.appendChild(td);
       });
@@ -6214,6 +6676,7 @@ body.dark-mode .recipe-accept-new {
     warning.hidden = !message;
     warning.textContent = message;
     confirm.disabled = !rows.length || Boolean(issues.length) || rows.length > ROWS || (hasExistingData && !recipeImportDraft?.applyMode);
+    renderRecipeFocusedReview();
   }
 
   function recipeRowIsComplete(row){
@@ -6223,10 +6686,10 @@ body.dark-mode .recipe-accept-new {
   function evaluateRecipeRecognition(prepared, recognition){
     const rows = recognition?.rows || [];
     const materialCells = (recognition?.cells || []).filter(cell => cell.type === "material" && cell.inkRatio >= .0045);
-    const recognized = materialCells.filter(cell => ["exact", "corrected"].includes(cell.status)).length;
-    const unresolved = materialCells.filter(cell => cell.status === "unresolved").length;
+    const recognized = materialCells.filter(cell => cell.status === "recognized").length;
+    const unresolved = materialCells.filter(cell => cell.status === "uncertain").length;
     const lowConfidence = materialCells.filter(cell => Number(cell.finalConfidence) < .9).length;
-    const headerArtifacts = materialCells.filter(cell => cell.normalizationReason === "ocr-artifact").length;
+    const headerArtifacts = materialCells.filter(cell => cell.normalizationReason === "likely-artifact").length;
     const plausibleRatio = recognized / Math.max(1, recognized + unresolved);
     const issues = recipeImportIssues(rows);
     const scannedRowCount = Number(recognition?.scannedRowCount) || rows.length;
@@ -6237,10 +6700,7 @@ body.dark-mode .recipe-accept-new {
     const strongGeometry = Boolean(prepared?.grid?.valid) &&
       prepared.grid.confidence >= .68 &&
       prepared.grid.rowHeightDeviation < .42;
-    const usefulReview = rows.length >= 2 &&
-      recognized >= Math.max(3, Math.ceil(materialCells.length * .45)) &&
-      plausibleRatio >= .45 &&
-      headerArtifacts <= Math.max(2, Math.ceil(materialCells.length * .08));
+    const usefulReview = rows.length >= 1 && materialCells.length >= rows.length;
     const reasons = [];
     if (!prepared?.ok || !prepared?.grid?.valid) reasons.push("structure");
     if (!rowCountMatches) reasons.push("rows");
@@ -6460,7 +6920,35 @@ body.dark-mode .recipe-accept-new {
   }
 
   function openRecipeManualReview(){
-    recipeImportDraft = createRecipeImportDraft([], false);
+    const engine = window.RecetteOcrEngine;
+    const plan = recipePreparedPhoto?.grid?.valid ? engine.buildCellPlan(recipePreparedPhoto) : [];
+    const rowCount = recipePreparedPhoto?.grid?.dataRowCount || 1;
+    const rows = Array.from({ length:rowCount }, (_, rowIndex) => {
+      const rowCells = plan.filter(cell => cell.rowIndex === rowIndex);
+      return {
+        buckets:[null, null, null],
+        bucketMeta:Array.from({ length:BUCKETS_PER_TRIP }, (_, bucketIndex) => {
+          const columnIndex = recipePreparedPhoto?.grid?.bucketColumns?.[bucketIndex];
+          const cell = rowCells.find(candidate => candidate.columnIndex === columnIndex);
+          if (cell?.blank) return { raw:"", value:null, status:"empty", confidence:1, reason:"visual-empty", candidates:[], previewDataUrl:cell.rawCanvas.toDataURL("image/jpeg", .82) };
+          const ranked = cell ? engine.rankMaterialCandidates(cell.canvas, materialTemplateLibrary()).candidates.slice(0, 5) : [];
+          return {
+            raw:"",
+            value:null,
+            status:"uncertain",
+            confidence:0,
+            reason:"manual-entry",
+            candidates:ranked.map(candidate => ({ code:candidate.code, score:Number(candidate.score.toFixed(3)) })),
+            previewDataUrl:cell?.rawCanvas?.toDataURL ? cell.rawCanvas.toDataURL("image/jpeg", .82) : ""
+          };
+        }),
+        sourceLine:rowIndex + 1
+      };
+    }).filter(row => row.bucketMeta.some(cell => cell.status !== "empty"));
+    recipeImportDraft = createRecipeImportDraft(rows.length ? rows : [{
+      buckets:[null, null, null],
+      bucketMeta:Array.from({ length:BUCKETS_PER_TRIP }, () => ({ raw:"", value:null, status:"uncertain", confidence:0, reason:"manual-entry", candidates:[] }))
+    }], false);
     const preview = recipePreparedPhoto?.tableCanvas || recipeImportSourceCanvas;
     if (preview) drawCanvasTo("recipeReviewCanvas", preview);
     setRecipeImportStage("review");
@@ -6474,7 +6962,7 @@ body.dark-mode .recipe-accept-new {
       setStatus(t("importTooMany", { count:ROWS }));
       return;
     }
-    draft.rows = normalizeRecipeRows(draft.rows);
+    draft.rows = normalizeRecipeRows(draft.rows, draft.startTruck);
     if (!draft.rows.length || recipeImportIssues(draft.rows).length) {
       renderRecipeReview();
       return;
@@ -6524,11 +7012,19 @@ body.dark-mode .recipe-accept-new {
       source:"photo",
       rowIndexes,
       rows:draft.rows.map((row, index) => {
-        const normalized = normalizeRecipeImportRow(row, index);
+        const normalized = normalizeRecipeImportRow(row, index, draft.startTruck);
         return {
           truck:normalized.truck,
           buckets:normalized.buckets,
-          bucketMeta:normalized.bucketMeta,
+          bucketMeta:normalized.bucketMeta.map(cell => ({
+            raw:cell.raw,
+            value:cell.value,
+            status:cell.status,
+            confidence:cell.confidence,
+            rawConfidence:cell.rawConfidence,
+            reason:cell.reason,
+            evidence:cell.evidence
+          })),
           plannedBucketCount:normalized.plannedBucketCount,
           isPartialTrip:normalized.isPartialTrip,
           confirmedPartialTrip:normalized.confirmedPartialTrip,
@@ -7174,56 +7670,128 @@ body.dark-mode .recipe-accept-new {
     }
     recipeImportDraft.rows.push({
       buckets:[null, null, null],
+      bucketMeta:Array.from({ length:BUCKETS_PER_TRIP }, () => ({ raw:"", value:null, status:"uncertain", confidence:0, reason:"manual-entry", candidates:[] })),
       confidence:0,
       sourceLine:recipeImportDraft.rows.length + 1
     });
-    recipeImportDraft.rows = normalizeRecipeRows(recipeImportDraft.rows);
+    recipeImportDraft.rows = normalizeRecipeRows(recipeImportDraft.rows, recipeImportDraft.startTruck);
     renderRecipeReview();
-    const inputs = document.querySelectorAll('#recipeReviewRows input[data-recipe-row="' + (recipeImportDraft.rows.length - 1) + '"]');
-    if (inputs[0]) inputs[0].focus();
-  });
-  document.getElementById("recipeReviewRows").addEventListener("input", event => {
-    const input = event.target.closest("input[data-recipe-row]");
-    if (!input || !recipeImportDraft) return;
-    const row = recipeImportDraft.rows[Number(input.dataset.recipeRow)];
-    if (!row) return;
-    const field = input.dataset.recipeField;
-    const bucketIndex = Number(field.slice(-1)) - 1;
-    row.buckets[bucketIndex] = input.value.trim() || null;
-    row.bucketMeta[bucketIndex] = null;
-    const hasExistingData = page().rows.some(rowStarted);
-    document.getElementById("btnRecipeConfirm").disabled = !recipeImportDraft.rows.length ||
-      recipeImportIssues(recipeImportDraft.rows).length > 0 ||
-      (hasExistingData && !recipeImportDraft.applyMode);
   });
   document.getElementById("recipeReviewRows").addEventListener("change", event => {
-    const input = event.target.closest("input[data-recipe-row]");
-    if (!input || !recipeImportDraft) return;
-    const row = recipeImportDraft.rows[Number(input.dataset.recipeRow)];
-    if (!row) return;
-    const bucketIndex = Number(input.dataset.recipeField.slice(-1)) - 1;
-    row.buckets[bucketIndex] = input.value.trim() || null;
-    row.bucketMeta[bucketIndex] = null;
-    recipeImportDraft.rows = normalizeRecipeRows(recipeImportDraft.rows);
+    const select = event.target.closest("select[data-recipe-row]");
+    if (!select || !recipeImportDraft) return;
+    const rowIndex = Number(select.dataset.recipeRow);
+    const bucketIndex = Number(select.dataset.recipeField.slice(-1)) - 1;
+    updateRecipeCell(rowIndex, bucketIndex, recipeKnownCodeFor(select.value) || null);
     renderRecipeReview();
   });
   document.getElementById("recipeReviewRows").addEventListener("click", event => {
     if (!recipeImportDraft) return;
-    const accept = event.target.closest("[data-accept-new-code]");
-    if (accept) {
-      const [rowIndex, bucketIndex] = accept.dataset.acceptNewCode.split(":").map(Number);
-      const row = recipeImportDraft.rows[rowIndex];
-      if (row?.bucketMeta?.[bucketIndex]) row.bucketMeta[bucketIndex].acceptedAsNew = true;
-      recipeImportDraft.rows = normalizeRecipeRows(recipeImportDraft.rows);
-      renderRecipeReview();
-      return;
-    }
     const button = event.target.closest("[data-remove-recipe-row]");
     if (!button) return;
     recipeImportDraft.rows.splice(Number(button.dataset.removeRecipeRow), 1);
-    recipeImportDraft.rows = normalizeRecipeRows(recipeImportDraft.rows);
+    recipeImportDraft.rows = normalizeRecipeRows(recipeImportDraft.rows, recipeImportDraft.startTruck);
     renderRecipeReview();
   });
+  document.getElementById("recipeStartTruck").addEventListener("change", event => {
+    if (!recipeImportDraft) return;
+    const value = Math.max(1, Math.min(999, Math.round(Number(event.target.value) || 1)));
+    recipeImportDraft.startTruck = value;
+    recipeImportDraft.rows = normalizeRecipeRows(recipeImportDraft.rows, value);
+    renderRecipeReview();
+  });
+  document.getElementById("recipeFocusReview").addEventListener("click", event => {
+    if (!recipeImportDraft) return;
+    if (event.target.id === "btnRecipeShowLocalRegistry") {
+      const form = document.getElementById("recipeLocalRegistryForm");
+      form.hidden = !form.hidden;
+      if (!form.hidden) document.getElementById("recipeLocalCodeInput").focus();
+      return;
+    }
+    if (event.target.id === "btnRecipeSaveLocalCode") {
+      const code = document.getElementById("recipeLocalCodeInput").value.trim().toUpperCase();
+      const groupId = document.getElementById("recipeLocalGroupSelect").value;
+      const mapsTo = document.getElementById("recipeLocalMappingSelect").value;
+      const group = ORE_REGISTRY.groups.find(candidate => candidate.id === groupId && candidate.enabled);
+      const valid = /^[A-Z][A-Z0-9/-]{1,9}$/.test(code) && !recipeKnownCodeFor(code) && group?.codes.includes(mapsTo);
+      if (!valid) {
+        setStatus(t("importLocalInvalid"));
+        return;
+      }
+      const nextRegistry = customMaterialRegistry.concat({ code, groupId, mapsTo }).slice(-20);
+      try {
+        localStorage.setItem(CUSTOM_MATERIAL_REGISTRY_KEY, JSON.stringify(nextRegistry));
+        customMaterialRegistry = nextRegistry;
+        recipeMaterialTemplateLibrary = null;
+        document.getElementById("recipeLocalCodeInput").value = "";
+        document.getElementById("recipeLocalRegistryForm").hidden = true;
+        setStatus(t("importLocalSaved", { code }));
+        renderRecipeReview();
+      } catch(error) {
+        setStatus(t("offlineFail"));
+      }
+      return;
+    }
+    const choice = event.target.closest("[data-resolve-recipe-cell]");
+    if (choice) {
+      updateRecipeCell(Number(choice.dataset.recipeRow), Number(choice.dataset.recipeBucket), recipeKnownCodeFor(choice.dataset.resolveRecipeCell) || null);
+      document.getElementById("recipeKnownPicker").open = false;
+      renderRecipeReview();
+      return;
+    }
+    if (event.target.id === "btnRecipeIssuePrevious") {
+      recipeImportDraft.reviewCursor = Math.max(0, (recipeImportDraft.reviewCursor || 0) - 1);
+      renderRecipeFocusedReview();
+      return;
+    }
+    if (event.target.id === "btnRecipeIssueNext") {
+      recipeImportDraft.reviewCursor = Math.min(recipeReviewIssues().length - 1, (recipeImportDraft.reviewCursor || 0) + 1);
+      renderRecipeFocusedReview();
+      return;
+    }
+    if (event.target.id === "btnRecipeUndo") {
+      const entry = recipeImportDraft.history?.pop();
+      const row = entry && recipeImportDraft.rows[entry.rowIndex];
+      if (row) {
+        row.bucketMeta[entry.bucketIndex] = entry.previous;
+        row.buckets[entry.bucketIndex] = entry.previous.value || null;
+        refreshRecipeRowConfidence(row);
+      }
+      renderRecipeReview();
+      return;
+    }
+    if (event.target.id === "btnRecipeSamePrevious") {
+      const rowIndex = Number(event.target.dataset.recipeRow);
+      const previous = recipeImportDraft.rows[rowIndex - 1];
+      if (previous) updateRecipeRowChoices(rowIndex, previous.buckets);
+      renderRecipeReview();
+      return;
+    }
+    if (event.target.id === "btnRecipeDuplicatePrevious") {
+      const rowIndex = Number(event.target.dataset.recipeRow);
+      const bucketIndex = Number(event.target.dataset.recipeBucket);
+      const value = recipeKnownCodeFor(recipeImportDraft.rows[rowIndex]?.buckets?.[bucketIndex - 1]);
+      if (value) updateRecipeCell(rowIndex, bucketIndex, value);
+      renderRecipeReview();
+      return;
+    }
+    if (event.target.id === "btnRecipeClearRow") {
+      const rowIndex = Number(event.target.dataset.recipeRow);
+      const row = recipeImportDraft.rows[rowIndex];
+      if (row) {
+        recipeImportDraft.history = Array.isArray(recipeImportDraft.history) ? recipeImportDraft.history : [];
+        row.bucketMeta.forEach((cell, bucketIndex) => {
+          const previous = Object.assign({}, cell);
+          recipeImportDraft.history.push({ rowIndex, bucketIndex, previous });
+          row.bucketMeta[bucketIndex] = { raw:"", value:null, status:"uncertain", confidence:0, reason:"manual-entry", candidates:previous.candidates || [], previewDataUrl:previous.previewDataUrl || "" };
+          row.buckets[bucketIndex] = null;
+        });
+        refreshRecipeRowConfidence(row);
+      }
+      renderRecipeReview();
+    }
+  });
+  document.getElementById("recipeLocalGroupSelect").addEventListener("change", renderLocalRegistryControls);
   document.getElementById("recipeImportModal").addEventListener("click", event => {
     if (event.target.id === "recipeImportModal") closeRecipeImport();
   });
@@ -7480,7 +8048,12 @@ body.dark-mode .recipe-accept-new {
       readRecipeSegmentedCells,
       evaluateRecipeRecognition,
       recipeDraftSummary,
-      normalizeRecipeOcrCode
+      normalizeRecipeOcrCode,
+      constrainedOcrEvidence,
+      classifyRecipeMaterialCell,
+      normalizeRecipeRows,
+      recipeImportIssues,
+      activeRecipeCodes
     });
   }
   setInterval(() => { if (darkModeSetting === "auto") applyDarkMode(); }, 60000);

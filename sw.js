@@ -1,8 +1,8 @@
-const CACHE_NAME = "recette-touch-v5.20.0-bucket-only-operational";
+const CACHE_NAME = "recette-touch-v5.21.0-structured-recognition";
 const ASSETS = [
   "./",
   "./index.html",
-  "./recipe-ocr-engine.js?v=5.20.0",
+  "./recipe-ocr-engine.js?v=5.21.0",
   "./manifest.webmanifest",
   "./sw.js",
   "./icon-192.png",

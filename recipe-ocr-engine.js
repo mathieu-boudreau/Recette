@@ -700,6 +700,8 @@
       horizontal = clusterProjection(yScores, Math.max(Math.round(tableCanvas.width * .22), maximumY * .32))
         .map(line => line.position);
     }
+    const strongHorizontal = horizontal.filter(position => yScores[position] >= Math.max(tableCanvas.width * .45, maximumY * .55));
+    if (strongHorizontal.length >= 3) horizontal = strongHorizontal;
     horizontal = repairBoundaries(horizontal, tableCanvas.height);
 
     if (vertical[0] > tableCanvas.width * .06) vertical.unshift(0);
@@ -717,7 +719,7 @@
       ? rowHeights.reduce((sum, value) => sum + Math.abs(value - rowMedian), 0) / rowHeights.length / rowMedian
       : 1;
     const plausibleColumns = columnCount === 4 || columnCount === 5;
-    const plausibleRows = dataRowCount >= 2 && dataRowCount <= 60;
+    const plausibleRows = dataRowCount >= 1 && dataRowCount <= 60;
     const confidence = clamp(
       (plausibleColumns ? .45 : 0) +
       (plausibleRows ? .25 : 0) +
@@ -730,6 +732,7 @@
       binary,
       verticalLines:vertical,
       horizontalLines:horizontal,
+      horizontalLineScores:horizontal.map(position => Number(yScores[position]) || 0),
       columnCount,
       dataRowCount,
       hasQuarter:columnCount === 5,
@@ -895,6 +898,180 @@
     };
   }
 
+  const GLYPH_WIDTH = 112;
+  const GLYPH_HEIGHT = 48;
+
+  function foregroundBounds(binary){
+    let left = binary.width;
+    let top = binary.height;
+    let right = -1;
+    let bottom = -1;
+    const edgeX = Math.max(1, Math.round(binary.width * .015));
+    const edgeY = Math.max(1, Math.round(binary.height * .035));
+    for (let y = edgeY; y < binary.height - edgeY; y++) {
+      for (let x = edgeX; x < binary.width - edgeX; x++) {
+        if (!binary.data[y * binary.width + x]) continue;
+        left = Math.min(left, x);
+        right = Math.max(right, x);
+        top = Math.min(top, y);
+        bottom = Math.max(bottom, y);
+      }
+    }
+    return right >= left && bottom >= top
+      ? { left, top, right, bottom, width:right - left + 1, height:bottom - top + 1 }
+      : null;
+  }
+
+  function normalizedGlyphFromBinary(binary){
+    const bounds = foregroundBounds(binary);
+    const data = new Uint8Array(GLYPH_WIDTH * GLYPH_HEIGHT);
+    if (!bounds) return { width:GLYPH_WIDTH, height:GLYPH_HEIGHT, data, ink:0, aspect:0, xProfile:[], yProfile:[], zones:[] };
+    const margin = 3;
+    const scale = Math.min(
+      (GLYPH_WIDTH - margin * 2) / Math.max(1, bounds.width),
+      (GLYPH_HEIGHT - margin * 2) / Math.max(1, bounds.height)
+    );
+    const targetWidth = Math.max(1, Math.round(bounds.width * scale));
+    const targetHeight = Math.max(1, Math.round(bounds.height * scale));
+    const offsetX = Math.round((GLYPH_WIDTH - targetWidth) / 2);
+    const offsetY = Math.round((GLYPH_HEIGHT - targetHeight) / 2);
+    let ink = 0;
+    for (let targetY = 0; targetY < targetHeight; targetY++) {
+      const sourceTop = bounds.top + targetY / scale;
+      const sourceBottom = bounds.top + (targetY + 1) / scale;
+      const fromY = Math.max(bounds.top, Math.floor(sourceTop));
+      const toY = Math.min(bounds.bottom, Math.ceil(sourceBottom));
+      for (let targetX = 0; targetX < targetWidth; targetX++) {
+        const sourceLeft = bounds.left + targetX / scale;
+        const sourceRight = bounds.left + (targetX + 1) / scale;
+        const fromX = Math.max(bounds.left, Math.floor(sourceLeft));
+        const toX = Math.min(bounds.right, Math.ceil(sourceRight));
+        let active = false;
+        for (let sourceY = fromY; sourceY <= toY && !active; sourceY++) {
+          for (let sourceX = fromX; sourceX <= toX; sourceX++) {
+            if (binary.data[sourceY * binary.width + sourceX]) {
+              active = true;
+              break;
+            }
+          }
+        }
+        if (!active) continue;
+        data[(offsetY + targetY) * GLYPH_WIDTH + offsetX + targetX] = 1;
+        ink++;
+      }
+    }
+    const xProfile = Array.from({ length:GLYPH_WIDTH }, () => 0);
+    const yProfile = Array.from({ length:GLYPH_HEIGHT }, () => 0);
+    const zones = Array.from({ length:24 }, () => 0);
+    for (let y = 0; y < GLYPH_HEIGHT; y++) {
+      for (let x = 0; x < GLYPH_WIDTH; x++) {
+        if (!data[y * GLYPH_WIDTH + x]) continue;
+        xProfile[x]++;
+        yProfile[y]++;
+        const zoneX = Math.min(5, Math.floor(x / GLYPH_WIDTH * 6));
+        const zoneY = Math.min(3, Math.floor(y / GLYPH_HEIGHT * 4));
+        zones[zoneY * 6 + zoneX]++;
+      }
+    }
+    return {
+      width:GLYPH_WIDTH,
+      height:GLYPH_HEIGHT,
+      data,
+      ink,
+      aspect:bounds.width / Math.max(1, bounds.height),
+      xProfile,
+      yProfile,
+      zones
+    };
+  }
+
+  function normalizedGlyphFromCanvas(canvas){
+    return normalizedGlyphFromBinary(adaptiveBinaryFromCanvas(canvas));
+  }
+
+  function profileSimilarity(left, right){
+    const leftTotal = left.reduce((sum, value) => sum + value, 0);
+    const rightTotal = right.reduce((sum, value) => sum + value, 0);
+    if (!leftTotal || !rightTotal) return 0;
+    let difference = 0;
+    for (let index = 0; index < left.length; index++) {
+      difference += Math.abs(left[index] / leftTotal - right[index] / rightTotal);
+    }
+    return clamp(1 - difference / 2, 0, 1);
+  }
+
+  function shiftedPixelSimilarity(left, right){
+    let best = 0;
+    for (let shiftY = -2; shiftY <= 2; shiftY++) {
+      for (let shiftX = -3; shiftX <= 3; shiftX++) {
+        let overlap = 0;
+        let leftInk = 0;
+        let rightInk = 0;
+        for (let y = 0; y < left.height; y++) {
+          const rightY = y + shiftY;
+          for (let x = 0; x < left.width; x++) {
+            const leftValue = left.data[y * left.width + x];
+            if (leftValue) leftInk++;
+            const rightX = x + shiftX;
+            const rightValue = rightX >= 0 && rightX < right.width && rightY >= 0 && rightY < right.height
+              ? right.data[rightY * right.width + rightX]
+              : 0;
+            if (rightValue) rightInk++;
+            if (leftValue && rightValue) overlap++;
+          }
+        }
+        const dice = 2 * overlap / Math.max(1, leftInk + rightInk);
+        best = Math.max(best, dice);
+      }
+    }
+    return best;
+  }
+
+  function glyphSimilarity(left, right){
+    if (!left?.ink || !right?.ink) return 0;
+    const pixel = shiftedPixelSimilarity(left, right);
+    const horizontal = profileSimilarity(left.xProfile, right.xProfile);
+    const vertical = profileSimilarity(left.yProfile, right.yProfile);
+    const zones = profileSimilarity(left.zones, right.zones);
+    const aspect = Math.min(left.aspect, right.aspect) / Math.max(left.aspect, right.aspect);
+    return clamp(pixel * .52 + horizontal * .15 + vertical * .13 + zones * .14 + aspect * .06, 0, 1);
+  }
+
+  function renderMaterialTemplate(code, variant){
+    const canvas = createCanvas(520, 132);
+    const context = canvas.getContext("2d", { willReadFrequently:true });
+    context.fillStyle = "#fff";
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    context.fillStyle = "#111";
+    context.textAlign = "center";
+    context.textBaseline = "middle";
+    context.font = `${variant.weight} ${variant.size}px ${variant.font}`;
+    context.fillText(code, canvas.width / 2, canvas.height / 2 + variant.offsetY);
+    return normalizedGlyphFromCanvas(canvas);
+  }
+
+  function buildMaterialTemplateLibrary(codes){
+    const variants = [
+      { font:"Arial, sans-serif", weight:400, size:58, offsetY:0 },
+      { font:"Arial, sans-serif", weight:700, size:58, offsetY:0 },
+      { font:"Helvetica, Arial, sans-serif", weight:600, size:64, offsetY:1 },
+      { font:"Arial Narrow, Arial, sans-serif", weight:700, size:62, offsetY:0 }
+    ];
+    return (codes || []).map(code => ({
+      code,
+      templates:variants.map(variant => renderMaterialTemplate(code, variant))
+    }));
+  }
+
+  function rankMaterialCandidates(cellCanvas, library){
+    const glyph = normalizedGlyphFromCanvas(cellCanvas);
+    const candidates = (library || []).map(entry => ({
+      code:entry.code,
+      score:entry.templates.reduce((best, template) => Math.max(best, glyphSimilarity(glyph, template)), 0)
+    })).sort((left, right) => right.score - left.score);
+    return { glyph, candidates };
+  }
+
   function buildCellDescriptors(grid){
     if (!grid?.valid) return [];
     const descriptors = [];
@@ -1024,6 +1201,10 @@
     prepare,
     cellBounds,
     extractCell,
+    normalizedGlyphFromCanvas,
+    glyphSimilarity,
+    buildMaterialTemplateLibrary,
+    rankMaterialCandidates,
     buildCellDescriptors,
     buildCellPlan,
     drawGridOverlay,
